@@ -4,20 +4,20 @@ Const
     12,10,12,10,13,29);
   nums:array [1..9] of integer=(3814,5085,11440,12711,15253,16254,17795,21608,27963);
   engleter:string[28]=' TCDSVUZJYHFKNBXGPMERA,L;.OI';
-  hebleter:string[28]=' €‚ƒ„…†‡ˆ‰‹Œ‘’”–—˜™šŠ“•'; // thanks to hebTx.html: const eng = "àáâãäåæçèéëìîğñòôö÷øùúêóõíï";
-  Names:Array [1..39] Of String[13]=('úéùàøá','úåîù','àø÷éå','øáãîá','íéøáã','òùåäé','íéèôåù','''à ìàåîù','''á ìàåîù', '''à íéëìî','''á íéëìî','äéòùé','äéîøé','ìà÷æçé','òùåä','ìàåé','ñåîò','äéãáåò','äğåé','äëéî','íåçğ','÷å÷áç','äéğôö', 'éâç','äéøëæ','éëàìî','íéìäú','éìùî','áåéà','íéøéùä øéù','úåø','äëéà','úìä÷','øúñà','ìàéğã','àøæò','äéîçğ', '''à íéîéä éøáã','''á íéîéä éøáã');	
+  hebleter:string[28]=' â‚¬Ââ€šÆ’â€â€¦â€ â€¡Ë†â€°â€¹Å’Å½Ââ€˜â€™â€â€“â€”Ëœâ„¢Å¡Å â€œâ€¢ÂÂ'; // thanks to hebTx.html: const eng = "××‘×’×“×”×•×–×—×˜×™×›×œ×× ×¡×¢×¤×¦×§×¨×©×ª×š×£×¥××Ÿ";
+  Names:Array [1..39] Of String[13]=('×ª×™×©××¨×‘','×ª×•××©','××¨×§×™×•','×¨×‘×“××‘','××™×¨×‘×“','×¢×©×•×”×™','××™×˜×¤×•×©','''× ×œ××•××©','''×‘ ×œ××•××©', '''× ××™×›×œ×','''×‘ ××™×›×œ×','×”×™×¢×©×™','×”×™××¨×™','×œ××§×–×—×™','×¢×©×•×”','×œ××•×™','×¡×•××¢','×”×™×“×‘×•×¢','×”× ×•×™','×”×›×™×','××•×—× ','×§×•×§×‘×—','×”×™× ×¤×¦', '×™×’×—','×”×™×¨×›×–','×™×›××œ×','××™×œ×”×ª','×™×œ×©×','×‘×•×™×','××™×¨×™×©×” ×¨×™×©','×ª×•×¨','×”×›×™×','×ª×œ×”×§','×¨×ª×¡×','×œ××™× ×“','××¨×–×¢','×”×™××—× ', '''× ××™××™×” ×™×¨×‘×“','''×‘ ××™××™×” ×™×¨×‘×“');	
   Posi:Array [1..40] Of Word=(0,1533,2743,3602,4890,5846,6502,7120,7931,8626,9443,10162,11453,12817,14090,14287,14360,14506,
     14527,14575,14680,14727,14783,14836,14874,15085,15140,17667,18582,19652,19769,19854,20008,20230,20397,20754,21034,21439,
     22382,23204);
   ZZ:Array [1..40] Of Integer=(1,2044,3712,4898,6614,8017,9033,10010,11295,12370,13653,14823,16550,18675,20560,20807,20905,
     21110,21140,21210,21350,21408,21480,21559,21617,21931,22015,24568,25485,26583,26722,26851,27048,27335,27628,28222,28633,
     29219,30431,31776);
-  oo:array [#1..#2] of string[8]=('" š†…˜‡',' Š˜’');
-  lessPsk:array [1..9] of string[45]=('ÿÕL§í>Åÿ@/Ç"»ì üd!HŸ¦gñ|á3‰ıCû%÷é?hÉ÷¸¿',
-    'ÿôü‰Öïèù{±ßĞò''X‡ôÿ‰ıbşòÅeş˜½|bÊ{°¿','jHÀ},ù3$ü‹ş|eä¤¿iROŒ²Úv|eôè¸ öÈŸbş ¤¿',
-    'ÿÿÿ´‰…>É}¬(ò„øùµ9fKò¯ ùµ9qşLËíHÊéíaAı ¿','ÿÿüúÃŒ_µ0t¡ôÉúd}ëû%ıaføõ NşbıRÊ~’0Ñ×Ÿ¥',
-    'ÿÈÃı+ş¶TúJ/…OÚŒàûJş¸Ør¤Ÿ# ¿ú]ı ËüŸ¥ß','`Cõ1ßÅ¬¡‡Æ—íHò²|iôøL‰ıïÔ>˜@Ÿ!HŸáÀù÷­Ÿ',
-    'ÿñ}¥I>÷3é’s¦|’ _µ8Ì¾Ò¥ß#$âü†''ÚT“ïwÚ°…Ÿ>W''?','ÿÀ}îû ˜÷‰ğ_{¾KÆgğà}€LÂı$+%ğEŸwŞ‘€?');
+  oo:array [#1..#2] of string[8]=('" Å¡â€ â€¦Ëœâ€¡Å½',' Å Ëœâ€™');
+  lessPsk:array [1..9] of string[45]=('Ã¿Ã•LÂ§Ã­>Ã…Ã¿@/Ã‡"Â»Ã¬ Ã¼d!HÅ¸Â¦gÃ±Â|Ã¡3â€°Ã½CÃ»%Ã·Ã©?hÃ‰Ã·Â¸Â¿',
+    'Ã¿Ã´Ã¼â€°Ã–Å½Ã¯Ã¨Ã¹{Â±ÃŸÃÃ²''Xâ€¡Ã´Ã¿â€°Ã½bÃ¾ÂÃ²Ã…eÃ¾ËœÂ½|bÃŠ{Â°Â¿','jHÃ€},Ã¹3$Ã¼â€¹Ã¾|eÃ¤Â¤Â¿iROÅ’Â²Ãšv|eÃ´Ã¨Â¸ Ã¶ÃˆÅ¸bÃ¾ Â¤Â¿',
+    'Ã¿Ã¿Ã¿Â´â€°â€¦>Ã‰}Â¬(Ã²â€Ã¸Ã¹Âµ9fKÃ²Â¯ Ã¹Âµ9qÃ¾LÃ‹Ã­HÃŠÃ©Ã­aAÃ½ Â¿','Ã¿Ã¿Ã¼ÃºÃƒÅ’_Âµ0tÂ¡Ã´Ã‰ÃºdÂ}Ã«Ã»%Ã½afÃ¸Ãµ NÃ¾bÃ½RÃŠ~â€™0Ã‘Ã—Å¸Â¥',
+    'Ã¿ÃˆÃƒÃ½+Ã¾Å½Â¶TÃºJ/Ââ€¦OÃšÅ’Ã Ã»JÂÃ¾Â¸Ã˜rÂ¤Å¸# Â¿ÂÃº]Ã½ Ã‹Ã¼ÂÅ¸Â¥ÃŸ','`CÃµ1ÃŸÃ…ÂÂÂ¬Â¡â€¡Ã†Ââ€”Ã­HÃ²Â²|iÃ´Ã¸Lâ€°Ã½Ã¯Ã”>Ëœ@Å¸!HÅ¸Ã¡Ã€Ã¹Ã·Â­Å¸',
+    'Ã¿Ã±Â}Â¥I>Ã·3Ã©â€™sÂ¦|â€™ _Âµ8ÃŒÂ¾Ã’Â¥ÃŸ#$Ã¢Ã¼â€ ''ÃšTâ€œÃ¯wÃšÂ°â€¦Å¸>W''?','Ã¿Ã€}Ã®Ã» ËœÃ·â€°Ã°_{Â¾KÃ†gÃ°Ã }â‚¬LÃ‚Ã½$+%Ã°ÂEÅ¸ÂwÃâ€˜â‚¬?');
 Type
   Recor=Record
     Perek,Pasuk:Byte;
@@ -82,7 +82,7 @@ end;
 procedure error(s:string);
 begin
   textattr:=cyan;
-  write(^j,'ş ',s,#7);
+  write(^j,'Ã¾ ',s,#7);
   textattr:=lightGray;
   writeln;
   halt;
@@ -99,16 +99,16 @@ Begin
   Code:=31;
   Heb:='';
   Repeat
-    If Code+100<=Size2 Then Adds('—',100)
-    Else If Code+90<=Size2 Then Adds('–',90)
-    Else If Code+80<=Size2 Then Adds('”',80)
-    Else If Code+70<=Size2 Then Adds('’',70)
-    Else If Code+60<=Size2 Then Adds('‘',60)
-    Else If Code+50<=Size2 Then Adds('',50)
-    Else If Code+40<=Size2 Then Adds('',40)
-    Else If Code+30<=Size2 Then Adds('Œ',30)
-    Else If Code+20<=Size2 Then Adds('‹',20)
-    Else If size2-code in [15,16] Then Adds('ˆ',9)
+    If Code+100<=Size2 Then Adds('â€”',100)
+    Else If Code+90<=Size2 Then Adds('â€“',90)
+    Else If Code+80<=Size2 Then Adds('â€',80)
+    Else If Code+70<=Size2 Then Adds('â€™',70)
+    Else If Code+60<=Size2 Then Adds('â€˜',60)
+    Else If Code+50<=Size2 Then Adds('Â',50)
+    Else If Code+40<=Size2 Then Adds('Å½',40)
+    Else If Code+30<=Size2 Then Adds('Å’',30)
+    Else If Code+20<=Size2 Then Adds('â€¹',20)
+    Else If size2-code in [15,16] Then Adds('Ë†',9)
     Else For X:=10 DownTo 1 Do
       If Code+X<=Size2 Then
         Adds(Chr(127+X),X);
@@ -137,19 +137,19 @@ Begin
     TextMode(Co80);
   CheckBreak:=False;
   textattr:=lightgreen;
-  writeln(^j'ş Œˆ ˜‡™ (c) ''98'^j);
+  writeln(^j'Ã¾ Å’Ë† Ëœâ€¡â„¢ (c) ''98'^j);
   textattr:=lightblue;
   for x:=1 to 8 do begin
     if x=8 then
       write(' ':18)
     else
-      write(names[32+x]:13,32+x:3,' ³');
-    write(names[24+x]:11,24+x:3,' ³',names[16+x]:11,16+x:3,' ³',names[8+x]:11,8+x:3,' ³',names[x]:11,x:3);
+      write(names[32+x]:13,32+x:3,' Â³');
+    write(names[24+x]:11,24+x:3,' Â³',names[16+x]:11,16+x:3,' Â³',names[8+x]:11,8+x:3,' Â³',names[x]:11,x:3);
   end;
   textattr:=lightred;
-  WriteLn(^j'ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ');
+  WriteLn(^j'Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„');
   textattr:=lightmagenta;
-  Writeln('îçøåæú àå òøê îñôøé ìçéôåù -> ');
+  Writeln('××—×¨×•×–×ª ××• ×¢×¨×š ××¡×¤×¨×™ ×œ×—×™×¤×•×© -> ');
   repeat
     gotoxy(31,wherey-1);
     heb:='';
@@ -193,48 +193,48 @@ Begin
     w:=heb;
     For X:=1 To Length(Heb) Do
       Case Heb[x] Of
-       '€'..'‰':Inc(Size,Ord(Heb[X])-127);
-        'Š','‹':Inc(Size,20);
-  	    'Œ':Inc(Size,30);
-        '','':Inc(Size,40);
-        '','':Inc(Size,50);
-	    '‘':Inc(Size,60);
- 	    '’':Inc(Size,70);
-        '“','”':Inc(Size,80);
-        '•','–':Inc(Size,90);
-       '—'..'š':Inc(Size,100*(Ord(Heb[X])-150));
+       'â‚¬'..'â€°':Inc(Size,Ord(Heb[X])-127);
+        'Å ','â€¹':Inc(Size,20);
+  	    'Å’':Inc(Size,30);
+        'Â','Å½':Inc(Size,40);
+        'Â','Â':Inc(Size,50);
+	    'â€˜':Inc(Size,60);
+ 	    'â€™':Inc(Size,70);
+        'â€œ','â€':Inc(Size,80);
+        'â€¢','â€“':Inc(Size,90);
+       'â€”'..'Å¡':Inc(Size,100*(Ord(Heb[X])-150));
       End;
     textattr:=lightGreen;
-    write(^j'çéôåù )î(çøåæú àå ôñå÷ ùååä )ò(øê');
+    write(^j'×—×™×¤×•×© )×(×—×¨×•×–×ª ××• ×¤×¡×•×§ ×©×•×•×” )×¢(×¨×š');
     repeat
       c:=upcase(readkey);
-    until c in ['N','G','','’'];
-    if c in ['N',''] then begin
+    until c in ['N','G','Å½','â€™'];
+    if c in ['N','Å½'] then begin
       c:=#1;
-      writeln('š†…˜‡');
+      writeln('Å½×—×¨×•×–Å¡');
       while pos('  ',copy(find,2,length(find)-2))>0 do
         delete(find,pos('  ',copy(find,2,length(find)-2))+1,1);
       size:=0;
 {      if find[length(find)] in ['0'..'9'] then
-        error('àéï ìçôù ñôøåú');}
+        error('××™×Ÿ ×œ×—×¤×© ×¡×¤×¨×•×ª');}
       for count:=1 to length(find) do
-        if find[count]>='€' then
+        if find[count]>='â‚¬' then
           inc(size);
       if size=0 then
-        error('àéï ìçôù øååçéí')
+        error('××™×Ÿ ×œ×—×¤×© ×¨×•×•×—×™×')
       else if size=1 then
-        error('š‡€ š…€ ™”‡Œ ‰€'); (***)
+        error('Å¡â€¡â‚¬ Å¡â€¦â‚¬ â„¢â€â€¡Å’ Ââ€°â‚¬'); (***)
 {      size:=0;
       for count:=1 to length(find) do
         if find[count]=' ' then
           size:=0
         else if size=10 then
-          error('‰……š 11- „‹…˜€„ „Œ ™”‡Œ ‰€')
+          error('Ââ€°â€¦â€¦Å¡ 11-Å½ â€â€¹â€¦Ëœâ‚¬â€ â€Å’Å½ â„¢â€â€¡Å’ Ââ€°â‚¬')
         else
           inc(size);}
     end else begin
       c:=#2;
-      writeln('Š˜’ „……™ —…‘”');
+      writeln('Å Ëœâ€™ â€â€¦â€¦â„¢ â€”â€¦â€˜â€');
     end;
     gotoxy(31,wherey-3);
     clreol;
@@ -245,12 +245,12 @@ Begin
       writeln('"',find,'"'^j^j);
   end;
   if (c=#2) and (size<159) or (size>13639) then
-    error('159-13639 äòøê àéğå áúçåí');
+    error('159-13639 ×”×¢×¨×š ××™× ×• ×‘×ª×—×•×');
   writeln(^j);
   textattr:=lightcyan;
   Repeat
     GotoXY(1,WhereY-1);
-    Write('˜”‘ ™”‡Œ -> ');
+    Write('Ëœâ€â€˜Å½ â„¢â€â€¡Å’ -> ');
     ClrEol;
     ReadLn(Heb);
     Val(Heb,X,Demo);
@@ -264,7 +264,7 @@ Begin
   textattr:=yellow;
   Repeat
     GotoXY(1,WhereY-1);
-    Write(' åòã ñôø )ëåìì( -> ');
+    Write(' ×•×¢×“ ×¡×¤×¨ )×›×•×œ×œ( -> ');
     ClrEol;
     ReadLn(Heb);
     Val(Heb,Stop,Demo);
@@ -276,7 +276,7 @@ Begin
   ClrEol;
   textattr:=red;
   if stop<x then
-    error('èååç ìà çå÷é');
+    error('×˜×•×•×— ×œ× ×—×•×§×™');
   Count:=0;
   Assign(Fil2,'Bible.Txt');
   assign(fil,'bible.txt');
@@ -284,15 +284,15 @@ Begin
     Assign(F,'Bible.Gim');
     {$i-} Reset(F,46408); {$i+}
     if ioresult<>0 then
-      error('Bible.Gim š‡‰š” š…’ˆ');
+      error('Bible.Gim Å¡â€¡â€°Å¡â€Â Å¡â€¦â€™Ë†');
     new(value);
     blockread(f,value^,1);
     {$i-} reset(fil2); {$i+}
   end else
     {$i-} Reset(Fil,59737); {$i+}
   if ioResult<>0 then
-    error('Bible.Txt èòåú áôúéçú');
-  writeln(^j'š... àğà ä'^j);
+    error('Bible.Txt ×˜×¢×•×ª ×‘×¤×ª×™×—×ª');
+  writeln(^j'ÂÅ¡Å½... Ã Ã°Ã  Ã¤'^j);
   str(x,heb);
   str(stop,xxx);
   str(size,p);
@@ -379,7 +379,7 @@ Begin
 	decrypt2;
         qw:=1;
         while s[qw]=#31 do inc(qw);
-        if (s[71]=chr(ord('‹')-128)) and (s[qw]=chr(ord('Œ')-128)) then begin
+        if (s[71]=chr(ord('â€¹')-128)) and (s[qw]=chr(ord('Å’')-128)) then begin
 {	If Pos(a,''+s+'')>0 Then Begin} {*****}
 	  while l+k>=zz[e+1] do
 	    inc(e);
@@ -390,7 +390,7 @@ Begin
               dec(k);
             inc(k);
             textattr:=green;
-            if k=1 then begin            {ä÷åã}
+            if k=1 then begin            {ÂÃ¤Ã·Ã¥Ã£}
               for k:=1 to 9 do
                 if nums[k]=l+1 then begin
                   for g:=1 to 45 do
@@ -409,7 +409,7 @@ Begin
               dec(k)
             else begin
               for k:=1 to 9 do
-                if nums[k]=l+1272 then     {€„}
+                if nums[k]=l+1272 then     {â‚¬Ââ€}
                   b:=k;
               k:=1271;
             end;
@@ -436,7 +436,7 @@ Begin
 {  gettime(y,y2,y3,y4);
   writeln(y3:4,y4:4);}
   textattr:=blue;
-  heb:='ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ';
+  heb:='Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„';
   Writeln(heb,heb,heb,heb);
   if count>0 then
     WriteLn(t,heb,heb,heb,heb);
@@ -448,15 +448,15 @@ Begin
       write(t,'"');
   end else
     str(size,find);
-  write(find,oo[c],' äåôòåú ì');
+  write(find,oo[c],' ×”×•×¤×¢×•×ª ×œ');
   If Count>0 Then begin
-    writeln(t,find,oo[c],'Œäåôòåú',count);
+    writeln(t,find,oo[c],'Å’Ã¤Ã¥Ã´Ã²Ã¥Ãº',count);
     Write(Count);
-    writeln(t,xxx,' ƒ’… ',names[x],'');
+    writeln(t,xxx,' Æ’â€™â€¦ ',names[x],'Å½');
     if (c=#2) and (w>'') then
-      writeln(t,'"',w,'ä÷èò äùååä áòøëå ìôñå÷éí äğ"ì äåà "');
+      writeln(t,'"',w,'×”×§×˜×¢ ×”×©×•×•×” ×‘×¢×¨×›×• ×œ×¤×¡×•×§×™× ×”× "×œ ×”×•× "');
   end Else
-    Write('…€– €Œ');
+    Write('â€¦â‚¬â€“Å½Â â‚¬Å’');
   close(t);
   if count=0 then
     erase(t);
