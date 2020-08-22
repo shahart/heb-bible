@@ -4,11 +4,8 @@ Const
     12,10,12,10,13,29);
   nums:array [1..9] of integer=(3814,5085,11440,12711,15253,16254,17795,21608,27963);
   engleter:string[28]=' TCDSVUZJYHFKNBXGPMERA,L;.OI';
-  hebleter:string[28]=' €‚ƒ„…†‡ˆ‰‹‘’”–—˜™“•';
-  Names:Array [1..39] Of String[13]=('‰™€˜','…™','€˜—‰…','˜ƒ','‰˜ƒ','’™…„‰','‰ˆ”…™','''€ €…™',''' €…™',
-    '''€ ‰‹',''' ‰‹','„‰’™‰','„‰˜‰','€—†‡‰','’™…„','€…‰','‘…’','„‰ƒ…’','„…‰','„‹‰','…‡','—…—‡','„‰”–',
-    '‰‚‡','„‰˜‹†','‰‹€','‰„','‰™','…‰€','‰˜‰™„ ˜‰™','…˜','„‹‰€','„—','˜‘€','€‰ƒ','€˜†’','„‰‡',
-    '''€ ‰‰„ ‰˜ƒ',''' ‰‰„ ‰˜ƒ');
+  hebleter:string[28]=' €‚ƒ„…†‡ˆ‰‹‘’”–—˜™“•'; // thanks to hebTx.html: const eng = "אבגדהוזחטיכלמנסעפצקרשתךףץםן";
+  Names:Array [1..39] Of String[13]=('תישארב','תומש','ארקיו','רבדמב','םירבד','עשוהי','םיטפוש','''א לאומש','''ב לאומש', '''א םיכלמ','''ב םיכלמ','היעשי','הימרי','לאקזחי','עשוה','לאוי','סומע','הידבוע','הנוי','הכימ','םוחנ','קוקבח','הינפצ', 'יגח','הירכז','יכאלמ','םילהת','ילשמ','בויא','םירישה ריש','תור','הכיא','תלהק','רתסא','לאינד','ארזע','הימחנ', '''א םימיה ירבד','''ב םימיה ירבד');	
   Posi:Array [1..40] Of Word=(0,1533,2743,3602,4890,5846,6502,7120,7931,8626,9443,10162,11453,12817,14090,14287,14360,14506,
     14527,14575,14680,14727,14783,14836,14874,15085,15140,17667,18582,19652,19769,19854,20008,20230,20397,20754,21034,21439,
     22382,23204);
@@ -152,7 +149,7 @@ Begin
   textattr:=lightred;
   WriteLn(^j'ִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִִ');
   textattr:=lightmagenta;
-  Writeln('™…”‰‡ ‰˜”‘ ˜’ …€ †…˜‡ -> ');
+  Writeln('מחרוזת או ערך מספרי לחיפוש -> ');
   repeat
     gotoxy(31,wherey-1);
     heb:='';
@@ -208,7 +205,7 @@ Begin
        '—'..'':Inc(Size,100*(Ord(Heb[X])-150));
       End;
     textattr:=lightGreen;
-    write(^j'˜(’) „……™ —…‘” …€ †…˜‡() ™…”‰‡ -> ');
+    write(^j'חיפוש )מ(חרוזת או פסוק שווה )ע(רך');
     repeat
       c:=upcase(readkey);
     until c in ['N','G','','’'];
@@ -219,12 +216,12 @@ Begin
         delete(find,pos('  ',copy(find,2,length(find)-2))+1,1);
       size:=0;
 {      if find[length(find)] in ['0'..'9'] then
-        error('…˜”‘ ™”‡ ‰€');}
+        error('אין לחפש ספרות');}
       for count:=1 to length(find) do
         if find[count]>='€' then
           inc(size);
       if size=0 then
-        error('‰‡……˜ ™”‡ ‰€')
+        error('אין לחפש רווחים')
       else if size=1 then
         error('‡€ …€ ™”‡ ‰€'); (***)
 {      size:=0;
@@ -248,7 +245,7 @@ Begin
       writeln('"',find,'"'^j^j);
   end;
   if (c=#2) and (size<159) or (size>13639) then
-    error('159-13639 …‡ …‰€ ˜’„');
+    error('159-13639 הערך אינו בתחום');
   writeln(^j);
   textattr:=lightcyan;
   Repeat
@@ -267,7 +264,7 @@ Begin
   textattr:=yellow;
   Repeat
     GotoXY(1,WhereY-1);
-    Write('(…‹) ˜”‘ ƒ’… -> ');
+    Write(' ועד ספר )כולל( -> ');
     ClrEol;
     ReadLn(Heb);
     Val(Heb,Stop,Demo);
@@ -279,7 +276,7 @@ Begin
   ClrEol;
   textattr:=red;
   if stop<x then
-    error('‰—…‡ € ‡……ˆ');
+    error('טווח לא חוקי');
   Count:=0;
   Assign(Fil2,'Bible.Txt');
   assign(fil,'bible.txt');
@@ -294,8 +291,8 @@ Begin
   end else
     {$i-} Reset(Fil,59737); {$i+}
   if ioResult<>0 then
-    error('Bible.Txt ‡‰” …’ˆ');
-  writeln(^j'„ €€ ...'^j);
+    error('Bible.Txt טעות בפתיחת');
+  writeln(^j'... אנא ה'^j);
   str(x,heb);
   str(stop,xxx);
   str(size,p);
@@ -393,7 +390,7 @@ Begin
               dec(k);
             inc(k);
             textattr:=green;
-            if k=1 then begin            {ƒ…—„}
+            if k=1 then begin            {הקוד}
               for k:=1 to 9 do
                 if nums[k]=l+1 then begin
                   for g:=1 to 45 do
@@ -451,13 +448,13 @@ Begin
       write(t,'"');
   end else
     str(size,find);
-  write(find,oo[c],' …’”…„ ');
+  write(find,oo[c],' הופעות ל');
   If Count>0 Then begin
-    writeln(t,find,oo[c],' …’”…„ ',count);
+    writeln(t,find,oo[c],'הופעות',count);
     Write(Count);
     writeln(t,xxx,' ƒ’… ',names[x],'');
     if (c=#2) and (w>'') then
-      writeln(t,'"',w,'" €…„ "„ ‰—…‘” …‹˜’ „……™„ ’ˆ—„');
+      writeln(t,'"',w,'הקטע השווה בערכו לפסוקים הנ"ל הוא "');
   end Else
     Write('…€– €');
   close(t);
