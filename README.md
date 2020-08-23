@@ -1,6 +1,8 @@
 The bible. 
 
-The code requires some reverse-eng to re-understand. Plus the fact it was done on DOS with hebrew characters (Ascii 128 stands for Aleph).
+![](read-psalm-119.png)
+
+The code requires some time to re-understand. Plus the fact it was done on DOS with hebrew characters (Ascii 128 stands for Aleph).
 
 The commit is without
 
