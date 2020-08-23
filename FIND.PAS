@@ -137,7 +137,6 @@ Begin
     TextMode(Co80);
   CheckBreak:=False;
   textattr:=lightgreen;
-  writeln(^j'þ Œˆ ˜‡™ (c) ''98'^j);
   textattr:=lightblue;
   for x:=1 to 8 do begin
     if x=8 then

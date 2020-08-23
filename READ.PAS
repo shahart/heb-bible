@@ -2,12 +2,12 @@
 Uses crt;
 Const
   engleter:string[28]=' TCDSVUZJYHFKNBXGPMERA,L;.OI';
-  hebleter:string[28]=' €‚ƒ„…†‡ˆ‰‹Œ‘’”–—˜™šŠ“•';
+  hebleter:string[28]=' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
   helper='!@#$%^&';
-  Names:Array [1..39] Of String[13]=('š‰™€˜','š…™','€˜—‰…','˜ƒ','‰˜ƒ','’™…„‰','‰ˆ”…™','''€ Œ€…™',''' Œ€…™',
-    '''€ ‰‹Œ',''' ‰‹Œ','„‰’™‰','„‰˜‰','Œ€—†‡‰','’™…„','Œ€…‰','‘…’','„‰ƒ…’','„…‰','„‹‰','…‡','—…—‡','„‰”–',
-    '‰‚‡','„‰˜‹†','‰‹€Œ','‰Œ„š','‰Œ™','…‰€','‰˜‰™„ ˜‰™','š…˜','„‹‰€','šŒ„—','˜š‘€','Œ€‰ƒ','€˜†’','„‰‡',
-    '''€ ‰‰„ ‰˜ƒ',''' ‰‰„ ‰˜ƒ');
+  Names:Array [1..39] Of String[13]=('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','''ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½','''ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½',
+    '''ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½','''ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½',
+    'ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½',
+    '''ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½','''ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½');
   ZZ:Array [1..40] Of Integer=(1,2044,3712,4898,6614,8017,9033,10010,11295,12370,13653,14823,16550,18675,20560,20807,20905,
     21110,21140,21210,21350,21408,21480,21559,21617,21931,22015,24568,25485,26583,26722,26851,27048,27335,27628,28222,28633,
     29219,30431,31775);
@@ -75,7 +75,7 @@ Begin
   For Line1:=Now To Now+23 Do
     Write(' '+Line[Line1]^);
   textAttr:=white;
-  Write('** ',Names[Y],' ** ',Now,' „˜…™ ** Info Find Prv Nxt 1-7:to memo. +shift:set memo');
+  Write('** ',Names[Y],' ** ',Now,' ï¿½ï¿½ï¿½ï¿½ ** Info Find Prv Nxt 1-7:to memo. +shift:set memo');
   clreol;
   write(^m);
 End;
@@ -93,7 +93,7 @@ Begin
 	if (pos('  ',findstr)=1) and (par1=1) then
 	  write(copy(findstr,2,length(findstr)-1))
 	else
-	  write(copy(findstr,1,length(findstr)-byte(findstr[length(findstr)]='³')));
+	  write(copy(findstr,1,length(findstr)-byte(findstr[length(findstr)]='ï¿½')));
 	gotoxy(1,25);
         bk[9]:=now;
         write('*'#8);
@@ -105,11 +105,11 @@ Begin
       end;
     end;
     textAttr:=red;
-    write('€– €Œ'^m#7);
+    write('ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½'^m#7);
     wait;
   End;
   textattr:=White;
-  Write(^m'** ',Names[Y],' ** ',Now,' „˜…™ ** Info Find Prv Nxt 1-7:to memo. +shift:set memo');
+  Write(^m'** ',Names[Y],' ** ',Now,' ï¿½ï¿½ï¿½ï¿½ ** Info Find Prv Nxt 1-7:to memo. +shift:set memo');
   clreol;
   write(^m);
 End;
@@ -126,9 +126,9 @@ Begin
   If (Y<1) Or (Y>39) Then Begin
     clrscr;
     textattr:=lightBlue;
-    WriteLn('³ ‰…š‹':29,'³  ‰€‰':26,'³ „˜…š':20,^m^j,'ÀÄÄÄÄÄÄÄ':29,'³ ‰…™€˜':26,'ÀÄÄÄÄÄ':20);
-    WriteLn('ÀÄÄÄÄÄÄÄÄ':55,^j^j^m,'³ š…Œ‰‚':29,^m^j,'ÀÄÄÄÄÄÄÄ':29,^j^m^j,'³  ‰€‰':55,^m^j,'³ ‰…˜‡€':55);
-    WriteLn('ÀÄÄÄÄÄÄÄÄ':55,^j^j^m,'³ ˜™’ ‰˜š':55,^m^j,'ÀÄÄÄÄÄÄÄÄ':55);
+    WriteLn('ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':29,'ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':26,'ï¿½ ï¿½ï¿½ï¿½ï¿½':20,^m^j,'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':29,'ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':26,'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':20);
+    WriteLn('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':55,^j^j^m,'ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':29,^m^j,'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':29,^j^m^j,'ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':55,^m^j,'ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':55);
+    WriteLn('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':55,^j^j^m,'ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½':55,^m^j,'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½':55);
     gotoxy(1,wherey-13);
     for tot:=27 to 39 do begin
       writeln(names[tot]:17,' ',tot);
@@ -146,11 +146,10 @@ Begin
       writeln(names[tot]:6,tot:2);
     window(1,17,80,25);
     textAttr:=lightred;
-    findstr:='ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ';
-    WriteLn('Ú'+findstr+'¿':32,^m^j,'³ Š…–˜™ ˜”‘„ ''‘ š€ ™—„ ³':32,^m^j,'³  —…‘”„… —˜”„ š€ ,š…€˜Œ  ³':32);
-    writeln('³   Enter-… (‰Œ…‰–”…€)   ³':32,^m^j,'À'+findstr+'Ù':32);
+    findstr:='ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
+    WriteLn('ï¿½'+findstr+'ï¿½':32,^m^j,'ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ''ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½':32,^m^j,'ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ,ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½':32);
+    writeln('ï¿½   Enter-ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)   ï¿½':32,^m^j,'ï¿½'+findstr+'ï¿½':32);
     textAttr:=lightgreen;
-    WriteLn(^j'ş Œˆ ˜‡™ (c) ''98':19);
     key:=' R e a d  ';
     mem[$40:$1c]:=$2a;
     mem[$40:$1a]:=$1e;
@@ -171,13 +170,13 @@ Begin
   {$i-} Reset(TextFile); {$i+}
   if ioresult<>0 then begin
     textattr:=cyan;
-    write(^j'ş Bible.Txt š‡‰š” š…’ˆ'#7);
+    write(^j'ï¿½ Bible.Txt ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½'#7);
     textAttr:=7;
     writeln;
     exit;
   end;
   textaTtr:=bRown;
-  Writeln(^j'š„ €€ ...');
+  Writeln(^j'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ...');
   Seek(TextFile,ZZ[Y]-1);
   Read(TextFile,FindStr2);
   Found1:=q=1;
@@ -186,12 +185,12 @@ Begin
     Inc(EndFile);
     New(Line[EndFile]);
     If FindStr2.Perek<>PPrk Then Begin
-      Line[EndFile]^:='                                                                        ³      ';
+      Line[EndFile]^:='                                                                        ï¿½      ';
       Inc(EndFile);
       New(Line[EndFile]);
     End;
     decrypt;
-    Line[EndFile]^:=s+' ³';
+    Line[EndFile]^:=s+' ï¿½';
     If PPrk<>FindStr2.Perek Then Begin
       Str(FindStr2.Perek-31:3,findstr);
       Line[EndFile]^:=Line[EndFile]^+findstr;
@@ -219,22 +218,22 @@ Begin
     Inc(EndFile);
     New(Line[EndFile]);
     decrypt;
-    Line[EndFile]^:=s+' ³      ';
+    Line[EndFile]^:=s+' ï¿½      ';
   End;
   If Not Found1 And (q>0) Or Not Found2 And (Par2>0) Then Begin
     textAttr:=red;
-    Write('ş €– €Œ'#7^m);
+    Write('ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½'#7^m);
     wait;
   End;
   val(paramstr(5),x,p);
-  if (paramstr(4)='à') and not(x in [0,13,24,34,44,55]) then begin {š…˜ˆ”„„ “…‘ š˜‰™Œ ParamStr(5)}
+  if (paramstr(4)='ï¿½') and not(x in [0,13,24,34,44,55]) then begin {ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ParamStr(5)}
     findstr:=' '+paramstr(6)+' ';
     strinfile(1,false);
     findstr:=' '+paramstr(7)+#0;
     if findstr<>' 1'#0 then
       strinfile(now,false);
     bk[8]:=now;
-    line[now]^[73]:='µ';
+    line[now]^[73]:='ï¿½';
   end;
   if Found1 Then Begin
     str(q,findstr);
@@ -246,16 +245,16 @@ Begin
       StrInFile(Now+byte(par2=q),false);
     End;
     bk[0]:=now;
-    line[now]^[73]:='µ';
-    if (paramstr(4)='à') and (x in [13,24,34,44,55]) then begin
+    line[now]^[73]:='ï¿½';
+    if (paramstr(4)='ï¿½') and (x in [13,24,34,44,55]) then begin
       if endfile-bk[0]>23 then
         bk[8]:=endfile
       else begin
         bk[8]:=endfile-4-byte(x=24)+byte(x=44)-16*byte(x=55);
-        line[endfile]^[73]:='µ';
-        line[endfile-23]^[73]:='³';
+        line[endfile]^[73]:='ï¿½';
+        line[endfile-23]^[73]:='ï¿½';
       end;
-      line[bk[8]]^[73]:='µ';
+      line[bk[8]]^[73]:='ï¿½';
     end;
     printscr(now);
   End else
@@ -276,9 +275,9 @@ Begin
     'I':Begin
 	  textattr:=lightmagenta;
           gotoxy(1,2);
-	  writeln('  ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸'^m^j'  ³',bookeng[y]:13,' :š‰Œ‚€ ™„        ³');
-	  writeln('  ³',tot+ppsk-14:13,' :‰—…‘”„ ˜”‘       ³'^m^j'  ³',words[y]:13,' :‰Œ„ ˜”‘         ³');
-	  write('  ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾');
+	  writeln('  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸'^m^j'  ï¿½',bookeng[y]:13,' :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½        ï¿½');
+	  writeln('  ï¿½',tot+ppsk-14:13,' :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½       ï¿½'^m^j'  ï¿½',words[y]:13,' :ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½         ï¿½');
+	  write('  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¾');
 	  gotoxy(1,25);
           wait;
 	  printScr(now);
@@ -294,7 +293,7 @@ Begin
     'F':Begin
 	  Window(4,25,80,25);
 	  textAttr:=yellow;
-	  Write(^j'€–: ');
+	  Write(^j'ï¿½ï¿½ï¿½: ');
 	  textAttr:=7;
           findStr:='';
           q:=wherex;
@@ -336,7 +335,7 @@ Begin
 	    while pos('  ',copy(findstr,2,length(findstr)-2))>0 do
 	      delete(findstr,pos('  ',copy(findstr,2,length(findstr)-2))+1,1);
 	    if copy(findstr,length(findstr)-1,2)='  ' then
-	      findstr[length(findstr)]:='³';
+	      findstr[length(findstr)]:='ï¿½';
           end;
           Window(1,1,80,25);
           if (findstr>'') and (findstr[1] in ['0'..'9']) and (pos(' ',findstr)=0) then begin
