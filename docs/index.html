@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
+    <link rel="shortcut icon" href="#">
+    <title>Pasuk</title>
+</head>
+<body>
+<script>
+    function pasuk() {
+        var output = "";
+
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT', true);
+		xhr.overrideMimeType('text/plain; charset=x-user-defined'); // Hack to pass bytes through unprocessed
+		xhr.onreadystatechange = function(e) {
+		  if (/*this.readyState == 4 && */this.status == 200) {
+			// console.log(this.readyState);
+			var binStr = this.responseText;
+			var output = binStr.length;
+			document.getElementById("result").innerHTML = "resultSet: " + output;
+		  }
+		};
+		xhr.send();
+        var input = document.getElementById("text").value;
+    }
+</script>
+First Name:
+</br>
+<input type="text" id="text" value="">
+<button onclick="pasuk()">Find my Pasuk</button>
+<p id="result"></p>
+</body>
+</html>
