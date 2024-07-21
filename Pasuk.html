@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
+    <link rel="shortcut icon" href="#">
+    <title>Pasuk</title>
+</head>
+<body>
+<script>
+    function getHebChar(i) {
+		return (i !== 31 ?  String.fromCharCode('א'.charCodeAt(0) + i) : " ");
+	}
+	
+	function decrypt(findStr2) {
+		var s = "";
+		var m = 2; // 0-Prk, 1-Psk
+        let i = 1;
+        while (i <= 72) {
+            s = getHebChar(((findStr2[m]) >> 3)) + s;
+            s = getHebChar((((findStr2[m]) & 7) << 2) | ((findStr2[m + 1]) >> 6)) + s;
+            s = getHebChar(((findStr2[m + 1]) & 62) >> 1) + s;
+            s = getHebChar((((findStr2[m + 1]) & 1) << 4) | ((findStr2[m + 2]) >> 4)) + s;
+            s = getHebChar((((findStr2[m + 2]) & 15) << 1) | ((findStr2[m + 3]) >> 7)) + s;
+            s = getHebChar(((findStr2[m + 3]) & 124) >> 2) + s;
+            s = getHebChar((((findStr2[m + 3]) & 3) << 3) | ((findStr2[m + 4]) >> 5)) + s;
+            s = getHebChar((findStr2[m + 4]) & 31) + s;
+            m += 5;
+            i += 8;
+        }
+		return s.trim();
+	}
+	
+	var output = "";
+	var EndFile = 0; // amount of verses: 22329
+	var args = "";
+    var bookeng = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Samuel 1',
+        'Samuel 2','Kings 1','Kings 2','Isaiah','Jeremiah','Ezekiel','Hosea','Joel','Amos','Obadiah','Jonah','Micha','Nachum',
+        'Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Psalms','Proverbs','Job','Song of songs','Ruth','Lamentations',
+        'Ecclesiastes','Esther','Daniel','Ezra','Nehemiah','Cronicles 1','Cronicles 2']; // 39 books
+    var currBook = bookeng[0];
+    var currBookIdx = 0;
+    var PPrk = 1;
+    var PPsk = 999;
+
+    function isValid(line) {
+		if (line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) {
+			output += line + " -- " + currBook + " " + PPrk + "-" + PPsk + "<br/><br/>";
+			++ EndFile;
+		}
+	}
+
+	
+    function pasuk() {
+		document.getElementById("result").innerHTML = "";
+		args = document.getElementById("text").value;
+		if (args.length <= 1 || args.charAt(0) > 'ת' || args.charAt(0) < 'א' || args.charAt(args.length-1) > 'ת' || args.charAt(args.length-1) < 'א') {
+			document.getElementById("result").innerHTML = "Invalid name";
+		}
+		else {
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT', true);
+			xhr.overrideMimeType('text/plain; charset=x-user-defined'); // Hack to pass bytes through unprocessed
+			xhr.onreadystatechange = function(e) {
+			  if ( this.readyState === 4 &&
+					this.status === 200) {
+				var binStr = this.responseText;
+				var line = "";
+                currBookIdx = 0;
+                currBook = bookeng[0];
+				let findStr2 = [];
+				EndFile = 0;
+				output = "";
+				PPsk = 999;
+				PPrk = 1;
+				var eof = 0;
+				while (eof < binStr.length) {
+					findStr2 = [];
+					for (var i = 0; i < 47; ++i) {
+					  var c = binStr.charCodeAt(eof);
+					  var xbyte = c & 0xff;  // byte at offset i
+					  findStr2.push(xbyte);
+					  ++ eof;
+					}
+					if (findStr2[1] - 31 !== PPsk
+							&& line.length > 0) {
+						isValid(line);
+                        if (findStr2[0] - 31 === 1 && findStr2[1] - 31 === 1 && findStr2[1] - 31 !== PPsk) {
+                            ++currBookIdx;
+                            currBook = bookeng[currBookIdx];
+                        }
+						line = "";
+					}
+					PPrk = findStr2[0] - 31;
+					PPsk = findStr2[1] - 31;
+					line = line + " " + decrypt(findStr2);
+				}
+				isValid(line);
+				document.getElementById("result").innerHTML = output + "<br/><br/> Total Psukim: " + EndFile;
+			  }
+			};
+			xhr.send();
+		}
+    }
+</script>
+First Name:
+</br>
+<input type="text" id="text" value="">
+<button onclick="pasuk()">Find my Pasuk</button>
+<p id="result"></p>
+<br/>
+<a href="https://github.com/shahart/heb-bible" target="_blank">
+	>>
+	<svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle">
+		<path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+	</svg>
+	<<
+</a>
+</body>
+</html>
