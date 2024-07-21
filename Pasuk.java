@@ -8,26 +8,13 @@ import java.io.*;
 public class Pasuk {
 
     public static void main(String[] args) throws Exception {
-        if (args.length == 0 || args[0].length() != 2) {
-            System.err.println("Missing 1st and last letters, like שר");
+        if (args.length == 0 || args[0].length() <= 1) {
+            System.err.println("Invalid name");
             System.exit(1);
         }
-        if (args[0].equals("??")) {
-            System.err.println("In debug, inject your hebrew input, as it was found to be ??");
-        }
+        args[0] = args[0].substring(0, 1) + args[0].substring(args[0].length()-1);
         Pasuk pasuk = new Pasuk();
-        // pasuk.showAleph();
-        // else {
-            pasuk.findPsukim(args[0]);
-        // }
-    }
-
-    private void showAleph() {
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < 27; i ++) {
-            getHebChar(s, i);
-        }
-        System.out.println(s);
+        pasuk.findPsukim(args[0]);
     }
 
     public void findPsukim(String args) throws Exception {
@@ -42,12 +29,11 @@ public class Pasuk {
                 for (int i = 0; i < 47; ++i) {
                     findStr2[i] = inputStream.readUnsignedByte();
                 }
-                if ((findStr2[1] - 31 > PPsk || // still same pasuk
-                    (findStr2[1] - 31 == 1 && findStr2[0] - 31 == 1)) // 1st pasuk, new chapter
-                        && (line.length() > 0)) {
+                if ((findStr2[1] - 31 != PPsk)
+                        && (!line.isEmpty())) {
                     if (line.charAt(1) == args.charAt(0) && line.charAt(line.length()-1) == args.charAt(1)) {
                         System.out.println(
-                                // "Prk:" + PPrk + ",Psk:" + PPsk + ":" + // todo nice to have, echo the book name
+                                // "Prk:" + PPrk + ",Psk:" + PPsk + ":" + // todo nice to have, echo the book name, see Genesis in read.pas
                                 line);
                     }
                     line = new StringBuilder();
