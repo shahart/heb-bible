@@ -7,6 +7,22 @@
     <title>Pasuk</title>
 </head>
 <body>
+
+First Name:
+</br>
+<input type="text" id="text" value="">
+
+<button onclick="pasuk()">Find my Pasuk</button>
+<p id="result"></p>
+<br/>
+<a href="https://github.com/shahart/heb-bible" target="_blank">
+	>>
+	<svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle">
+		<path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+	</svg>
+	<<
+</a> 
+
 <script>
     function getHebChar(i) {
 		return (i !== 31 ?  String.fromCharCode('א'.charCodeAt(0) + i) : " ");
@@ -42,6 +58,51 @@
     var currBookIdx = 0;
     var PPrk = 1;
     var PPsk = 999;
+	
+	function saveInput(cname, cvalue) {
+		if (typeof (Storage) !== "undefined") {
+			// ~5M max
+			localStorage.setItem(cname, cvalue);
+		} else {
+			// 4K
+			const d = new Date();
+			let expireInDays = 7;
+			d.setTime(d.getTime() + (expireInDays * 24 * 60 * 60 * 1000));
+			let expires = "expires=" + d.toUTCString();
+			var myCookieValue = cvalue;
+			document.cookie = cname + "=" + myCookieValue + ";" + expires + ";path=/";
+		}
+	}
+
+	function loadInput(cname) {
+		if (typeof (Storage) !== "undefined") {
+			let res = localStorage.getItem(cname);
+			return res ? res : "";
+		} else {
+			let name = cname + "=";
+			let decodedCookie = document.cookie;
+			let ca = decodedCookie.split(';');
+			for (let i = 0; i < ca.length; i++) {
+				let c = ca[i];
+				while (c.charAt(0) === ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) === 0) {
+					return c.substring(name.length, c.length).split('\\').join('\n');
+				}
+			}
+			return "";
+		}
+	}	
+	
+	let cookieInput = loadInput("input");
+	if (cookieInput !== "") {
+        document.getElementById('text').value = cookieInput;
+    }
+	let totalPsukim = loadInput("resCount");
+	if (totalPsukim !== "") {
+		document.getElementById("result").innerHTML = "Total Psukim: " + totalPsukim;
+	}
 
     function isValid(line) {
 		if (line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) {
@@ -49,7 +110,6 @@
 			++ EndFile;
 		}
 	}
-
 	
     function pasuk() {
 		document.getElementById("result").innerHTML = "";
@@ -58,6 +118,7 @@
 			document.getElementById("result").innerHTML = "Invalid name";
 		}
 		else {
+			saveInput("input", args);
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT', true);
 			xhr.overrideMimeType('text/plain; charset=x-user-defined'); // Hack to pass bytes through unprocessed
@@ -96,6 +157,7 @@
 					line = line + " " + decrypt(findStr2);
 				}
 				isValid(line);
+				saveInput('resCount', EndFile);
 				document.getElementById("result").innerHTML = output + "<br/><br/> Total Psukim: " + EndFile;
 			  }
 			};
@@ -103,18 +165,6 @@
 		}
     }
 </script>
-First Name:
-</br>
-<input type="text" id="text" value="">
-<button onclick="pasuk()">Find my Pasuk</button>
-<p id="result"></p>
-<br/>
-<a href="https://github.com/shahart/heb-bible" target="_blank">
-	>>
-	<svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle">
-		<path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-	</svg>
-	<<
-</a>
+
 </body>
 </html>
