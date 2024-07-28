@@ -7,11 +7,20 @@
     <title>Pasuk</title>
 </head>
 <body>
-
+<a href="https://www.toratemetfreeware.com/online/f_00720_all.html" target="_blank">
+סגולה שלא ישכח שמו ליום הדין: יאמר קודם יהיו לרצון השני בתפילת העמידה פסוק מהתנ"ך המתחיל באות הראשונה של שמו ומסתיים באות האחרונה של שמו או פסוק ששמו מופיע בו,
+</a>
+</br>
+</br>
 First Name:
 </br>
 <input type="text" id="text" value="">
-
+</br>
+</br>
+<input type="checkbox" id="containsName" name="containsName" value="true" checked>
+<label for="containsName"> שם בתוך הפסוק או רק אות ראשונה ואחרונה</label><br>
+</br>
+<!-- todo containsName checkBox -->
 <button onclick="pasuk()">Find my Pasuk</button>
 <p id="result"></p>
 <br/>
@@ -77,13 +86,12 @@ First Name:
 	function loadInput(cname) {
 		if (typeof (Storage) !== "undefined") {
 			let res = localStorage.getItem(cname);
-			return res ? res : "";
+			return res || "";
 		} else {
 			let name = cname + "=";
 			let decodedCookie = document.cookie;
 			let ca = decodedCookie.split(';');
-			for (let i = 0; i < ca.length; i++) {
-				let c = ca[i];
+			for (let c of ca) {
 				while (c.charAt(0) === ' ') {
 					c = c.substring(1);
 				}
@@ -104,8 +112,8 @@ First Name:
 		document.getElementById("result").innerHTML = "Total Psukim: " + totalPsukim;
 	}
 
-    function isValid(line) {
-		if (line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) {
+    function isValid(line, containsName) {
+		if ((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)) {
 			output += line + " -- " + currBook + " " + PPrk + "-" + PPsk + "<br/><br/>";
 			++ EndFile;
 		}
@@ -113,6 +121,7 @@ First Name:
 	
     function pasuk() {
 		document.getElementById("result").innerHTML = "";
+		let containsName = document.getElementById("containsName").checked;
 		args = document.getElementById("text").value;
 		if (args.length <= 1 || args.charAt(0) > 'ת' || args.charAt(0) < 'א' || args.charAt(args.length-1) > 'ת' || args.charAt(args.length-1) < 'א') {
 			document.getElementById("result").innerHTML = "Invalid name";
@@ -145,7 +154,7 @@ First Name:
 					}
 					if (findStr2[1] - 31 !== PPsk
 							&& line.length > 0) {
-						isValid(line);
+						isValid(line, containsName);
                         if (findStr2[0] - 31 === 1 && findStr2[1] - 31 === 1 && findStr2[1] - 31 !== PPsk) {
                             ++currBookIdx;
                             currBook = bookeng[currBookIdx];
@@ -156,7 +165,7 @@ First Name:
 					PPsk = findStr2[1] - 31;
 					line = line + " " + decrypt(findStr2);
 				}
-				isValid(line);
+				isValid(line, containsName);
 				saveInput('resCount', EndFile);
 				document.getElementById("result").innerHTML = output + "<br/><br/> Total Psukim: " + EndFile;
 			  }

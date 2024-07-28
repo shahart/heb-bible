@@ -7,20 +7,28 @@ import java.io.*;
 
 public class Pasuk {
 
+    final static String []bookeng = new String[] {"Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Samuel 1",
+            "Samuel 2","Kings 1","Kings 2","Isaiah","Jeremiah","Ezekiel","Hosea","Joel","Amos","Obadiah","Jonah","Micha","Nachum",
+            "Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Psalms","Proverbs","Job","Song of songs","Ruth","Lamentations",
+            "Ecclesiastes","Esther","Daniel","Ezra","Nehemiah","Cronicles 1","Cronicles 2"};
+
     public static void main(String[] args) throws Exception {
+        // todo apache-commons-cli: and -containsName
         if (args.length == 0 || args[0].length() <= 1) {
             System.err.println("Invalid name");
             System.exit(1);
         }
-        args[0] = args[0].substring(0, 1) + args[0].substring(args[0].length()-1);
         Pasuk pasuk = new Pasuk();
         pasuk.findPsukim(args[0]);
     }
 
     public void findPsukim(String args) throws Exception {
+        boolean containsName = true;
+        int findings = 0;
         int EndFile = 0; // amount of psukim
+        int currBookIdx = 0;
         long ts = System.currentTimeMillis();
-        try (DataInputStream inputStream = new DataInputStream(new FileInputStream("c:\\temp\\bible.txt"))) {
+        try (DataInputStream inputStream = new DataInputStream(new FileInputStream("c:\\repos\\heb-bible\\bible.txt"))) {
             int[] findStr2 = new int[47];
             int PPsk = 999;
             int PPrk = 1;
@@ -31,10 +39,14 @@ public class Pasuk {
                 }
                 if ((findStr2[1] - 31 != PPsk)
                         && (!line.isEmpty())) {
-                    if (line.charAt(1) == args.charAt(0) && line.charAt(line.length()-1) == args.charAt(1)) {
+                    if ((line.charAt(1) == args.charAt(0) && line.charAt(line.length()-1) == args.charAt(args.length()-1)) || (containsName && line.indexOf(args) >= 0)) {
                         System.out.println(
-                                // "Prk:" + PPrk + ",Psk:" + PPsk + ":" + // todo nice to have, echo the book name, see Genesis in read.pas
+                                bookeng[currBookIdx] + " " + PPrk + "-" + PPsk + " -- " +
                                 line);
+                        ++ findings;
+                    }
+                    if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
+                        ++ currBookIdx;
                     }
                     line = new StringBuilder();
                     ++EndFile;
@@ -45,10 +57,10 @@ public class Pasuk {
             }
         } catch (EOFException ignored) {
         }
-        System.out.println(EndFile + " verses total. Time taken (mSec): " + (System.currentTimeMillis() - ts));
+        System.out.println(EndFile + " verses total. \nTime taken (mSec): " + (System.currentTimeMillis() - ts) + ". \nTotal Psukim: " + findings);
     }
 
-    private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it's unicode
+    private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode
         char res = i == 31 ? ' ' : (char)('א' + i);
         s.insert(0, res);
     }
