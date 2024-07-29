@@ -101,13 +101,19 @@ First Name:
 			}
 			return "";
 		}
-	}	
+	}
 	
-	let cookieInput = loadInput("input");
+	const params = new URLSearchParams(document.location.search);
+	const firstName = params.get("firstName");
+	if (firstName && firstName !== '') {
+		console.info(firstName);
+	}
+	
+	let cookieInput = firstName && firstName !== '' ? firstName : loadInput("input");
 	if (cookieInput !== "") {
         document.getElementById('text').value = cookieInput;
     }
-	let totalPsukim = loadInput("resCount");
+	let totalPsukim = firstName && firstName !== '' ? 0 : loadInput("resCount");
 	if (totalPsukim !== "") {
 		document.getElementById("result").innerHTML = "Total Psukim: " + totalPsukim;
 	}
@@ -173,6 +179,10 @@ First Name:
 			xhr.send();
 		}
     }
+
+	if (firstName && firstName !== '') {
+		pasuk();
+	}
 </script>
 
 </body>
