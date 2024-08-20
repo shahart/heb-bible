@@ -1,0 +1,42 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4.1.7
+
+      - name: Configure JDK
+        uses: actions/setup-java@v4.2.2
+        with:
+          distribution: temurin
+          java-version: 19
+
+      - name: Java
+        run: javac Pasuk.java && java Pasuk שחר
+
+      - name: Configure HTML
+        run: sudo apt-get install lynx
+
+      - name: HTML
+        run: lynx -dump Pausk.html
+        
+      - name: Configure Node
+        uses: actions/setup-node@v4
+
+#      - name: JavaScript
+#        run: node Pasuk.js
+
+      - name: Configure Pascal
+        uses: fabasoad/pascal-actions@v1.1.3 # fpc
+        id: pascal
+        with:
+          path: READ.PAS
+
