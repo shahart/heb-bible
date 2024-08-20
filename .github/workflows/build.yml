@@ -20,7 +20,7 @@ jobs:
           java-version: 19
 
       - name: Java
-        run: javac Pasuk.java && java Pasuk שחר
+        run: javac Pasuk.java # && java Pasuk שחר # java.io.FileNotFoundException: c:\repos\heb-bible\bible.txt
 
       - name: Configure HTML
         run: sudo apt-get install lynx
