@@ -1,6 +1,7 @@
 // package edu.hebbible;
 
 import java.io.*;
+import java.net.URL;
 
 // TODO refactor, for now simple migration from pasuk.pas (kind of, as it was lost).
 // Even the var names are the same style of 2002.
@@ -23,12 +24,12 @@ public class Pasuk {
     }
 
     public void findPsukim(String args) throws Exception {
-        boolean containsName = true;
+        boolean containsName = false;
         int findings = 0;
         int EndFile = 0; // amount of psukim
         int currBookIdx = 0;
         long ts = System.currentTimeMillis();
-        try (DataInputStream inputStream = new DataInputStream(new FileInputStream("c:\\repos\\heb-bible\\bible.txt"))) {
+        try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
             int[] findStr2 = new int[47];
             int PPsk = 999;
             int PPrk = 1;
@@ -38,11 +39,11 @@ public class Pasuk {
                     findStr2[i] = inputStream.readUnsignedByte();
                 }
                 if ((findStr2[1] - 31 != PPsk)
-                        && (!line.isEmpty())) {
+                        && (line.length()>=1)) {
                     if ((line.charAt(1) == args.charAt(0) && line.charAt(line.length()-1) == args.charAt(args.length()-1)) || (containsName && line.indexOf(args) >= 0)) {
                         System.out.println(
                                 bookeng[currBookIdx] + " " + PPrk + "-" + PPsk + " -- " +
-                                line);
+                                        line);
                         ++ findings;
                     }
                     if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {

@@ -1,4 +1,4 @@
-{$A+,B-,D-,E-,F-,G+,I+,L-,N-,O-,P-,Q-,R-,S-,T-,V+,X+}
+{$A+,B-,D-,G+,I+,O-,P-,Q-,R-,S-,T-,V+,X+}
 {$m 1024,0,0}
 uses crt,dos;
 const
