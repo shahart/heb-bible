@@ -55,3 +55,10 @@ F,Find ³ חיפוש מחרוזת מבוקשת. לחיפוש מלה הקש רו�
 ³ הקש את מספרו בלבד. הקש 3 רווחים לקפיצה לפרק
 
 ³ הבא.
+
+#### AWS Lambda
+
+`mvn clean package shade:shade`
+
+At https://eu-north-1.console.aws.amazon.com/lambda/home?region=eu-north-1#/functions/myPsukimViaLambda?tab=configure
+Allow _CORS_, put `access-control-allow-origin` at both Expose/ Allowed headers

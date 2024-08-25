@@ -2,6 +2,7 @@ package edu.hebbible;
 
 import java.io.*;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -22,7 +23,14 @@ public class Handler implements RequestHandler<Map<String, Object>, String> {
         Gson gson = new Gson();
         Map<String, Object> request = gson.fromJson(gson.toJson(event), Map.class);
         try {
-            return findPsukim(context.getLogger(), request.get("name").toString(), Boolean.parseBoolean(request.getOrDefault("containsName", false).toString()));
+            Map<String, String> bodyParams = new HashMap<>();
+            if (request.containsKey("body")) {
+                request = gson.fromJson((String) request.get("body"), Map.class);
+            }
+            bodyParams.put("name", request.get("name").toString());
+            bodyParams.put("containsName", request.getOrDefault("containsName", Boolean.FALSE).toString());
+            return findPsukim(context.getLogger(),
+                    bodyParams.get("name"), Boolean.parseBoolean(bodyParams.getOrDefault("containsName", "false")));
         }
         catch (Exception e) {
             throw new IllegalArgumentException(e.toString(), e);
@@ -63,7 +71,8 @@ public class Handler implements RequestHandler<Map<String, Object>, String> {
             }
         } catch (EOFException ignored) {
         }
-        return EndFile + " verses total. \nTime taken (mSec): " + (System.currentTimeMillis() - ts) + ". \nTotal Psukim: " + findings;
+        return // EndFile + " verses total. \nTime taken (mSec): " + (System.currentTimeMillis() - ts) + ". \n" +
+                "Total Psukim: " + findings;
     }
 
     private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode
@@ -77,7 +86,7 @@ public class Handler implements RequestHandler<Map<String, Object>, String> {
         // Java has no unsigned, so for InputStream look at https://mkyong.com/java/java-convert-bytes-to-unsigned-bytes/
         int i = 1;
         while (i <= 72) {
-            getHebChar(s, ((findstr2[m]) >> 3));                                           // {11111000}
+            getHebChar(s, ((findstr2[m]) >> 3));                                        // {11111000}
             getHebChar(s, (((findstr2[m]) & 7) << 2) | ((findstr2[m + 1]) >> 6));       // {00000111+11000000}
             getHebChar(s, ((findstr2[m + 1]) & 62) >> 1);                               // {00111110}
             getHebChar(s, (((findstr2[m + 1]) & 1) << 4) | ((findstr2[m + 2]) >> 4));   // {00000001+11110000}
