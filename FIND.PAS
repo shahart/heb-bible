@@ -40,7 +40,8 @@ Var
 procedure decrypt2;
 begin
   m:=1;
-  for i:=1 to 72 do begin
+  i:=1;
+  while (i<=72) do begin
     s[i]:=chr(reco.txt[m] shr 3);                                {11111000}
     s[i+1]:=chr(reco.txt[m] and 7 shl 2 or reco.txt[m+1] shr 6); {00000111 + 11000000}
     s[i+2]:=chr(reco.txt[m+1] and 62 shr 1);                                {00111110}
@@ -50,7 +51,7 @@ begin
     s[i+6]:=chr(reco.txt[m+3] and 3 shl 3 or reco.txt[m+4] shr 5);                                {00000011 + 11100000}
     s[i+7]:=chr(reco.txt[m+4] and 31);                                                                       {00011111}
     inc(m,5);
-    inc(i,7);
+    i:=i+7;
   end;
 end;
 
@@ -88,7 +89,7 @@ begin
   halt;
 end;
 
-Procedure Adds(Ch:char;N:Byte);
+Procedure Adds(Ch:char;N:Byte); // todo error: incompatible type for arg no. 1: got "constant string", expected "char "
 Begin
   Heb:=Ch+Heb;
   Inc(Code,N);

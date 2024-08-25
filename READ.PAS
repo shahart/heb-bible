@@ -39,7 +39,8 @@ Var
 procedure decrypt;
 begin
   m:=1;
-  for i:=1 to 72 do begin
+  i:=1;
+  while (i<=72) do begin
     s[i]:=chr(128 or findstr2.txt[m] shr 3);                                    {11111000}
     s[i+1]:=chr(128 or findstr2.txt[m] and 7 shl 2 or findstr2.txt[m+1] shr 6); {00000111+11000000}
     s[i+2]:=chr(128 or findstr2.txt[m+1] and 62 shr 1);                                  {00111110}
@@ -49,7 +50,7 @@ begin
     s[i+6]:=chr(128 or findstr2.txt[m+3] and 3 shl 3 or findstr2.txt[m+4] shr 5);                          {00000011+11100000}
     s[i+7]:=chr(128 or findstr2.txt[m+4] and 31);                                                                   {00011111}
     inc(m,5);
-    inc(i,7);
+    i:=i+7;
   end;
   for i:=1 to 69 do
     if s[i]=#159 then
@@ -151,7 +152,7 @@ Begin
     writeln('�   Enter-� (���������)   �':32,^m^j,'�'+findstr+'�':32);
     textAttr:=lightgreen;
     key:=' R e a d  ';
-    mem[$40:$1c]:=$2a;
+    mem[$40:$1c]:=$2a; // todo fix
     mem[$40:$1a]:=$1e;
     exit;
   End;
