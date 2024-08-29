@@ -67,7 +67,7 @@ First Name:
     var currBookIdx = 0;
     var PPrk = 1;
     var PPsk = 999;
-	
+
 	function saveInput(cname, cvalue) {
 		if (typeof (Storage) !== "undefined") {
 			// ~5M max
@@ -177,6 +177,18 @@ First Name:
 			  }
 			};
 			xhr.send();
+			//
+			var xhrAws = new XMLHttpRequest();
+            xhrAws.open('POST', 'https://nd4w9kk8f3.execute-api.eu-north-1.amazonaws.com/v1/pasuk'); // deployed before with https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/ // todo nd4 -> shahart
+            xhrAws.setRequestHeader("Content-Type", "application/json");
+            xhrAws.send(JSON.stringify({ "name": args, "containsName": containsName }));
+            xhrAws.onreadystatechange = function(e) {
+              if ( xhrAws.readyState === 4 &&
+                    xhrAws.status === 200) {
+                console.log(this.responseText);
+              }
+            }
+            xhrAws.send();
 		}
     }
 

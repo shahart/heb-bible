@@ -58,7 +58,20 @@ F,Find ³ חיפוש מחרוזת מבוקשת. לחיפוש מלה הקש רו�
 
 #### AWS Lambda
 
+Api GW /v1/pasuk with POST method.
+Allow _CORS_
+
+- Java
+
 `mvn clean package shade:shade`
 
 At https://eu-north-1.console.aws.amazon.com/lambda/home?region=eu-north-1#/functions/myPsukimViaLambda?tab=configure
 Allow _CORS_, put `access-control-allow-origin` at both Expose/ Allowed headers
+
+- JavaScript
+
+`node Pasuk.mjs שחר` >> TODO lambda/index.mjs
+
+- GoLang
+
+TODO lambda/Pasuk.go
