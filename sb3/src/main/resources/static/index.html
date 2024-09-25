@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>psukim</title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $.ajax({
+        url: "http://localhost:8080/psukim",
+        success: function(data) {
+            console.debug(data);
+            $('.count').append(data);
+        }
+    });
+</script>
+<a href="http://localhost:8080/swagger-ui/index.html">Swagger</a>
+<div>
+    <p class="count">Count is </p>
+</div>
+</body>
+</html>

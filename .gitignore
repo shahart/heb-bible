@@ -1,5 +1,9 @@
 out/
 .idea/
-lambda/target
+aws-lambda/target
 *.exe
 *.iml
+sb3/build
+sb3/.gradle
+gcp-cloud-function/target
+azure-functions/target

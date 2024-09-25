@@ -4,10 +4,11 @@ The bible.
 
 The code requires some time to re-understand. Plus the fact it was done on DOS with hebrew characters (Ascii 128 stands for Aleph).
 
-The commit is without
+The commit is with
 
 - bible.txt 1.42 MB
 - bible.gim 46 KB (for gematria)
+- errata.inf (קרי וכתיב)
 
 A nice fact: as we need only 27 letters plus period and space (maybe more, I can't remember), 5 bits are enough, so silly compression done to put it on old 1.44 floppy.
 
@@ -56,6 +57,18 @@ F,Find ³ חיפוש מחרוזת מבוקשת. לחיפוש מלה הקש רו�
 
 ³ הבא.
 
+#### Azure Function App
+
+myPsukimViaFunctionApp
+
+#### Gcp Cloud Function
+
+https://us-central1-pivotal-racer-435706-c6.cloudfunctions.net/myPsukimViaLambda
+
+CLI: gcloud functions list
+
+`curl http://localhost:8081?name=שחר`
+
 #### AWS Lambda
 
 Api GW /v1/pasuk with POST method.
@@ -74,4 +87,34 @@ Allow _CORS_, put `access-control-allow-origin` at both Expose/ Allowed headers
 
 - GoLang
 
-TODO lambda/Pasuk.go
+TODO Pasuk.go
+
+go run Pasuk.go
+
+#### EC2
+
+Bare minimum Spring Boot 3 App.
+
+Init'ed with Spring Initializ: https://start.spring.io/
+
+- `docker build -t hebbible-app .`
+- `docker run -p 8080:8080 hebbible-app`
+
+- `curl -H "Content-Type: application/json" -d 'שחר' http://localhost:8080/[hebBible/]psukim`
+
+$ java -jar hebbible-0.0.1-SNAPSHOT.war
+
+http://localhost:8080/ >> Swagger/OpenApi
+
+# Getting Started with Create React App
+
+- `node grab-git-info.js`
+
+- `chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security`
+
+
+#### Dynamo DB
+
+- `aws dynamodb create-table --table-name psukim`
+
+- `docker pull amazon/dynamodb-local`

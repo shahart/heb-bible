@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1, width=device-width, height=device-height" />
+    <title>מצאו דילוגים בתנך</title>
+    <style>
+        body {direction:rtl; background-color:#f8f8f8; font-family:Arial; font-size:16px;	color:black; overflow:auto;}
+        #sresult {display:block; background-color:#f5f5dc; font-size:12px; width:80%; margin:auto; border:1px solid; padding:4px; overflow:auto;}
+        table {margin-top:10px; margin-right:10px; margin-bottom:10px; margin-left:auto; border:1px solid;}
+        td {white-space:nowrap;}
+    </style>
+    <script>
+        // Indexes  0...N-1 named ind*,IND*
+        // Counters 1...N   named cnt*,CNT*, max*,MAX*, tot*,TOT*, len*,LEN*
+
+        // todo build it from https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT
+
+        var torVerses = [
+            {cntLetter:1, vrsNam:"בראשית א א", vrsTxt:"בראשית ברא אלהים את השמים ואת הארץ"},
+            {cntLetter:29, vrsNam:"בראשית א ב", vrsTxt:"והארץ היתה תהו ובהו וחשך על פני תהום ורוח אלהים מרחפת על פני המים"},
+            {cntLetter:81, vrsNam:"בראשית א ג", vrsTxt:"ויאמר אלהים יהי אור ויהי אור"},
+            {cntLetter:104, vrsNam:"בראשית א ד", vrsTxt:"וירא אלהים את האור כי טוב ויבדל אלהים בין האור ובין החשך"},
+            {cntLetter:149, vrsNam:"בראשית א ה", vrsTxt:"ויקרא אלהים לאור יום ולחשך קרא לילה ויהי ערב ויהי בקר יום אחד"}
+        ];
+
+        var torTxt =
+            "בראשיתבראאלהימאתהשמימואתהארצ" +
+            "והארצהיתהתהוובהווחשכעלפניתהומורוחאלהיממרחפתעלפניהמימ" +
+            "ויאמראלהימיהיאורויהיאור" +
+            "ויראאלהימאתהאורכיטובויבדלאלהימבינהאורובינהחשכ" +
+            "ויקראאלהימלאוריומולחשכקראלילהויהיערבויהיבקריומאחד";
+
+        var TOTVERSES = 5;
+        var TOTLETTERS = 197;
+
+        //-------------------------------------------------------------------------------------------
+        // Return the index of the verse containing a specific letter count.
+        // Input: cntLtr: given letter count
+        //        indLowVrs: index of first verse in range
+        //        indHigVrs: index of last verse in range
+        // Assume good input.
+        //-------------------------------------------------------------------------------------------
+        function indVrsRange(cntLtr, indLowVrs, indHigVrs) {
+            if (indLowVrs == indHigVrs) return indLowVrs;
+            else {
+                var indMidVrs = Math.ceil((indLowVrs + indHigVrs) / 2);
+                if (cntLtr < torVerses[indMidVrs].cntLetter) return indVrsRange(cntLtr, indLowVrs, indMidVrs-1);
+                else return indVrsRange(cntLtr, indMidVrs, indHigVrs);
+            }
+        }
+        function indVrs(cntLtr) {
+            return indVrsRange(cntLtr, 0, TOTVERSES-1);
+        }
+
+        //-------------------------------------------------------------------------------------------
+        // Return verse parts based on a specific letter count.
+        // Input: cntLtr: given letter count
+        // Return {verse name, verse part before letter, letter, verse part after letter}
+        //        Part before or after may be an empty string.
+        // Assume good input.
+        //-------------------------------------------------------------------------------------------
+        function vrsParts(cntLtr) {
+            var ret = {vrsName:"", vrsBefore:"", vrsLetter:"", vrsAfter:""};
+            var iVrs = indVrs(cntLtr);
+            ret.vrsName = torVerses[iVrs].vrsNam;
+            var txt = torVerses[iVrs].vrsTxt;
+            var iLtr = 0;
+            var jLtr = cntLtr - torVerses[iVrs].cntLetter;
+            for (var i = 0; i < txt.length; i++) {
+                if (txt.charAt(i) != " ") {
+                    if (jLtr == iLtr) {
+                        ret.vrsBefore = txt.substr(0,i);
+                        ret.vrsLetter = txt.charAt(i);
+                        ret.vrsAfter = txt.substr(i+1);
+                        return ret;
+                    }
+                    iLtr++;
+                }
+            }
+        }
+    </script>
+</head>
+<body dir="rtl">
+<h2 align="center">מצא דילוגים בתנך</h2>
+<form name="sform">
+    <p align="center">
+        חפש: <input type="text" style="direction:rtl;" placeholder="טקסט לחיפוש" id="starget" name="starget" size="25"></input> &nbsp;
+        מדילוג של: <input type="number" id="smin" name="smin" size="8" min="1" max="304804"></input> &nbsp;
+        עד דילוג של: <input type="number" id="smax" name="smax" size="8" min="1" max="304804"></input>
+        <br/>
+        <span style="line-height:25px;">(דילוג של 1 הוא בעצם חיפוש בטקסט המקורי.)</span>
+    </p>
+    <p align="center">
+        <input type="checkbox" id="sarea" name="sarea"></input> הצג גם את הפסוקים באזור &nbsp;&nbsp;
+        <input type="button" id="ssearch" name="ssearch" value="חפש" onClick="doSearch()"></input> &nbsp;
+        <input type="button" id="sabort"  name="sabort" value="הפסק" disabled onClick="doAbort()"></input>
+    </p>
+    <p align="center">
+        <input type="text" style="direction:rtl;" id="smsg" name="smsg" value="הודעות המערכת" disabled size="80"></input>
+    </p>
+</form>
+<p align="center">
+    תוצאות החיפוש:<br/>
+<div id="sresult"></div>
+</P>
+<script language="JavaScript">
+    <!--
+                var abort = false;
+                var searching = false;
+                var found = 0;
+                var TPAD = 9; // letters displayed on each side of searched text
+                var TOOMANY = 50;
+                var iSkip, target, targetLen, skipMin, skipMax, skipLimit;
+                var lastInd, match, targetExt, table, posInd, verseParts, timer;
+
+                function doSearch() {
+                    if (!searching) {
+                        searching = true;
+                        sform.ssearch.disabled = true;
+                        abort = false;
+                        sform.sabort.disabled = true;
+                        document.getElementById("sresult").innerHTML = "";
+
+                        // Check input:
+                        sform.smsg.value = "";
+                        document.getElementById("smsg").style.color = "red";
+                        target = sform.starget.value;
+                        if (target == "") {doErrInput("יש למלא טקסט לחיפוש"); return;}
+                        target = target.replace(/\s+/g, ''); // remove spaces
+                        if (!(/^[\u05D0-\u05EA]+$/).test(target)) {doErrInput("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים"); return;}
+                        target = target.replace(/\u05DA/g, 'כ');
+                        target = target.replace(/\u05DD/g, 'מ');
+                        target = target.replace(/\u05DF/g, 'נ');
+                        target = target.replace(/\u05E3/g, 'פ');
+                        target = target.replace(/\u05E5/g, 'צ');
+                        sform.starget.value = target;
+                        targetLen = target.length;
+                        if (targetLen < 2) {doErrInput("הטקסט לחיפוש חייב להכיל לפחות 2 אותיות"); return;}
+                        skipMin = sform.smin.value;
+                        skipMax = sform.smax.value;
+                        if ((skipMin == "") || (skipMax == "")) {doErrInput("יש למלא את תחום הדילוג, ובספרות בלבד"); return;}
+                        if (!(/^[0-9]+$/).test(skipMin) || !(/^[0-9]+$/).test(skipMax)) {doErrInput("יש למלא את תחום הדילוג, ובספרות בלבד"); return;}
+                        skipMin = parseInt(skipMin);
+                        skipMax = parseInt(skipMax);
+                        if ((skipMin < 1) || (skipMin > (TOTLETTERS-1)) || (skipMax < 1) || (skipMax > (TOTLETTERS-1))) {doErrInput("הדילוגים צריכים להיות בתחום 1-304804"); return;}
+                        if (skipMin > skipMax) {doErrInput("הדילוג המקסימלי אינו יכול להיות קטן מהדילוג המינימלי"); return;}
+                        skipLimit = Math.floor((TOTLETTERS-1)/(targetLen-1));
+                        if (skipMax > skipLimit) {doErrInput("בטקסט באורך " + targetLen + " הדילוג המקסימלי יכול להיות " + skipLimit); return;}
+                        document.getElementById("smsg").style.color = "black";
+
+                        // Actual search:
+                        sform.sabort.disabled = false;
+                        found = 0;
+                        iSkip = skipMin;
+                        timer = setTimeout(doOneSkip, 1);
+                    }
+                }
+
+                function doOneSkip() {
+                    if (abort) doStop("החיפוש הופסק");
+                    else {
+                        sform.smsg.value = "בודק דילוג של " + iSkip;
+                        lastInd = TOTLETTERS - (targetLen-1) * iSkip;
+
+                        for (let j = 0; j < lastInd; j++) { // loop on Torah
+                            match = true;
+
+                            for (let k = 0; k < targetLen; k++) { // loop on target
+                                if (torTxt[j+k*iSkip] != target[k]) {match = false; break;}
+                            }
+
+                            if (match) {
+                                document.getElementById("sresult").innerHTML += "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + " (" + vrsParts(j+1).vrsName + "):";
+                                found++;
+
+                                if (document.getElementById("sarea").checked) { // show area around result
+                                    table = '<table border="0" cellspacing="0" cellpadding="0" align="center" style="background-color:white">';
+                                    for (let k = 0; k < TPAD + targetLen + TPAD; k++) {
+                                        posInd = j + (k-TPAD) * iSkip;
+                                        if ((posInd >= 0) && (posInd < TOTLETTERS)) {
+                                            verseParts = vrsParts(posInd+1);
+                                            table +=
+                                                '<tr><td align="right">' + verseParts.vrsName +
+                                                '</td><td>&nbsp;&nbsp;</td><td>' +
+                                                '</td><td align="left">' + verseParts.vrsBefore +
+                                                '</td><td align="center"><font color="red"><b>' + verseParts.vrsLetter +
+                                                '</font></b></td><td align="right">' + verseParts.vrsAfter + '</td></tr>';
+                                        }
+                                        if ((k == (TPAD-1)) || (k == (TPAD+targetLen-1))) table += '<tr><td colspan="5">&nbsp;</td></tr>';
+                                    }
+                                    table += '</table>';
+                                    document.getElementById("sresult").innerHTML += table;
+                                }
+
+                                else { // show only result without area
+                                    targetExt = "";
+                                    for (let k = 0; k < TPAD + targetLen + TPAD; k++) {
+                                        posInd = j + (k-TPAD) * iSkip;
+                                        if (k == TPAD) targetExt += ' <font color="red"><b>';
+                                        if ((posInd >= 0) && (posInd < TOTLETTERS)) targetExt += torTxt[posInd];
+                                        if (k == (TPAD+targetLen-1)) targetExt += '</b></font> ';
+                                    }
+                                    document.getElementById("sresult").innerHTML += "<br/>" + targetExt + "<br/><br/>";
+                                }
+                            }
+                        }
+
+                        if (found < TOOMANY) {
+                            if (iSkip < skipMax) {iSkip++; timer = setTimeout(doOneSkip, 1);}
+                            else doStop("החיפוש הסתיים");
+                        }
+                        else doStop("נמצאו יותר מדי תוצאות ולכן החיפוש הופסק - נסה חיפוש קשה יותר");
+                    }
+                }
+
+                function doAbort() {
+                    if (searching) {
+                        abort = true;
+                        sform.sabort.disabled = true;
+                    }
+                }
+
+                function doStop(msg) {
+                    sform.smsg.value = msg;
+                    if (searching) {
+                        searching = false;
+                        sform.ssearch.disabled = false;
+                        sform.sabort.disabled = true;
+                    }
+                }
+
+                function doErrInput(msg) {
+                    doStop("שגיאה: " + msg);
+                }
+    //-->
+</script>
+</body>
+</html>

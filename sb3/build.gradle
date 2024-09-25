@@ -1,0 +1,84 @@
+buildscript {
+    dependencies {
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version('3.3.4')
+    id 'war'
+    id 'com.gorylenko.gradle-git-properties' version('2.4.1')
+    id 'io.spring.dependency-management' version '1.1.6'
+    id "com.github.spotbugs" version('6.0.21')
+    id 'com.palantir.docker' version('0.36.0')
+    id 'jacoco'
+}
+
+gitProperties {
+    keys = ['git.commit.id.abbrev', 'git.branch', 'git.commit.time']
+}
+
+group = 'edu.hebbible'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation(platform("software.amazon.awssdk:bom:2.27.21"))
+    implementation 'software.amazon.awssdk:dynamodb'
+
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+//        exclude group:'org.springframework.boot', module:'spring-boot-starter-tomcat'
+    }
+//    implementation "org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}"
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+    afterTest { descriptor, result ->
+        def totalTime = result.endTime - result.startTime
+        println "\n$totalTime msec"
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.deprecation = true
+}
+
+docker {
+    name 'hebbible:0.0.1-SNAPSHOT'
+    dockerfile file('Dockerfile')
+}
+
+tasks {
+    spotbugsTest {
+        onlyIf { false }
+    }
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}

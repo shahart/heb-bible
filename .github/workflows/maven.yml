@@ -27,6 +27,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      working-directory: ./lambda
+    - name: Build Lambda with Maven
+      working-directory: ./aws-lambda
       run: mvn -B package --file pom.xml
+    - name: Build Gcp Cloud Function with Maven
+      working-directory: ./gcp-cloud-function
+      run: mvn -B package --file pom.xml
+    - name: Build Azure Function with Maven
+      working-directory: ./azure-functions
+      run: mvn -B package --file pom.xml
+  # - name: Build ec2 with Maven
+  #   working-directory: ./sb3
+  #   run: mvn -B package --file pom.xml
+    

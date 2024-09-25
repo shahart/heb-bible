@@ -1,32 +1,55 @@
-// package edu.hebbible;
+package edu.hebbible.repository;
 
-import java.io.*;
+import java.io.DataInputStream;
+//import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.*;
 
-// TODO refactor, for now simple migration from pasuk.pas (kind of, as it was lost).
-// Even the var names are the same style of 2002.
+import edu.hebbible.model.Pasuk;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
-@Deprecated
-public class Pasuk {
+//import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
-    final static String []bookeng = new String[] {"Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Samuel 1",
-            "Samuel 2","Kings 1","Kings 2","Isaiah","Jeremiah","Ezekiel","Hosea","Joel","Amos","Obadiah","Jonah","Micha","Nachum",
-            "Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Psalms","Proverbs","Job","Song of songs","Ruth","Lamentations",
-            "Ecclesiastes","Esther","Daniel","Ezra","Nehemiah","Cronicles 1","Cronicles 2"};
+@Repository
+public class Repo {
 
-    public static void main(String[] args) throws Exception {
-        // todo apache-commons-cli: and -containsName
-        if (args.length == 0 || args[0].length() <= 1) {
-            System.err.println("Invalid name");
-            System.exit(1);
-        }
-        Pasuk pasuk = new Pasuk();
-        pasuk.findPsukim(args[0]);
+    private static Logger log = LoggerFactory.getLogger(Repo.class);
+
+    private final List<Pasuk> store = new ArrayList<>();
+
+    final static String []bookHeb = new String[] {"תישארב","תומש","ארקיו","רבדמב","םירבד","עשוהי","םיטפוש","א לאומש","ב לאומש", "א םיכלמ","ב םיכלמ","היעשי","הימרי","לאקזחי","עשוה","לאוי","סומע","הידבוע","הנוי","הכימ","םוחנ","קוקבח","הינפצ", "יגח","הירכז","יכאלמ","םילהת","ילשמ","בויא","םירישה ריש","תור","הכיא","תלהק","רתסא","לאינד","ארזע","הימחנ", "א םימיה ירבד","ב םימיה ירבד"};
+
+    @PostConstruct
+    public void postConstruct() {
+        logGitProps();
+        init();
     }
 
-    public void findPsukim(String args) throws Exception {
-        boolean containsName = false;
-        int findings = 0;
+    // reads the result of the git prop in the build.gradle
+    private void logGitProps() {
+        try {
+            Properties props = new Properties();
+            InputStream is = getClass().getClassLoader().getResourceAsStream("git.properties");
+            if (is != null) {
+                props.load(is);
+            }
+            log.info("git.commit.id.abbrev: " + props.get("git.commit.id.abbrev"));
+        } catch (IOException e) {
+            log.warn("cannot get the git props " + e.getMessage());
+        }
+    }
+
+    public Collection<Pasuk> getStore() {
+        return Collections.unmodifiableList(store);
+    }
+
+    @SuppressWarnings(value = "REC_CATCH_EXCEPTION") // , justification = "eof exception, ignored")
+    void init() {
         int EndFile = 0; // amount of psukim
         int currBookIdx = 0;
         long ts = System.currentTimeMillis();
@@ -40,16 +63,12 @@ public class Pasuk {
                     findStr2[i] = inputStream.readUnsignedByte();
                 }
                 if ((findStr2[1] - 31 != PPsk)
-                        && (line.length()>=1)) {
-                    if ((line.charAt(1) == args.charAt(0) && line.charAt(line.length()-1) == args.charAt(args.length()-1)) || (containsName && line.indexOf(args) >= 0)) {
-                        System.out.println(
-                                bookeng[currBookIdx] + " " + PPrk + "-" + PPsk + " -- " +
-                                        line);
-                        ++ findings;
-                    }
+                        && (!line.isEmpty())) {
                     if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
                         ++ currBookIdx;
                     }
+                    Pasuk pasuk = new Pasuk(new StringBuilder(bookHeb[currBookIdx]).reverse().toString(), PPrk, PPsk, line.toString().trim());
+                    store.add(pasuk);
                     line = new StringBuilder();
                     ++EndFile;
                 }
@@ -57,9 +76,11 @@ public class Pasuk {
                 PPsk = findStr2[1] - 31;
                 line.append(" ").append(decryprt(findStr2));
             }
-        } catch (EOFException ignored) {
+        } catch (Exception ignored) {
+            // ignored.printStackTrace(); // EndOfFile
         }
-        System.out.println(EndFile + " verses total. \nTime taken (mSec): " + (System.currentTimeMillis() - ts) + ". \nTotal Psukim: " + findings);
+        log.info(System.currentTimeMillis() - ts + " msec");
+        log.info(EndFile + " psukim");
     }
 
     private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode
@@ -86,4 +107,6 @@ public class Pasuk {
         }
         return s.toString().trim();
     }
+
+
 }
