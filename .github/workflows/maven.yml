@@ -36,7 +36,7 @@ jobs:
     - name: Build Azure Function with Maven
       working-directory: ./azure-functions
       run: mvn -B package --file pom.xml
-  # - name: Build ec2 with Maven
-  #   working-directory: ./sb3
-  #   run: mvn -B package --file pom.xml
+    - name: Build ec2 with Maven
+      working-directory: ./sb3
+      run: mvn -B package --file pom.xml
     
