@@ -17,8 +17,8 @@ First Name:
 <input type="text" id="text" value="">
 </br>
 </br>
-<input type="checkbox" id="containsName" name="containsName" value="true" checked>
-<label for="containsName"> שם בתוך הפסוק או רק אות ראשונה ואחרונה</label><br>
+<input type="checkbox" id="containsName" name="containsName" value="false">
+<label for="containsName"> אות ראשונה ואחרונה, או גם שם בתוך הפסוק</label><br>
 </br>
 <!-- todo containsName checkBox -->
 <button onclick="pasuk()">Find my Pasuk</button>
@@ -173,7 +173,7 @@ First Name:
 				}
 				isValid(line, containsName);
 				saveInput('resCount', EndFile);
-				document.getElementById("result").innerHTML = output + "<br/><br/> Total Psukim: " + EndFile;
+				document.getElementById("result").innerHTML = "Total Psukim: " + EndFile + "<br/><br/>" + output;
 			  }
 			};
 			xhr.send();

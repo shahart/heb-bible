@@ -1,0 +1,8 @@
+schema_version: 20180708
+name: psukim
+version: 0.0.2
+runtime: java
+build_image: fnproject/fn-java-fdk-build:jdk17-1.0.193
+run_image: fnproject/fn-java-fdk:jre17-1.0.193
+cmd: edu.hebbible.Handler::handleRequest
+memory: 512

@@ -91,6 +91,26 @@ TODO Pasuk.go
 
 go run Pasuk.go
 
+#### Alibaba Cloud Function Engine
+
+Log on to the Function Compute console https://fcnext.console.aliyun.com/ and upload the code package.
+
+Handler name in the UI = edu.hebbible.Handler::handleRequest
+
+#### Oracle Clound Fn
+
+- `fn start [--log-level DEBUG`
+- `fn init --runtime java psukim`
+- `fn create app java-app`
+- `fn --verbose deploy --app java-app --local`
+
+
+- `fn invoke java-app psukim`
+
+
+- `fn inspect function java-app psukim`
+- `curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01J8YZ0S20NG8G00GZJ0000002` --data 'שחר'
+
 #### EC2
 
 Bare minimum Spring Boot 3 App.
@@ -106,7 +126,7 @@ $ java -jar hebbible-0.0.1-SNAPSHOT.war
 
 http://localhost:8080/ >> Swagger/OpenApi
 
-# Getting Started with Create React App
+#### Getting Started with Create React App
 
 - `node grab-git-info.js`
 

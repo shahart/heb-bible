@@ -27,6 +27,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+        
     - name: Build Lambda with Maven
       working-directory: ./aws-lambda
       run: mvn -B package --file pom.xml
@@ -36,6 +37,13 @@ jobs:
     - name: Build Azure Function with Maven
       working-directory: ./azure-functions
       run: mvn -B package --file pom.xml
+    - name: Build Alibaba Cloud Function Compute with Maven
+      working-directory: ./alibaba-function-compute
+      run: mvn -B package --file pom.xml
+    - name: Build Oracle Cloud Fn
+      working-directory: ./oracle-cloud-fn
+      run: mvn -B package --file pom.xml
+      
     - name: Build ec2 with Maven
       working-directory: ./sb3
       run: mvn -B package --file pom.xml
