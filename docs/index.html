@@ -5,9 +5,16 @@
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
     <link rel="shortcut icon" href="#">
     <title>Pasuk</title>
+    <!-- HolyClock.com <HEAD> code for shahart.github.io -->
+    <script>/*<![CDATA[*/_holyclock_id="a587140a291af38d7336f360192e7f83";_holyclock_tag='<s'+'cript src\x3d"//www.holyclock.com/holyclock.js?'+Math.floor(+new Date/864E5)+'">\x3c/script>';null!==document.cookie.match(/(?:^|;)\s*_holyclock_qr=\s*\w/)&&null===window.location.hash.match(/#holyclock=qr(?=#|$)/)&&document.write(_holyclock_tag);//]]></script>
+    <!-- HolyClock.com <HEAD> code for shahart.github.io -->
 </head>
 <body>
+<!-- HolyClock.com <BODY> code -->
+<script>document.write(typeof _holyclock_tag=="string"?_holyclock_tag:'HolyClock \x26lt;head\x26gt; tag missing!');</script>
+<!-- HolyClock.com <BODY> code -->
 <a href="https://www.toratemetfreeware.com/online/f_00720_all.html" target="_blank">
+</br></br>
 סגולה שלא ישכח שמו ליום הדין: יאמר קודם יהיו לרצון השני בתפילת העמידה פסוק מהתנ"ך המתחיל באות הראשונה של שמו ומסתיים באות האחרונה של שמו או פסוק ששמו מופיע בו,
 </a>
 </br>
@@ -119,11 +126,16 @@ First Name:
 	}
 
     function isValid(line, containsName) {
-		if ((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)) {
-			output += line + " -- " + currBook + " " + PPrk + "-" + PPsk + "<br/><br/>";
+		if ((((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)))
+		    && output.indexOf(noName(line)) == -1) {
+			output += noName(line) + " -- " + currBook + " " + PPrk + "-" + PPsk + "<br/><br/>";
 			++ EndFile;
 		}
 	}
+
+    function noName(orig) {
+        return orig.replaceAll("יהוה", "ה'");
+    }
 	
     function pasuk() { // same todo as in Pasuk.html
 		document.getElementById("result").innerHTML = "";

@@ -97,7 +97,7 @@ Log on to the Function Compute console https://fcnext.console.aliyun.com/ and up
 
 Handler name in the UI = edu.hebbible.Handler::handleRequest
 
-#### Oracle Clound Fn
+#### Oracle Cloud Fn
 
 - `fn start [--log-level DEBUG`
 - `fn init --runtime java psukim`

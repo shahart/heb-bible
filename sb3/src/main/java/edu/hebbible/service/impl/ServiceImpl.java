@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import software.amazon.awssdk.regions.Region;
@@ -27,17 +28,21 @@ public class ServiceImpl implements Svc {
 
     DynamoDbClient dynamodb;
 
+    @Value("${spring.profiles.active:prod}")
+    String profile;
+
     @PostConstruct
     public void initDb() {
+        if (! "test".equalsIgnoreCase(profile)) {
+            // from .aws/cred file
+            AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
+                    "access-key-id",
+                    "secret-access-key");
 
-        // from .aws/cred file
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
-                "access-key-id",
-                "secret-access-key");
-
-        dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
-                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                .build();
+            dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
+                    .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                    .build();
+        }
     }
 
     @Override
@@ -49,17 +54,24 @@ public class ServiceImpl implements Svc {
         int findings = 0;
         for (Pasuk pasuk: psukim) {
             String line = pasuk.text();
-            if ((line.charAt(0) == name.charAt(0) && line.charAt(line.length()-1) == name.charAt(name.length()-1)) || (containsName && line.indexOf(name) >= 0)) {
-                log.debug(
-                        pasuk.book() + " " + pasuk.perek() + "-" + pasuk.pasuk() + " -- " +
-                                line);
-                ++findings;
-                result.add(pasuk);
+            if ((line.charAt(0) == name.charAt(0) && line.charAt(line.length()-1) == name.charAt(name.length()-1)) || (containsName && line.contains(name))) {
+                if (result.isEmpty() || ! result.getLast().text().equals(pasuk.text())) {
+                    log.debug(
+                            pasuk.book() + " " + pasuk.perek() + "-" + pasuk.pasuk() + " -- " +
+                                    line);
+                    ++findings;
+                    result.add(new Pasuk(pasuk.book(), pasuk.perek(), pasuk.pasuk(), noName(pasuk.text())));
+                }
             }
         }
         log.info(findings + " verses total");
         return result;
     }
+
+    private static String noName(String orig) {
+        return orig.replaceAll("יהוה", "ה'");
+    }
+
 
     @Override
     public int repoSize() {
@@ -67,15 +79,17 @@ public class ServiceImpl implements Svc {
     }
 
     public static void putItemInTable(DynamoDbClient dynamodb, String name) {
-        HashMap<String, AttributeValue> itemValues = new HashMap<>();
-        itemValues.put("name", AttributeValue.builder().s(name).build());
-        try {
-            PutItemRequest request = PutItemRequest.builder().tableName("psukim").item(itemValues).build();
-            // PutItemResponse response = // findBugs: Medium: Dead store
-            dynamodb.putItem(request);
-            // log.info( response.responseMetadata().requestId());
-        } catch (Exception e) {
-            log.warn("putItemInTable. " + e);
+        if (dynamodb != null) {
+            HashMap<String, AttributeValue> itemValues = new HashMap<>();
+            itemValues.put("name", AttributeValue.builder().s(name).build());
+            try {
+                PutItemRequest request = PutItemRequest.builder().tableName("psukim").item(itemValues).build();
+                // PutItemResponse response = // findBugs: Medium: Dead store
+                dynamodb.putItem(request);
+                // log.info( response.responseMetadata().requestId());
+            } catch (Exception e) {
+                log.warn("putItemInTable. " + e);
+            }
         }
     }
 
