@@ -76,7 +76,7 @@ public class Repo {
                 PPsk = findStr2[1] - 31;
                 line.append(" ").append(decryprt(findStr2));
             }
-        } catch (Exception ignored) {
+        } catch (Exception ignored) { // TODO gradle:spotbugsMain M D REC: Exception is caught when Exception is not thrown
             // ignored.printStackTrace(); // EndOfFile
         }
         log.info(System.currentTimeMillis() - ts + " msec");

@@ -47,8 +47,8 @@ dependencies {
     implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
 }
 
 tasks.named('test') {
