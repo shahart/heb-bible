@@ -57,11 +57,11 @@ F,Find ³ חיפוש מחרוזת מבוקשת. לחיפוש מלה הקש רו�
 
 ³ הבא.
 
-#### Azure Function App
+### Azure Function App
 
 myPsukimViaFunctionApp
 
-#### Gcp Cloud Function
+### Gcp Cloud Function
 
 https://us-central1-pivotal-racer-435706-c6.cloudfunctions.net/myPsukimViaLambda
 
@@ -69,7 +69,7 @@ CLI: gcloud functions list
 
 `curl http://localhost:8081?name=שחר`
 
-#### AWS Lambda
+### AWS Lambda
 
 Api GW /v1/pasuk with POST method.
 Allow _CORS_
@@ -85,33 +85,14 @@ Allow _CORS_, put `access-control-allow-origin` at both Expose/ Allowed headers
 
 `node Pasuk.mjs שחר` >> TODO lambda/index.mjs
 
-- GoLang
+### GoLang
 
 TODO Pasuk.go
 
-go run Pasuk.go
+go build Pasuk.go >> ./Pasuk.exe שחר
+go run Pasuk.go שחר
 
-#### Alibaba Cloud Function Engine
-
-Log on to the Function Compute console https://fcnext.console.aliyun.com/ and upload the code package.
-
-Handler name in the UI = edu.hebbible.Handler::handleRequest
-
-#### Oracle Cloud Fn
-
-- `fn start [--log-level DEBUG`
-- `fn init --runtime java psukim`
-- `fn create app java-app`
-- `fn --verbose deploy --app java-app --local`
-
-
-- `fn invoke java-app psukim`
-
-
-- `fn inspect function java-app psukim`
-- `curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01J8YZ0S20NG8G00GZJ0000002` --data 'שחר'
-
-#### EC2
+### EC2
 
 Bare minimum Spring Boot 3 App.
 
@@ -138,3 +119,32 @@ http://localhost:8080/ >> Swagger/OpenApi
 - `aws dynamodb create-table --table-name psukim`
 
 - `docker pull amazon/dynamodb-local`
+
+
+### IBM discontinued https://cloud.ibm.com/functions/
+
+### Heroku https://devcenter.heroku.com/articles/getting-started-with-java
+
+### Alibaba Cloud Function Engine
+
+Log on to the Function Compute console https://fcnext.console.aliyun.com/ and upload the code package.
+
+Handler name in the UI = edu.hebbible.Handler::handleRequest
+
+### Oracle Cloud Fn
+
+Via https://fnproject.io/
+
+- `fn start [--log-level DEBUG]`
+- `fn init --runtime java psukim`
+- `fn create app java-app`
+
+
+- `fn --verbose deploy --app java-app --local`
+
+
+- `fn invoke java-app psukim`
+
+
+- `fn inspect function java-app psukim`
+- `curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01J8YZ0S20NG8G00GZJ0000002` --data '{"name":"ajr="}'

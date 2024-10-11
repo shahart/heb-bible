@@ -14,10 +14,30 @@
             $('.count').append(data);
         }
     });
+
+    function pasuk() {
+        $.post({
+            url: "http://localhost:8080/psukim",
+            success: function(data) {
+                console.debug(data.length);
+                $('.result').append('Psukim per name: ' + data.length);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus);
+                alert("Error: " + errorThrown);
+            },
+            data: document.getElementById('text').value
+        });
+    }
 </script>
 <a href="http://localhost:8080/swagger-ui/index.html">Swagger</a>
 <div>
-    <p class="count">Count is </p>
+    <p class="count">Total Count is </p>
+</div>
+<input type="text" id="text" value="">
+<button onclick="pasuk()">Find my Pasuk</button>
+<div>
+    <p class="result"></p>
 </div>
 </body>
 </html>

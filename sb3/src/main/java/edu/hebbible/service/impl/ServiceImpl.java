@@ -93,4 +93,21 @@ public class ServiceImpl implements Svc {
         }
     }
 
+    // @SuppressWarnings(value = "SBSC_USE_STRINGBUFFER_CONCATENATION")
+    public static String engTx(String arg) {
+        // todo solve the encoding stuff, from %D7%A9%D7%97%D7%A8= to שחר
+        if (! arg.endsWith("=")) {
+            return arg;
+        }
+        String eng = "qwertyuiopasdfghjkl;'zxcvbnm,./'";
+        String heb =  "/'קראטוןםפשדגכעיחלךף,זסבהנמצתץ.'";
+        var output = "";
+        for (int i = 0; i < arg.length()-1; ++ i) {
+            var idx = eng.indexOf(arg.charAt(i));
+            output += (idx >= 0 ? heb.charAt(idx) : arg.charAt(i)); // NOSONAR concatenates strings using + in a loop
+        }
+        log.info(" >> /post " + output);
+        return output;
+    }
+
 }

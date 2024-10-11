@@ -10,13 +10,12 @@ public class HandlerTest {
     @Rule
     public final FnTestingRule testing = FnTestingRule.createDefault();
 
-    @Ignore
-    // @Test
+    @Test
     public void shouldReturnPsukim() {
-        testing.givenEvent().withBody("שחר").enqueue(); // "{\"name\":\"arj\"}").enqueue();
+        testing.givenEvent().withBody("{\"name\":\"ajr=\"}").enqueue();
         testing.thenRun(Handler.class, "handleRequest");
 
         FnResult result = testing.getOnlyResult();
-        assertEquals("Total Psukim: שחר25", result.getBodyAsString());
+        assertEquals("Total Psukim: 25", result.getBodyAsString());
     }
 }

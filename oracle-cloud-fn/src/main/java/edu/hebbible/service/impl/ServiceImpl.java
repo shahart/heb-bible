@@ -36,6 +36,7 @@ public class ServiceImpl implements Svc {
 //                log.debug(
 //                        bookeng[pasuk.book()] + " " + pasuk.perek() + "-" + pasuk.pasuk() + " -- " +
 //                                line);
+
                 ++ findings;
                 result.add(pasuk);
             }
@@ -52,6 +53,21 @@ public class ServiceImpl implements Svc {
     @Override
     public String firstPasuk() {
         return repo.getStore().iterator().next().text();
+    }
+
+    public static String engTx(String arg) {
+        // todo solve the encoding stuff, from %D7%A9%D7%97%D7%A8= to שחר
+        if (! arg.endsWith("=")) {
+            return arg;
+        }
+        String eng = "qwertyuiopasdfghjkl;'zxcvbnm,./'";
+        String heb =  "/'קראטוןםפשדגכעיחלךף,זסבהנמצתץ.'";
+        var output = "";
+        for (int i = 0; i < arg.length()-1; ++ i) {
+            var idx = eng.indexOf(arg.charAt(i));
+            output += (idx >= 0 ? heb.charAt(idx) : arg.charAt(i));
+        }
+        return output;
     }
 
 }

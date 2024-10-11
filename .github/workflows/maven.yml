@@ -47,4 +47,5 @@ jobs:
     - name: Build ec2 with Maven
       working-directory: ./sb3
       run: mvn -B package --file pom.xml
+      # -Pinteg-test or -Dtest.active.profile=integ-test
     

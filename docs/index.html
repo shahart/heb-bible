@@ -43,6 +43,10 @@ First Name:
     function getHebChar(i) {
 		return (i !== 31 ?  String.fromCharCode('א'.charCodeAt(0) + i) : " ");
 	}
+
+	function reverse(str) {
+	    return str.split('').reverse().join('');
+	}
 	
 	function decrypt(findStr2) {
 		var s = "";
@@ -66,11 +70,8 @@ First Name:
 	var output = "";
 	var EndFile = 0; // amount of verses: 22329
 	var args = "";
-    var bookeng = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Samuel 1',
-        'Samuel 2','Kings 1','Kings 2','Isaiah','Jeremiah','Ezekiel','Hosea','Joel','Amos','Obadiah','Jonah','Micha','Nachum',
-        'Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Psalms','Proverbs','Job','Song of songs','Ruth','Lamentations',
-        'Ecclesiastes','Esther','Daniel','Ezra','Nehemiah','Cronicles 1','Cronicles 2']; // 39 books
-    var currBook = bookeng[0];
+    var bookheb = ['תישארב','תומש','ארקיו','רבדמב','םירבד','עשוהי','םיטפוש','א לאומש','ב לאומש', 'א םיכלמ','ב םיכלמ','היעשי','הימרי','לאקזחי','עשוה','לאוי','סומע','הידבוע','הנוי','הכימ','םוחנ','קוקבח','הינפצ', 'יגח','הירכז','יכאלמ','םילהת','ילשמ','בויא','םירישה ריש','תור','הכיא','תלהק','רתסא','לאינד','ארזע','הימחנ', 'א םימיה ירבד','ב םימיה ירבד']; // 39 books
+    var currBook = reverse(bookheb[0]);
     var currBookIdx = 0;
     var PPrk = 1;
     var PPsk = 999;
@@ -155,7 +156,7 @@ First Name:
 				var binStr = this.responseText;
 				var line = "";
                 currBookIdx = 0;
-                currBook = bookeng[0];
+                currBook = reverse(bookheb[0]);
 				let findStr2 = [];
 				EndFile = 0;
 				output = "";
@@ -175,7 +176,7 @@ First Name:
 						isValid(line, containsName);
                         if (findStr2[0] - 31 === 1 && findStr2[1] - 31 === 1 && findStr2[1] - 31 !== PPsk) {
                             ++currBookIdx;
-                            currBook = bookeng[currBookIdx];
+                            currBook = reverse(bookheb[currBookIdx]);
                         }
 						line = "";
 					}

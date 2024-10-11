@@ -7,3 +7,9 @@ sb3/build
 sb3/.gradle
 gcp-cloud-function/target
 azure-functions/target
+alibaba-function-compute/target
+aws-lambda/target
+
+tencent/target
+heroku/target
+ibm/target
