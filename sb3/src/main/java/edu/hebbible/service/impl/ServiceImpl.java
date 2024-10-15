@@ -21,10 +21,10 @@ import java.util.*;
 @Service
 public class ServiceImpl implements Svc {
 
-    private static Logger log = LoggerFactory.getLogger(Service.class);
+    private static final Logger log = LoggerFactory.getLogger(Service.class);
 
     @Autowired
-    Repo repo;
+    protected Repo repo;
 
     DynamoDbClient dynamodb;
 
@@ -60,7 +60,7 @@ public class ServiceImpl implements Svc {
                             pasuk.book() + " " + pasuk.perek() + "-" + pasuk.pasuk() + " -- " +
                                     line);
                     ++findings;
-                    result.add(new Pasuk(pasuk.book(), pasuk.perek(), pasuk.pasuk(), noName(pasuk.text())));
+                    result.add(new Pasuk(pasuk.book(), pasuk.perek(), pasuk.pasuk(), noName(pasuk.text()), pasuk.cntLetter()));
                 }
             }
         }
@@ -75,7 +75,7 @@ public class ServiceImpl implements Svc {
 
     @Override
     public int repoSize() {
-        return repo.getStore().size();
+        return repo.getTotalVerses();
     }
 
     public static void putItemInTable(DynamoDbClient dynamodb, String name) {
@@ -93,21 +93,73 @@ public class ServiceImpl implements Svc {
         }
     }
 
-    // @SuppressWarnings(value = "SBSC_USE_STRINGBUFFER_CONCATENATION")
     public static String engTx(String arg) {
-        // todo solve the encoding stuff, from %D7%A9%D7%97%D7%A8= to שחר
-        if (! arg.endsWith("=")) {
+        // todo solve the encoding stuff
+        if (! (arg.endsWith("=") && arg.startsWith("%"))) {
             return arg;
         }
-        String eng = "qwertyuiopasdfghjkl;'zxcvbnm,./'";
-        String heb =  "/'קראטוןםפשדגכעיחלךף,זסבהנמצתץ.'";
+        String eng = "%D7%90%D7%91%D7%92%D7%93%D7%94%D7%95%D7%96%D7%97%D7%98%D7%99%D7%9A%D7%9B%D7%9C%D7%9D%D7%9E%D7%9F%D7%A0%D7%A1%D7%A2%D7%A3%D7%A4%D7%A5%D7%A6%D7%A7%D7%A8%D7%A9%D7%AA=";
+        String heb =  "אבגדהוזחטיךכלםמןנסעףפץצקרשת";
         var output = "";
-        for (int i = 0; i < arg.length()-1; ++ i) {
-            var idx = eng.indexOf(arg.charAt(i));
-            output += (idx >= 0 ? heb.charAt(idx) : arg.charAt(i)); // NOSONAR concatenates strings using + in a loop
+        for (int i = 0; i < arg.length()/6; ++ i) { // 6 = "%D7%90".length
+            var idx = eng.indexOf(arg.substring(i*6, (i+1)*6));
+            output += (idx >= 0 ? heb.charAt(idx/6) : arg.charAt(i));
         }
         log.info(" >> /post " + output);
         return output;
+    }
+
+    int indVrsRange(int cntLtr, int indLowVrs, int indHigVrs) {
+        if (indLowVrs == indHigVrs) {
+            return indLowVrs;
+        }
+        else {
+            int indMidVrs = (int)(Math.ceil((indLowVrs + indHigVrs) / 2.0));
+            if (cntLtr < repo.getStore().get(indMidVrs).cntLetter()) {
+                return indVrsRange(cntLtr, indLowVrs, indMidVrs-1);
+            }
+            else {
+                return indVrsRange(cntLtr, indMidVrs, indHigVrs);
+            }
+        }
+    }
+
+    @Override
+    public int dilugim(String target, int skipMin, int skipMax) {
+        boolean match;
+        int iSkip, targetLen, lastInd, found = 0;
+        target = target.replaceAll(" ", "");
+        target = Repo.suffix(target);
+        targetLen = target.length();
+        for (iSkip = skipMin; iSkip <= skipMax; ++ iSkip) {
+            lastInd = repo.getTotalLetters() - (targetLen - 1) * iSkip;
+            for (int j = 0; j < lastInd; j ++) { // loop on bible
+                match = true;
+                for (int k = 0; k < targetLen; k ++) { // loop on target
+                    if (repo.getTorTxt().charAt(j + k * iSkip) != target.charAt(k)) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    var iVrs = indVrsRange(j, 0, repo.getTotalVerses()-1);
+                    String txt = repo.getTorTxt().substring(j, j+ (target.length()) * (iSkip));
+                    while (repo.getStore().get(iVrs).cntLetter() < j) {
+                        ++ iVrs;
+                    }
+                    log.info("new dilug of {} from {} {}", iSkip, j, repo.getStore().get(iVrs));
+                    for (int i = 0; i < target.length(); ++i) {
+                        log.info(txt.substring(i*iSkip, (i+1)*iSkip));
+                    }
+                    if (++ found >= 50) {
+                        log.warn("Too many results");
+                        return found;
+                    }
+                }
+            }
+        }
+        log.info("{} findings", found);
+        return found;
     }
 
 }

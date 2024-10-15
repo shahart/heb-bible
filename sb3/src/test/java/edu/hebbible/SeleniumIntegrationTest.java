@@ -31,7 +31,7 @@ class SeleniumIntegrationTest { // todo with Profile so it will work on my local
     @Test
     void pasukByName() throws Exception {
         WebElement text = driver.findElement(By.id("text"));
-        text.sendKeys("ajr="); // todo שחר
+        text.sendKeys("שחר");
         WebElement submitButton = driver.findElement(By.cssSelector("button"));
         submitButton.click();
         Thread.sleep(3_000);

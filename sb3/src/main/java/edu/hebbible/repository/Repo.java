@@ -18,16 +18,34 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class Repo {
 
-    private static Logger log = LoggerFactory.getLogger(Repo.class);
+    private static final Logger log = LoggerFactory.getLogger(Repo.class);
 
-    private final List<Pasuk> store = new ArrayList<>();
+    private final List<Pasuk> verses = new ArrayList<>();
+    private final StringBuilder torTxt = new StringBuilder();
+
+    private int totalVerses = 0;
+    private int totalLetters = 1;
 
     final static String []bookHeb = new String[] {"תישארב","תומש","ארקיו","רבדמב","םירבד","עשוהי","םיטפוש","א לאומש","ב לאומש", "א םיכלמ","ב םיכלמ","היעשי","הימרי","לאקזחי","עשוה","לאוי","סומע","הידבוע","הנוי","הכימ","םוחנ","קוקבח","הינפצ", "יגח","הירכז","יכאלמ","םילהת","ילשמ","בויא","םירישה ריש","תור","הכיא","תלהק","רתסא","לאינד","ארזע","הימחנ", "א םימיה ירבד","ב םימיה ירבד"};
 
     @PostConstruct
     public void postConstruct() {
-        logGitProps();
-        init();
+        if (verses.isEmpty()) {
+            logGitProps();
+            init();
+        }
+    }
+
+    public int getTotalVerses() {
+        return totalVerses;
+    }
+
+    public int getTotalLetters() {
+        return totalLetters;
+    }
+
+    public StringBuilder getTorTxt() { // NOSONAR may expose internal representation by returning Repo.torTxt
+        return torTxt;
     }
 
     // reads the result of the git prop in the build.gradle
@@ -44,13 +62,12 @@ public class Repo {
         }
     }
 
-    public Collection<Pasuk> getStore() {
-        return Collections.unmodifiableList(store);
+    public List<Pasuk> getStore() {
+        return Collections.unmodifiableList(verses);
     }
 
     @SuppressWarnings(value = "REC_CATCH_EXCEPTION") // , justification = "eof exception, ignored")
     void init() {
-        int EndFile = 0; // amount of psukim
         int currBookIdx = 0;
         long ts = System.currentTimeMillis();
         try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
@@ -67,10 +84,13 @@ public class Repo {
                     if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
                         ++ currBookIdx;
                     }
-                    Pasuk pasuk = new Pasuk(new StringBuilder(bookHeb[currBookIdx]).reverse().toString(), PPrk, PPsk, line.toString().trim());
-                    store.add(pasuk);
+                    String txt = line.toString().trim().replaceAll(" ", "");
+                    torTxt.append(suffix(txt));
+                    totalLetters += txt.length();
+                    Pasuk pasuk = new Pasuk(new StringBuilder(bookHeb[currBookIdx]).reverse().toString(), PPrk, PPsk, line.toString().trim(), totalLetters);
+                    verses.add(pasuk);
                     line = new StringBuilder();
-                    ++EndFile;
+                    ++totalVerses;
                 }
                 PPrk = findStr2[0] - 31;
                 PPsk = findStr2[1] - 31;
@@ -79,8 +99,9 @@ public class Repo {
         } catch (Exception ignored) { // TODO gradle:spotbugsMain M D REC: Exception is caught when Exception is not thrown
             // ignored.printStackTrace(); // EndOfFile
         }
-        log.info(System.currentTimeMillis() - ts + " msec");
-        log.info(EndFile + " psukim");
+        log.info(torTxt.length() + " total Letters (no spaces)"); // 80% out of with spaces 1,479,010
+        log.info(System.currentTimeMillis() - ts + " mSec");
+        log.info(totalVerses + " psukim");
     }
 
     private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode
@@ -108,5 +129,13 @@ public class Repo {
         return s.toString().trim();
     }
 
+    public static String suffix(String txt) {
+        txt = txt.replaceAll( "ך", "כ");
+        txt = txt.replaceAll( "ם", "מ");
+        txt = txt.replaceAll( "ן", "נ");
+        txt = txt.replaceAll( "ף", "פ");
+        txt = txt.replaceAll( "ץ", "צ");
+        return txt;
+    }
 
 }

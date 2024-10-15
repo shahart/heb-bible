@@ -41,7 +41,7 @@ public class ControllerTest {
 
     @Test
     void postPsukim() throws Exception {
-        List<Pasuk> res = List.of(new Pasuk("משלי", 12, 19, "שפת אמת תכון לעד ועד ארגיעה לשון שקר"));
+        List<Pasuk> res = List.of(new Pasuk("משלי", 12, 19, "שפת אמת תכון לעד ועד ארגיעה לשון שקר", 0));
         Mockito.when(service.psukim(anyString(), anyBoolean())).thenReturn(res);
 
         mvc.perform(post("/psukim").

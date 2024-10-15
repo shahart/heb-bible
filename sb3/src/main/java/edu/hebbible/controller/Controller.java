@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 public class Controller {
 
-    private static Logger log = LoggerFactory.getLogger(Controller.class);
+    private static final Logger log = LoggerFactory.getLogger(Controller.class);
 
     @Autowired
     private Svc svc;
@@ -25,6 +25,13 @@ public class Controller {
     public ResponseEntity<Collection<Pasuk>> psukim(@RequestBody String args) {
         log.info("/post " + args);
         List<Pasuk> result = svc.psukim(ServiceImpl.engTx(args), false);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("dilugim")
+    public ResponseEntity<Integer> dilugim(@RequestBody String args, @RequestParam Integer skipMin, @RequestParam Integer skipMax) {
+        log.info("/dilugim " + args);
+        int result = svc.dilugim(ServiceImpl.engTx(args), skipMin, skipMax);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

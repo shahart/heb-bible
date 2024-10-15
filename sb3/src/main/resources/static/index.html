@@ -5,6 +5,7 @@
     <title>psukim</title>
 </head>
 <body>
+<!--integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="-->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     $.ajax({
@@ -23,10 +24,23 @@
                 $('.result').append('Psukim per name: ' + data.length);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus);
-                alert("Error: " + errorThrown);
+                alert("Status: " + textStatus + " Error: " + errorThrown);
             },
             data: document.getElementById('text').value
+        });
+    }
+
+    function dilugim() {
+        $.post({
+            url: "http://localhost:8080/dilugim?skipMin=1&skipMax=100",
+            success: function(data) {
+                console.debug(data);
+                $('.dilugimResult').append('Dilugim per name: ' + data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + " Error: " + errorThrown);
+            },
+            data: document.getElementById('dilugimTxt').value
         });
     }
 </script>
@@ -38,6 +52,12 @@
 <button onclick="pasuk()">Find my Pasuk</button>
 <div>
     <p class="result"></p>
+</div>
+</br>
+<input type="text" id="dilugimTxt" value="">
+<button onclick="dilugim()">Dilugim</button>
+<div>
+    <p class="dilugimResult"></p>
 </div>
 </body>
 </html>

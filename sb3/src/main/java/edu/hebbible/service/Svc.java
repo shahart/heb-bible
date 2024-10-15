@@ -10,4 +10,6 @@ public interface Svc {
 
     int repoSize();
 
+    int dilugim(String name, int skipMin, int skipMan);
+
 }
