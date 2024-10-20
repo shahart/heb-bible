@@ -36,11 +36,17 @@ public class Handler implements RequestHandler<Map<String, Object>, String> {
             }
             bodyParams.put("name", request.get("name").toString());
             bodyParams.put("containsName", request.getOrDefault("containsName", Boolean.FALSE).toString());
-            List<Pasuk> result = svc.psukim( // findPsukim(log,
-                    bodyParams.get("name"), Boolean.parseBoolean(bodyParams.getOrDefault("containsName", "false")));
-            if (! result.isEmpty()) log.log("1st: " + result.iterator().next(), LogLevel.DEBUG);
-            log.log("Total Psukim: " + result.size()); // + " 1st: " + result.subList(0, 1));
-            return "Total Psukim: " + result.size();
+            if (request.containsKey("dilugim")) {
+                svc.logDilugim(bodyParams.get("name"), Boolean.parseBoolean(request.getOrDefault("found", Boolean.FALSE).toString()));
+                return "dilugim";
+            }
+            else {
+                List<Pasuk> result = svc.psukim( // findPsukim(log,
+                        bodyParams.get("name"), Boolean.parseBoolean(bodyParams.getOrDefault("containsName", "false")));
+                if (!result.isEmpty()) log.log("1st: " + result.iterator().next(), LogLevel.DEBUG);
+                log.log("Total Psukim: " + result.size()); // + " 1st: " + result.subList(0, 1));
+                return "Total Psukim: " + result.size();
+            }
         }
         catch (Exception e) {
             throw new IllegalArgumentException(e.toString(), e);

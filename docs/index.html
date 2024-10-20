@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
     <link rel="shortcut icon" href="#">
-    <title>Pasuk</title>
+    <title>Pasuk or Dilug</title>
     <!-- HolyClock.com <HEAD> code for shahart.github.io -->
     <script>/*<![CDATA[*/_holyclock_id="a587140a291af38d7336f360192e7f83";_holyclock_tag='<s'+'cript src\x3d"//www.holyclock.com/holyclock.js?'+Math.floor(+new Date/864E5)+'">\x3c/script>';null!==document.cookie.match(/(?:^|;)\s*_holyclock_qr=\s*\w/)&&null===window.location.hash.match(/#holyclock=qr(?=#|$)/)&&document.write(_holyclock_tag);//]]></script>
     <!-- HolyClock.com <HEAD> code for shahart.github.io -->
@@ -31,8 +31,21 @@ First Name:
 <label for="containsName"> אות ראשונה ואחרונה, או גם שם בתוך הפסוק</label><br>
 </br>
 <!-- todo containsName checkBox -->
-<button onclick="pasuk()">Find my Pasuk</button>
+<button onclick="pasuk()" disabled id="button1">Find my Pasuk</button>
 <p id="result"></p>
+
+</br>
+</br>
+"Dilug" to search (up to 100 skips of letters):
+</br>
+<input type="text" id="dilugTxt" value="">
+</br>
+</br>
+</br>
+<!-- todo containsName checkBox -->
+<button onclick="dilug(1,100)" id="buttonD" disabled>Look for the 1st "dilug"</button>
+<p id="resultDilug"></p>
+
 <br/>
 <a href="https://github.com/shahart/heb-bible" target="_blank">
 	>>
@@ -78,7 +91,82 @@ First Name:
     var currBookIdx = 0;
     var PPrk = 1;
     var PPsk = 999;
-	
+    var TOTLETTERS = 1;
+    var verses = [];
+    var currBookArr = [];
+    var torTxt = [];
+    var torTxtLength = 0;
+    var PPrkArr = [];
+    var PPskArr = [];
+    var found = 0;
+
+    function init() {
+        var startTime = new Date();
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT', true);
+        xhr.overrideMimeType('text/plain; charset=x-user-defined'); // Hack to pass bytes through unprocessed
+        xhr.onreadystatechange = function(e) {
+          if ( this.readyState === 4 &&
+                this.status === 200) {
+            var binStr = this.responseText;
+            var line = "";
+            currBookIdx = 0;
+            currBook = reverse(bookheb[0]);
+            let findStr2 = [];
+            EndFile = 0;
+            output = "";
+            PPsk = 999;
+            PPrk = 1;
+            var eof = 0;
+            while (eof < binStr.length) {
+                findStr2 = [];
+                for (var i = 0; i < 47; ++i) {
+                  var c = binStr.charCodeAt(eof);
+                  var xbyte = c & 0xff;  // byte at offset i
+                  findStr2.push(xbyte);
+                  ++ eof;
+                }
+                if (findStr2[1] - 31 !== PPsk
+                        && line.length > 0) {
+                    let pasuk = line.replace(/\s+/g, '');
+                    pasuk = suffix(pasuk);
+                    TOTLETTERS += pasuk.length;
+                    for (let g = 0; g < pasuk.length; ++g) {
+                        ++ torTxtLength;
+                        torTxt[torTxtLength] = pasuk[g];
+                    }
+                    ++ EndFile;
+                    verses[EndFile] = line;
+                    currBookArr[EndFile] = currBook;
+                    PPskArr[EndFile] = PPsk;
+                    PPrkArr[EndFile] = PPrk;
+                    if (findStr2[0] - 31 === 1 && findStr2[1] - 31 === 1 && findStr2[1] - 31 !== PPsk) {
+                        ++currBookIdx;
+                        currBook = reverse(bookheb[currBookIdx]);
+                    }
+                    line = "";
+                }
+                PPrk = findStr2[0] - 31;
+                PPsk = findStr2[1] - 31;
+                line = line + " " + decrypt(findStr2);
+            }
+            let pasuk = line.replace(/\s+/g, '');
+            pasuk = suffix(pasuk);
+            TOTLETTERS += pasuk.length;
+            ++ EndFile;
+            verses[EndFile] = line;
+            currBookArr[EndFile] = currBook;
+            PPskArr[EndFile] = PPsk;
+            PPrkArr[EndFile] = PPrk;
+            document.getElementById('button1').disabled = false;
+            document.getElementById('buttonD').disabled = false;
+            var endTime = new Date();
+            console.log((endTime - startTime) + " mSec");
+          }
+        }
+        xhr.send();
+    }
+
 	function saveInput(cname, cvalue) {
 		if (typeof (Storage) !== "undefined") {
 			// ~5M max
@@ -129,17 +217,29 @@ First Name:
 		document.getElementById("result").innerHTML = "Total Psukim: " + totalPsukim;
 	}
 
-    function isValid(line, containsName) {
+    function suffix(target) {
+        target = target.replace(/\u05DA/g, 'כ');
+        target = target.replace(/\u05DD/g, 'מ');
+        target = target.replace(/\u05DF/g, 'נ');
+        target = target.replace(/\u05E3/g, 'פ');
+        target = target.replace(/\u05E5/g, 'צ');
+        return target;
+    }
+
+    function isValid(i, containsName) {
+        let line = verses[i];
 		if ((((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)))
 		    && output.indexOf(noName(line)) == -1) {
-			output += noName(line) + " -- " + currBook + " " + PPrk + "-" + PPsk + "<br/><br/>";
-			++ EndFile;
+			output += noName(line) + " -- " + currBookArr[i] + " " + PPrkArr[i] + "-" + PPskArr[i] + "<br/><br/>";
+		    ++found;
 		}
 	}
 
     function noName(orig) {
         return orig.replaceAll("יהוה", "ה'");
     }
+
+    init();
 	
     function pasuk() { // same todo as in Pasuk.html
 		document.getElementById("result").innerHTML = "";
@@ -150,49 +250,14 @@ First Name:
 		}
 		else {
 			saveInput("input", args);
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT', true);
-			xhr.overrideMimeType('text/plain; charset=x-user-defined'); // Hack to pass bytes through unprocessed
-			xhr.onreadystatechange = function(e) {
-			  if ( this.readyState === 4 &&
-					this.status === 200) {
-				var binStr = this.responseText;
-				var line = "";
-                currBookIdx = 0;
-                currBook = reverse(bookheb[0]);
-				let findStr2 = [];
-				EndFile = 0;
-				output = "";
-				PPsk = 999;
-				PPrk = 1;
-				var eof = 0;
-				while (eof < binStr.length) {
-					findStr2 = [];
-					for (var i = 0; i < 47; ++i) {
-					  var c = binStr.charCodeAt(eof);
-					  var xbyte = c & 0xff;  // byte at offset i
-					  findStr2.push(xbyte);
-					  ++ eof;
-					}
-					if (findStr2[1] - 31 !== PPsk
-							&& line.length > 0) {
-						isValid(line, containsName);
-                        if (findStr2[0] - 31 === 1 && findStr2[1] - 31 === 1 && findStr2[1] - 31 !== PPsk) {
-                            ++currBookIdx;
-                            currBook = reverse(bookheb[currBookIdx]);
-                        }
-						line = "";
-					}
-					PPrk = findStr2[0] - 31;
-					PPsk = findStr2[1] - 31;
-					line = line + " " + decrypt(findStr2);
-				}
-				isValid(line, containsName);
-				saveInput('resCount', EndFile);
-				document.getElementById("result").innerHTML = "Total Psukim: " + EndFile + "<br/><br/>" + output;
-			  }
-			};
-			xhr.send();
+			output = "";
+			found = 0;
+            for (let i = 1; i < verses.length; ++i) {
+                isValid(i, containsName);
+            }
+            saveInput('resCount', found);
+            document.getElementById("result").innerHTML = "Total Psukim: " + found + "<br/><br/>" + output;
+
 			//
             var xhrAws = new XMLHttpRequest();
             xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
@@ -211,6 +276,66 @@ First Name:
 	if (firstName && firstName !== '') {
 		pasuk();
 	}
+
+    function dilug(skipMin, skipMax) {
+        var startTime = new Date();
+        // todo document.getElementById('buttonD').disabled = true;
+		document.getElementById("resultDilug").innerHTML = "";
+		args = document.getElementById("dilugTxt").value;
+		var found = 0;
+
+        var target = args.replace(/\s+/g, ''); // remove spaces
+        if (!(/^[\u05D0-\u05EA]+$/).test(target)) {
+            alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
+            return;
+        }
+        target = suffix(target);
+        var targetLen = target.length;
+
+        for (let iSkip = 1; iSkip <= skipMax; ++ iSkip) {
+            lastInd = TOTLETTERS - (targetLen-1) * iSkip;
+            for (let j = 0; j < lastInd; j++) { // loop on Torah
+                match = true;
+                for (let k = 0; k < targetLen; k++) { // loop on target
+                    if (torTxt[j+k*iSkip] != target[k]) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    var foundStr = "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
+                    console.info(foundStr);
+                    let txt = "";
+                    for (let h = j; h <= j+ targetLen * iSkip; ++h) {
+                        txt += torTxt[h];
+                    }
+                    for (let h = 0; h < targetLen; ++h) {
+                        foundStr += "<br>" + txt.substring(h*iSkip, (h+1)*iSkip);
+                    }
+                    document.getElementById("resultDilug").innerHTML = foundStr;
+                    found++;
+                    j = lastInd;
+                    iSkip = skipMax + 1;
+                }
+            }
+            // todo document.getElementById('buttonD').disabled = false;
+        }
+        var endTime = new Date();
+        console.log((endTime - startTime) + " mSec");
+
+        //
+        var xhrAws = new XMLHttpRequest();
+        xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
+        xhrAws.setRequestHeader("Content-Type", "application/json");
+        xhrAws.send(JSON.stringify({ "name": args, "found": (found >= 1), "dilugim": true }));
+        xhrAws.onreadystatechange = function(e) {
+          if ( xhrAws.readyState === 4 &&
+                xhrAws.status === 200) {
+            console.log(this.responseText);
+          }
+        }
+        xhrAws.send();
+    }
 </script>
 
 </body>

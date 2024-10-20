@@ -9,7 +9,7 @@ import edu.hebbible.service.Svc;
 //import org.springframework.stereotype.Service;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+//import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
@@ -39,10 +39,12 @@ public class ServiceImpl implements Svc {
 
     @Override
     public List<Pasuk> psukim(String name, boolean containsName) {
-        dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
-                // .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+        if (dynamodb == null) {
+            dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
+                 // .credentialsProvider(StaticCredentialsProvider.create(awsCreds)) //
                 .build();
-        putItemInTable(dynamodb, name, containsName);
+        }
+        putItemInTable(dynamodb, name, containsName, false);
 
         List<Pasuk> result = new ArrayList<>();
         Collection<Pasuk> psukim = repo.getStore();
@@ -66,18 +68,30 @@ public class ServiceImpl implements Svc {
         return repo.getStore().size();
     }
 
-    public static void putItemInTable(DynamoDbClient dynamodb, String name, boolean containsName) {
-        HashMap<String, AttributeValue> itemValues = new HashMap<>();
-        itemValues.put("name", AttributeValue.builder().s(name).build());
-        itemValues.put("containsName", AttributeValue.builder().bool(containsName).build());
-        itemValues.put("date", AttributeValue.builder().s(new SimpleDateFormat("dd-MM-yyyy").format(new Date())).build());
-        // todo? userAgent user-agent
-        try {
-            PutItemRequest request = PutItemRequest.builder().tableName("psukim").item(itemValues).build();
-            PutItemResponse response = dynamodb.putItem(request);
-            // log.info( response.responseMetadata().requestId());
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void putItemInTable(DynamoDbClient dynamodb, String name, boolean containsName, boolean isDilugim) {
+        if (dynamodb != null) {
+            HashMap<String, AttributeValue> itemValues = new HashMap<>();
+            itemValues.put("name", AttributeValue.builder().s(name).build());
+            itemValues.put(isDilugim ? "found" : "containsName", AttributeValue.builder().bool(containsName).build());
+            itemValues.put("date", AttributeValue.builder().s(new SimpleDateFormat("dd-MM-yyyy").format(new Date())).build());
+            // todo? userAgent user-agent
+            try {
+                PutItemRequest request = PutItemRequest.builder().tableName(isDilugim ? "dilugim" : "psukim").item(itemValues).build();
+                PutItemResponse response = dynamodb.putItem(request);
+                // log.info( response.responseMetadata().requestId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public void logDilugim(String name, boolean found) {
+        if (dynamodb == null) {
+            dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
+                     // .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                    .build();
+        }
+        putItemInTable(dynamodb, name, found, true);
     }
 }

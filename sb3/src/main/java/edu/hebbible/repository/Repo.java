@@ -69,12 +69,12 @@ public class Repo {
     @SuppressWarnings(value = "REC_CATCH_EXCEPTION") // , justification = "eof exception, ignored")
     void init() {
         int currBookIdx = 0;
+        int PPsk = 999;
+        int PPrk = 1;
+        StringBuilder line = new StringBuilder();
         long ts = System.currentTimeMillis();
         try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
             int[] findStr2 = new int[47];
-            int PPsk = 999;
-            int PPrk = 1;
-            StringBuilder line = new StringBuilder();
             while (true) {
                 for (int i = 0; i < 47; ++i) {
                     findStr2[i] = inputStream.readUnsignedByte();
@@ -84,24 +84,29 @@ public class Repo {
                     if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
                         ++ currBookIdx;
                     }
-                    String txt = line.toString().trim().replaceAll(" ", "");
-                    torTxt.append(suffix(txt));
-                    totalLetters += txt.length();
-                    Pasuk pasuk = new Pasuk(new StringBuilder(bookHeb[currBookIdx]).reverse().toString(), PPrk, PPsk, line.toString().trim(), totalLetters);
-                    verses.add(pasuk);
+                    addVerse(line.toString(), currBookIdx, PPrk, PPsk);
                     line = new StringBuilder();
-                    ++totalVerses;
+
                 }
                 PPrk = findStr2[0] - 31;
                 PPsk = findStr2[1] - 31;
                 line.append(" ").append(decryprt(findStr2));
             }
-        } catch (Exception ignored) { // TODO gradle:spotbugsMain M D REC: Exception is caught when Exception is not thrown
-            // ignored.printStackTrace(); // EndOfFile
+        } catch (Exception e) {
+            addVerse(line.toString(), currBookIdx, PPrk, PPsk);
         }
         log.info(torTxt.length() + " total Letters (no spaces)"); // 80% out of with spaces 1,479,010
         log.info(System.currentTimeMillis() - ts + " mSec");
         log.info(totalVerses + " psukim");
+    }
+
+    private void addVerse(String line, int currBookIdx, int PPrk, int PPsk) {
+        String txt = line.trim().replaceAll(" ", "");
+        torTxt.append(suffix(txt));
+        totalLetters += txt.length();
+        Pasuk pasuk = new Pasuk(new StringBuilder(bookHeb[currBookIdx]).reverse().toString(), PPrk, PPsk, line.trim(), totalLetters);
+        verses.add(pasuk);
+        ++totalVerses;
     }
 
     private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode

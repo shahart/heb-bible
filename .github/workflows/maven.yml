@@ -21,16 +21,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build aws Lambda with Maven
+      working-directory: ./aws-lambda
+      run: mvn -B package --file pom.xml
+
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-        
-    - name: Build Lambda with Maven
-      working-directory: ./aws-lambda
-      run: mvn -B package --file pom.xml
+
     - name: Build Gcp Cloud Function with Maven
       working-directory: ./gcp-cloud-function
       run: mvn -B package --file pom.xml
@@ -44,7 +53,7 @@ jobs:
       working-directory: ./oracle-cloud-fn
       run: mvn -B package --file pom.xml
       
-    - name: Build ec2 with Maven
+    - name: Build aws ec2 with Maven
       working-directory: ./sb3
       run: mvn -B package --file pom.xml
       # -Pinteg-test or -Dtest.active.profile=integ-test

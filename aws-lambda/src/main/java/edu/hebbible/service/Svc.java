@@ -10,4 +10,6 @@ public interface Svc {
 
     int repoSize();
 
+    void logDilugim(String name, boolean found);
+
 }

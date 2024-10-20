@@ -16,7 +16,7 @@ public class RepoTest {
         Repo repo = new Repo();
         repo.init();
         Collection<Pasuk> store = repo.getStore();
-        assertTrue(store.size() > 20_000);
+        assertEquals(23_204, store.size());
         assertTrue(store.iterator().next().text().contains("בראשית ברא"));
     }
 
