@@ -17,7 +17,13 @@ public class RepoTest {
         repo.init();
         Collection<Pasuk> store = repo.getStore();
         assertEquals(23_204, store.size());
+
         assertTrue(store.iterator().next().text().contains("בראשית ברא"));
+
+        Pasuk last = repo.getStore().getLast();
+        assertEquals(36, last.perek());
+        assertEquals(23, last.pasuk());
+        assertEquals("דברי הימים ב", last.book());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package edu.hebbible.main.java.edu.hebbible;
+package edu.hebbible;
 
 import com.google.cloud.functions.invoker.runner.Invoker;
 import edu.hebbible.Function;
@@ -30,6 +30,9 @@ public class FunctionTest {
 
   @Disabled
   public void psukim() {
-    assertEquals(75, new Function().psukim("שחר", true).size());
+    Function func = new Function();
+    func.init();
+    assertEquals(75, func.psukim("שחר", true).size());
+    assertEquals(23_204, func.size());
   }
 }

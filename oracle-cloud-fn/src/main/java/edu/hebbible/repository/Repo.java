@@ -34,40 +34,42 @@ public class Repo {
     }
 
     private void init() {
-        int EndFile = 0; // amount of psukim
-        int currBookIdx = 0;
-        int PPsk = 999;
-        int PPrk = 1;
-        StringBuilder line = new StringBuilder();
-//        long ts = System.currentTimeMillis();
-        try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
-            int[] findStr2 = new int[47];
-            while (true) {
-                for (int i = 0; i < 47; ++i) {
-                    findStr2[i] = inputStream.readUnsignedByte();
-                }
-                if ((findStr2[1] - 31 != PPsk)
-                        && (!line.isEmpty())) {
-                    if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
-                        ++ currBookIdx;
+        if (store.isEmpty()) {
+            int EndFile = 0; // amount of psukim
+            int currBookIdx = 0;
+            int PPsk = 999;
+            int PPrk = 1;
+            StringBuilder line = new StringBuilder();
+//          long ts = System.currentTimeMillis();
+            try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
+                int[] findStr2 = new int[47];
+                while (true) {
+                    for (int i = 0; i < 47; ++i) {
+                        findStr2[i] = inputStream.readUnsignedByte();
                     }
-                    Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
-                    store.add(pasuk);
-                    line = new StringBuilder();
-                    ++EndFile;
+                    if ((findStr2[1] - 31 != PPsk)
+                            && (!line.isEmpty())) {
+                        if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
+                            ++currBookIdx;
+                        }
+                        Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
+                        store.add(pasuk);
+                        line = new StringBuilder();
+                        ++EndFile;
+                    }
+                    PPrk = findStr2[0] - 31;
+                    PPsk = findStr2[1] - 31;
+                    line.append(" ").append(decryprt(findStr2));
                 }
-                PPrk = findStr2[0] - 31;
-                PPsk = findStr2[1] - 31;
-                line.append(" ").append(decryprt(findStr2));
+            } catch (Exception e) {
+                Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
+                store.add(pasuk);
+                ++EndFile;
             }
-        } catch (Exception e) {
-            Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
-            store.add(pasuk);
-            ++EndFile;
+            System.err.println(EndFile + " psukim");
+//          log.info(System.currentTimeMillis() - ts + " msec");
+//          log.info(EndFile + " psukim");
         }
-        System.err.println(EndFile + " psukim");
-//        log.info(System.currentTimeMillis() - ts + " msec");
-//        log.info(EndFile + " psukim");
     }
 
     private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode
@@ -94,6 +96,5 @@ public class Repo {
         }
         return s.toString().trim();
     }
-
 
 }

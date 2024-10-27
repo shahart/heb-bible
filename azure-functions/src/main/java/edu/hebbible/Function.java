@@ -60,11 +60,11 @@ public class Function {
       int EndFile = 0; // amount of psukim
       int currBookIdx = 0;
       long ts = System.currentTimeMillis();
+      int PPsk = 999;
+      int PPrk = 1;
+      StringBuilder line = new StringBuilder();
       try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
         int[] findStr2 = new int[47];
-        int PPsk = 999;
-        int PPrk = 1;
-        StringBuilder line = new StringBuilder();
         while (true) {
           for (int i = 0; i < 47; ++i) {
             findStr2[i] = inputStream.readUnsignedByte();
@@ -83,7 +83,10 @@ public class Function {
           PPsk = findStr2[1] - 31;
           line.append(" ").append(decryprt(findStr2));
         }
-      } catch (Exception ignored) {
+      } catch (Exception e) {
+        Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
+        store.add(pasuk);
+        ++EndFile;
       }
       System.out.println((System.currentTimeMillis() - ts) + " msec");
     }
@@ -112,6 +115,10 @@ public class Function {
       i += 8;
     }
     return s.toString().trim();
+  }
+
+  public int size() {
+      return store.size();
   }
 
   // SvcImpl

@@ -40,10 +40,13 @@ public class FunctionTest {
     doReturn(Logger.getGlobal()).when(context).getLogger();
 
     // Invoke
-    final HttpResponseMessage ret = new Function().run(req, context);
+    Function func = new Function();
+    final HttpResponseMessage ret = func.run(req, context);
 
     // Verify
     assertEquals(ret.getStatus(), HttpStatus.OK);
     assertEquals(ret.getBody(), "Total Psukim: 25");
+
+    assertEquals(23_204, func.size());
   }
 }

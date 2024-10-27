@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'FreeMono';
+  font-style: normal;
+  src:
+     local('FreeMono'), 
+     url('https://fonts.cdnfonts.com/s/16387/FreeMono.woff') format('woff');
+}
+
+pre {
+  font-family: 'FreeMono', sans-serif;
+}
