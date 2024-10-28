@@ -15,7 +15,7 @@ A nice fact: as we need only 27 letters plus period and space (maybe more, I can
 --
 
 
-חבילה זו מכילה מספר עזרים שונים לתנ"ך (קריאה, הפטרות, קרי/כתיב, חיפוש, פרשות, גימטריה, פסוק לפי שם). רובם פשוטים ביותר לשימוש
+חבילה זו מכילה מספר עזרים שונים לתנ"ך (קריאה, הפטרות, קרי/כתיב, חיפוש, פרשות, גימטריה, פסוק לפי שם, דילוגים). רובם פשוטים ביותר לשימוש
 ועל-כן התיעוד הנ"ל די קצר.
 
 בקליטת מחרוזת הקש Esc למחיקת כל הביטוי, ו-BackSpace למחיקת
@@ -122,6 +122,8 @@ http://localhost:8080/ >> Swagger/OpenApi
 
 
 ### IBM discontinued https://cloud.ibm.com/functions/
+
+### Tencent
 
 ### Heroku https://devcenter.heroku.com/articles/getting-started-with-java
 

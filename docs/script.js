@@ -42,6 +42,7 @@ var torTxtLength = 0;
 var PPrkArr = [];
 var PPskArr = [];
 var found = 0;
+var foundInclDups = 0;
 cntLetter[0] = 1;
 
 function init() {
@@ -174,9 +175,12 @@ function suffix(target) {
 function isValid(i, containsName) {
     let line = verses[i];
     if ((((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)))
-        && output.indexOf(noName(line)) == -1) {
-        output += noName(line) + " -- " + currBookArr[i] + " " + PPrkArr[i] + "-" + PPskArr[i] + "<br/><br/>";
-        ++found;
+        ) {
+        ++foundInclDups;
+        if (output.indexOf(noName(line)) == -1) {
+            output += noName(line) + " -- " + currBookArr[i] + " " + PPrkArr[i] + "-" + PPskArr[i] + "<br/><br/>";
+            ++found;
+        }
     }
 }
 
@@ -197,6 +201,7 @@ function pasuk() { // same todo as in Pasuk.html
         saveInput("input", args);
         output = "";
         found = 0;
+        foundInclDups = 0;
         for (let i = 1; i < verses.length; ++i) {
             isValid(i, containsName);
         }
@@ -212,7 +217,7 @@ function pasuk() { // same todo as in Pasuk.html
           if ( xhrAws.readyState === 4 &&
                 xhrAws.status === 200) {
             console.log(this.responseText);
-            if (this.responseText != "Total Psukim: " + found) {
+            if (this.responseText != "Total Psukim: " + foundInclDups) {
                 alert("Total Psukim diff was found, contact shahar_t@hotmail.com");
             }
 
