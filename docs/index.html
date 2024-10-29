@@ -40,14 +40,17 @@ First Name:
 <hr>
 </br></br>
 </br>
-"Dilug" to search (up to 100 skips of letters):
+"Dilug" to search:
 </br>
-<input type="text" id="dilugTxt" value="">
+<input type="text" id="dilugTxt" value=""/>
+</br>
+</br>
+<input type="number" id="skipMin" value="1" min="1" max="9999"/>
+<input type="number" id="skipMax" value="100" min="1" max="9999">
 </br>
 </br>
 </br>
-<!-- todo containsName checkBox -->
-<button onclick="dilug(1,100)" id="buttonD" disabled>Look for the 1st "dilug"</button>
+<button onclick="dilug()" id="buttonD" disabled>Look for the 1st "dilug"</button>
 <p id="resultDilug"></p>
 
 <br/>

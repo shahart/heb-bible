@@ -178,7 +178,7 @@ function isValid(i, containsName) {
         ) {
         ++foundInclDups;
         if (output.indexOf(noName(line)) == -1) {
-            output += noName(line) + " -- " + currBookArr[i] + " " + PPrkArr[i] + "-" + PPskArr[i] + "<br/><br/>";
+            output += noName(line) + " - " + currBookArr[i] + " " + PPrkArr[i] + "-" + PPskArr[i] + "<br/><br/>";
             ++found;
         }
     }
@@ -246,7 +246,12 @@ function indVrsRange(cntLtr, indLowVrs, indHigVrs) {
     }
 }
 
-function dilug(skipMin, skipMax) {
+function dilug() {
+    var skipMin = Math.ceil(document.getElementById("skipMin").value);
+    if (skipMin < 0) { skipMin = 1; }
+    var skipMax = Math.ceil(document.getElementById("skipMax").value);
+    if (skipMax < 0) { skipMax = 1; }
+    if (skipMax >= 10000) { skipMax = 9999 ; }
     var startTime = new Date();
     // todo document.getElementById('buttonD').disabled = true;
     document.getElementById("resultDilug").innerHTML = "";
@@ -261,7 +266,7 @@ function dilug(skipMin, skipMax) {
     target = suffix(target);
     var targetLen = target.length;
 
-    for (let iSkip = 1; iSkip <= skipMax; ++ iSkip) {
+    for (let iSkip = skipMin; iSkip <= skipMax; ++ iSkip) {
         lastInd = TOTLETTERS - (targetLen-1) * iSkip;
         for (let j = 0; j < lastInd; j++) { // loop on Torah
             match = true;
@@ -274,7 +279,7 @@ function dilug(skipMin, skipMax) {
             if (match) {
                 var foundStr = "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
                 var idx = indVrsRange(j+1, 0, EndFile-1) + 1;
-                foundStr += currBookArr[idx] + " " + PPrkArr[idx] + " " + PPskArr[idx] + " " + verses[idx];
+                foundStr += verses[idx] + " - " + currBookArr[idx] + " " + PPskArr[idx] + "-" + PPrkArr[idx];
 
                 let txt = "";
                 for (let h = j; h <= j+ targetLen * iSkip; ++h) {
@@ -312,3 +317,4 @@ function dilug(skipMin, skipMax) {
     }
     xhrAws.send();
 }
+
