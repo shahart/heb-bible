@@ -107,7 +107,7 @@ function init() {
         document.getElementById('button1').disabled = false;
         document.getElementById('buttonD').disabled = false;
         var endTime = new Date();
-        console.log((endTime - startTime) + " mSec");
+        console.log("Init: " + (endTime - startTime) + " mSec");
       }
     }
     xhr.send();
@@ -276,10 +276,19 @@ function dilug() {
                     break;
                 }
             }
+            if (!match) {
+                match = true;
+                for (let k = 0; k < targetLen; k++) { // loop on target
+                    if (torTxt[j+k*iSkip] != target[targetLen-k-1]) {
+                        match = false;
+                        break;
+                    }
+                }
+            }
             if (match) {
                 var foundStr = "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
                 var idx = indVrsRange(j+1, 0, EndFile-1) + 1;
-                foundStr += verses[idx] + " - " + currBookArr[idx] + " " + PPskArr[idx] + "-" + PPrkArr[idx];
+                foundStr += verses[idx] + " - " + currBookArr[idx] + " " + PPrkArr[idx] + "-" + PPskArr[idx];
 
                 let txt = "";
                 for (let h = j; h <= j+ targetLen * iSkip; ++h) {
