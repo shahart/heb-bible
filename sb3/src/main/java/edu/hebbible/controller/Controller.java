@@ -3,6 +3,8 @@ package edu.hebbible.controller;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.service.Svc;
 import edu.hebbible.service.impl.ServiceImpl;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,9 @@ public class Controller {
     }
 
     @PostMapping("dilugim")
-    public ResponseEntity<Integer> dilugim(@RequestBody String args, @RequestParam Integer skipMin, @RequestParam Integer skipMax) {
+    public ResponseEntity<Integer> dilugim(@RequestBody String args,
+                                           @RequestParam @Max(9999) @Min(1) Integer skipMin,
+                                           @RequestParam @Max(9999) @Min(1) Integer skipMax) {
         log.info("/dilugim " + args);
         int result = svc.dilugim(ServiceImpl.engTx(args), skipMin, skipMax);
         return new ResponseEntity<>(result, HttpStatus.OK);

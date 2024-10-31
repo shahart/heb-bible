@@ -49,6 +49,7 @@ public class ServiceImpl implements Svc {
     public List<Pasuk> psukim(String name, boolean containsName) {
         putItemInTable(dynamodb, name);
 
+        initRepo();
         List<Pasuk> result = new ArrayList<>();
         Collection<Pasuk> psukim = repo.getStore();
         int findings = 0;
@@ -75,6 +76,7 @@ public class ServiceImpl implements Svc {
 
     @Override
     public int repoSize() {
+        initRepo();
         return repo.getTotalVerses();
     }
 
@@ -126,6 +128,7 @@ public class ServiceImpl implements Svc {
 
     @Override
     public int dilugim(String target, int skipMin, int skipMax) {
+        initRepo();
         boolean match;
         int iSkip, targetLen, lastInd, found = 0;
         target = target.replaceAll(" ", "");
@@ -139,6 +142,15 @@ public class ServiceImpl implements Svc {
                     if (repo.getTorTxt().charAt(j + k * iSkip) != target.charAt(k)) {
                         match = false;
                         break;
+                    }
+                }
+                if (!match) {
+                    match = true;
+                    for (int k = 0; k < targetLen; k ++) { // loop on target
+                        if (repo.getTorTxt().charAt(j + k * iSkip) != target.charAt(targetLen-k-1)) {
+                            match = false;
+                            break;
+                        }
                     }
                 }
                 if (match) {
@@ -160,6 +172,10 @@ public class ServiceImpl implements Svc {
         }
         log.info("{} findings", found);
         return found;
+    }
+
+    private void initRepo() {
+        repo.init();
     }
 
 }

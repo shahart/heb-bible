@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.*;
 
 import edu.hebbible.model.Pasuk;
@@ -30,10 +31,8 @@ public class Repo {
 
     @PostConstruct
     public void postConstruct() {
-        if (verses.isEmpty()) {
-            logGitProps();
-            init();
-        }
+        logGitProps();
+        init();
     }
 
     public int getTotalVerses() {
@@ -67,37 +66,42 @@ public class Repo {
     }
 
     @SuppressWarnings(value = "REC_CATCH_EXCEPTION") // , justification = "eof exception, ignored")
-    void init() {
-        int currBookIdx = 0;
-        int PPsk = 999;
-        int PPrk = 1;
-        StringBuilder line = new StringBuilder();
-        long ts = System.currentTimeMillis();
-        try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
-            int[] findStr2 = new int[47];
-            while (true) {
-                for (int i = 0; i < 47; ++i) {
-                    findStr2[i] = inputStream.readUnsignedByte();
-                }
-                if ((findStr2[1] - 31 != PPsk)
-                        && (!line.isEmpty())) {
-                    if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
-                        ++ currBookIdx;
+    public void init() {
+        if (verses.isEmpty()) {
+            int currBookIdx = 0;
+            int PPsk = 999;
+            int PPrk = 1;
+            StringBuilder line = new StringBuilder();
+            long ts = System.currentTimeMillis();
+            try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
+                int[] findStr2 = new int[47];
+                while (true) {
+                    for (int i = 0; i < 47; ++i) {
+                        findStr2[i] = inputStream.readUnsignedByte();
                     }
-                    addVerse(line.toString(), currBookIdx, PPrk, PPsk);
-                    line = new StringBuilder();
+                    if ((findStr2[1] - 31 != PPsk)
+                            && (!line.isEmpty())) {
+                        if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
+                            ++currBookIdx;
+                        }
+                        addVerse(line.toString(), currBookIdx, PPrk, PPsk);
+                        line = new StringBuilder();
 
+                    }
+                    PPrk = findStr2[0] - 31;
+                    PPsk = findStr2[1] - 31;
+                    line.append(" ").append(decryprt(findStr2));
                 }
-                PPrk = findStr2[0] - 31;
-                PPsk = findStr2[1] - 31;
-                line.append(" ").append(decryprt(findStr2));
+            } catch (UnknownHostException uhe) {
+                log.error("No internet, no bible to fetch >> " + uhe);
+                // throw new RuntimeException(uhe);
+            } catch (Exception e) {
+                addVerse(line.toString(), currBookIdx, PPrk, PPsk);
             }
-        } catch (Exception e) {
-            addVerse(line.toString(), currBookIdx, PPrk, PPsk);
+            log.info(torTxt.length() + " total Letters (no spaces)"); // 80% out of with spaces 1,479,010
+            log.info(System.currentTimeMillis() - ts + " mSec");
+            log.info(totalVerses + " psukim");
         }
-        log.info(torTxt.length() + " total Letters (no spaces)"); // 80% out of with spaces 1,479,010
-        log.info(System.currentTimeMillis() - ts + " mSec");
-        log.info(totalVerses + " psukim");
     }
 
     private void addVerse(String line, int currBookIdx, int PPrk, int PPsk) {

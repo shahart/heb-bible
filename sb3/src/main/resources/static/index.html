@@ -6,7 +6,7 @@
 </head>
 <body>
 <!--integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="-->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" onerror="alert('No internet!')"></script>
 <script>
     $.ajax({
         url: "http://localhost:8080/psukim",
@@ -31,8 +31,10 @@
     }
 
     function dilugim() {
+        var skipMin = Math.ceil(document.getElementById("skipMin").value);
+        var skipMax = Math.ceil(document.getElementById("skipMax").value);
         $.post({
-            url: "http://localhost:8080/dilugim?skipMin=1&skipMax=100",
+            url: "http://localhost:8080/dilugim?skipMin=" + skipMin + "&skipMax=" + skipMax,
             success: function(data) {
                 console.debug(data);
                 $('.dilugimResult').append('Dilugim per name: ' + data);
@@ -56,6 +58,8 @@
 </br>
 <input type="text" id="dilugimTxt" value="">
 <button onclick="dilugim()">Dilugim</button>
+from <input type="number" id="skipMin" value="1" min="1" max="9999"/>
+to <input type="number" id="skipMax" value="100" min="1" max="9999">
 <div>
     <p class="dilugimResult"></p>
 </div>

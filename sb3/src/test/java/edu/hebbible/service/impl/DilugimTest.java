@@ -12,7 +12,7 @@ public class DilugimTest {
 
     @BeforeEach
     public void before() {
-        repo.postConstruct();
+        repo.init();
         svc.repo = repo;
     }
 
