@@ -73,7 +73,7 @@ public class ServiceImpl implements Svc {
             HashMap<String, AttributeValue> itemValues = new HashMap<>();
             itemValues.put("name", AttributeValue.builder().s(name).build());
             itemValues.put(isDilugim ? "found" : "containsName", AttributeValue.builder().bool(containsName).build());
-            itemValues.put("date", AttributeValue.builder().s(new SimpleDateFormat("dd-MM-yyyy").format(new Date())).build());
+            itemValues.put("date", AttributeValue.builder().s(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).build());
             // todo? userAgent user-agent
             try {
                 PutItemRequest request = PutItemRequest.builder().tableName(isDilugim ? "dilugim" : "psukim").item(itemValues).build();
@@ -89,7 +89,7 @@ public class ServiceImpl implements Svc {
     public void logDilugim(String name, boolean found) {
         if (dynamodb == null) {
             dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
-                     // .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                     // .credentialsProvider(StaticCredentialsProvider.create(awsCreds)) //
                     .build();
         }
         putItemInTable(dynamodb, name, found, true);
