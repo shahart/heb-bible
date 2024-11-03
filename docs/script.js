@@ -230,7 +230,7 @@ function pasuk() { // same todo as in Pasuk.html
                 xhrAws.status === 200) {
             console.log(this.responseText);
             if (this.responseText != "Total Psukim: " + foundInclDups) {
-                alert("Total Psukim diff was found, please contact shahar_t AT hotmail DOT com");
+                alert("Total Psukim diff was found, please contact shahar_t AT hotmail DOT com. " + this.responseText + " -- " + "Total Psukim: " + foundInclDups + " -- " + args);
             }
 
           }
