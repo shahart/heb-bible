@@ -26,7 +26,7 @@ public class Controller {
     @PostMapping("psukim")
     public ResponseEntity<Collection<Pasuk>> psukim(@RequestBody String args) {
         log.info("/post " + args);
-        List<Pasuk> result = svc.psukim(ServiceImpl.engTx(args), false);
+        List<Pasuk> result = svc.psukim(ServiceImpl.engTx(args), false, false);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

@@ -46,8 +46,12 @@ public class ServiceImpl implements Svc {
     }
 
     @Override
-    public List<Pasuk> psukim(String name, boolean containsName) {
+    public List<Pasuk> psukim(String name, boolean containsName, boolean withDups) {
         putItemInTable(dynamodb, name);
+
+        if (withDups) {
+            log.warn("withDups: on");
+        }
 
         initRepo();
         List<Pasuk> result = new ArrayList<>();
@@ -56,7 +60,7 @@ public class ServiceImpl implements Svc {
         for (Pasuk pasuk: psukim) {
             String line = pasuk.text();
             if ((line.charAt(0) == name.charAt(0) && line.charAt(line.length()-1) == name.charAt(name.length()-1)) || (containsName && line.contains(name))) {
-                if (result.isEmpty() || ! result.getLast().text().equals(pasuk.text())) {
+                if (result.isEmpty() || (withDups || ! result.getLast().text().equals(pasuk.text()))) {
                     log.debug(
                             pasuk.book() + " " + pasuk.perek() + "-" + pasuk.pasuk() + " -- " +
                                     line);

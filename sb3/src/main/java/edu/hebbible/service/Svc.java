@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Svc {
 
-    List<Pasuk> psukim(String name, boolean containsName);
+    List<Pasuk> psukim(String name, boolean containsName, boolean withDups);
 
     int repoSize();
 

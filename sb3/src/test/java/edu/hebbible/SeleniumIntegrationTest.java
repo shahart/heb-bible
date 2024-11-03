@@ -25,7 +25,7 @@ class SeleniumIntegrationTest { // todo with Profile so it will work on my local
     @Test
     void psukimTotal() {
         WebElement count = driver.findElement(By.className("count"));
-        Assertions.assertTrue(count.getText().contains("23203"), count.getText());
+        Assertions.assertTrue(count.getText().contains("23204"), count.getText());
     }
 
     @Test

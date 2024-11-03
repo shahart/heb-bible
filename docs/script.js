@@ -198,6 +198,18 @@ function pasuk() { // same todo as in Pasuk.html
         document.getElementById("result").innerHTML = "Invalid name";
     }
     else {
+        if (! containsName) {
+            var dictionary = {};
+            dictionary["אא"] = 43;
+            dictionary["אב"] = 34;
+            dictionary["אג"] = 2;
+            dictionary["אד"] = 33;
+            // todo see SvcTest.java output
+            var shortName = args.charAt(0) + args.charAt(args.length-1);
+            if (dictionary[shortName]) {
+                document.getElementById("result").innerHTML = "Total Psukim: " + dictionary[shortName];
+            }
+        }
         saveInput("input", args);
         output = "";
         found = 0;
@@ -207,7 +219,7 @@ function pasuk() { // same todo as in Pasuk.html
         }
         saveInput('resCount', found);
         document.getElementById("result").innerHTML = "Total Psukim: " + found + "<br/><br/>" + output;
-
+        console.log("withDups: " + foundInclDups);
         //
         var xhrAws = new XMLHttpRequest();
         xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
@@ -218,7 +230,7 @@ function pasuk() { // same todo as in Pasuk.html
                 xhrAws.status === 200) {
             console.log(this.responseText);
             if (this.responseText != "Total Psukim: " + foundInclDups) {
-                alert("Total Psukim diff was found, contact shahar_t@hotmail.com");
+                alert("Total Psukim diff was found, please contact shahar_t AT hotmail DOT com");
             }
 
           }

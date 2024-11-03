@@ -113,7 +113,7 @@ public class Repo {
         ++totalVerses;
     }
 
-    private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode
+    public static void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode
         char res = i == 31 ? ' ' : (char)('א' + i);
         s.insert(0, res);
     }
