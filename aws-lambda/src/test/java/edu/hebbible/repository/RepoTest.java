@@ -10,9 +10,10 @@ import static org.junit.Assert.assertTrue;
 
 public class RepoTest {
 
+    Repo repo = new Repo();
+
     @Test
     public void init() {
-        Repo repo = new Repo();
         Collection<Pasuk> store = repo.getStore();
         assertEquals(23_204, store.size());
 
@@ -22,5 +23,20 @@ public class RepoTest {
         assertEquals(36, last.perek());
         assertEquals(23, last.pasuk());
         assertEquals(38, last.book());
+    }
+
+    @Test
+    public void torahAllCompare() {
+        Pasuk prevPasuk = null;
+        for (Pasuk pasuk: repo.getStore()) {
+            if (pasuk.book() == 5) { // end of Torah, 5 chumashim
+                assertEquals(pasuk.perek(), 1);
+                assertEquals(pasuk.pasuk(), 1);
+                break;
+            }
+            prevPasuk = pasuk;
+        }
+        assertEquals(prevPasuk.perek(), 34);
+        assertEquals(prevPasuk.pasuk(), 12);
     }
 }

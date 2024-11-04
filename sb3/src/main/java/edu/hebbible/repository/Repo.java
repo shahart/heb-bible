@@ -81,12 +81,11 @@ public class Repo {
                     }
                     if ((findStr2[1] - 31 != PPsk)
                             && (!line.isEmpty())) {
+                        addVerse(line.toString(), currBookIdx, PPrk, PPsk);
+                        line = new StringBuilder();
                         if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
                             ++currBookIdx;
                         }
-                        addVerse(line.toString(), currBookIdx, PPrk, PPsk);
-                        line = new StringBuilder();
-
                     }
                     PPrk = findStr2[0] - 31;
                     PPsk = findStr2[1] - 31;

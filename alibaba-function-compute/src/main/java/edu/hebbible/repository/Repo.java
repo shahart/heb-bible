@@ -49,12 +49,12 @@ public class Repo {
                 }
                 if ((findStr2[1] - 31 != PPsk)
                         && (!line.isEmpty())) {
-                    if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
-                        ++ currBookIdx;
-                    }
                     Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
                     store.add(pasuk);
                     line = new StringBuilder();
+                    if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
+                        ++ currBookIdx;
+                    }
                     ++EndFile;
                 }
                 PPrk = findStr2[0] - 31;
