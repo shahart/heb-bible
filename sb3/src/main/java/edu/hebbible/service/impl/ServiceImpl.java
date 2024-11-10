@@ -55,7 +55,7 @@ public class ServiceImpl implements Svc {
 
         initRepo();
         List<Pasuk> result = new ArrayList<>();
-        Collection<Pasuk> psukim = repo.getStore();
+        List<Pasuk> psukim = repo.getStore();
         int findings = 0;
         for (Pasuk pasuk: psukim) {
             String line = pasuk.text();
@@ -65,7 +65,7 @@ public class ServiceImpl implements Svc {
                             pasuk.book() + " " + pasuk.perek() + "-" + pasuk.pasuk() + " -- " +
                                     line);
                     ++findings;
-                    result.add(new Pasuk(pasuk.book(), pasuk.perek(), pasuk.pasuk(), noName(pasuk.text()), pasuk.cntLetter()));
+                    result.add(new Pasuk(pasuk.book(), pasuk.bookNo(), pasuk.perek(), pasuk.pasuk(), noName(pasuk.text()), pasuk.cntLetter()));
                 }
             }
         }

@@ -1,12 +1,12 @@
 package edu.hebbible.repository;
 
-import java.io.DataInputStream;
+import java.io.*;
 //import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 
 import edu.hebbible.model.Pasuk;
 import jakarta.annotation.PostConstruct;
@@ -68,34 +68,54 @@ public class Repo {
     @SuppressWarnings(value = "REC_CATCH_EXCEPTION") // , justification = "eof exception, ignored")
     public void init() {
         if (verses.isEmpty()) {
-            int currBookIdx = 0;
-            int PPsk = 999;
-            int PPrk = 1;
-            StringBuilder line = new StringBuilder();
             long ts = System.currentTimeMillis();
-            try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
-                int[] findStr2 = new int[47];
-                while (true) {
-                    for (int i = 0; i < 47; ++i) {
-                        findStr2[i] = inputStream.readUnsignedByte();
+            // todo gzip-js
+            if (new File("../bible.txt.gz").exists()) {
+                try {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream("../bible.txt.gz")), StandardCharsets.UTF_8));
+                    String content;
+                    while ((content = in.readLine()) != null) {
+                        String []splits = content.split(",");
+                        addVerse(splits[1],
+                                Integer.parseInt(splits[0].split(":")[0]) - 1, Integer.parseInt(splits[0].split(":")[1]), Integer.parseInt(splits[0].split(":")[2]));
                     }
-                    if ((findStr2[1] - 31 != PPsk)
-                            && (!line.isEmpty())) {
-                        addVerse(line.toString(), currBookIdx, PPrk, PPsk);
-                        line = new StringBuilder();
-                        if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
-                            ++currBookIdx;
-                        }
-                    }
-                    PPrk = findStr2[0] - 31;
-                    PPsk = findStr2[1] - 31;
-                    line.append(" ").append(decryprt(findStr2));
+                    log.info("Used gzip");
                 }
-            } catch (UnknownHostException uhe) {
-                log.error("No internet, no bible to fetch >> " + uhe);
-                // throw new RuntimeException(uhe);
-            } catch (Exception e) {
-                addVerse(line.toString(), currBookIdx, PPrk, PPsk);
+                catch (Exception e) {
+                    log.error("Unable to gUnzip >> " + e);
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                int currBookIdx = 0;
+                int PPsk = 999;
+                int PPrk = 1;
+                StringBuilder line = new StringBuilder();
+                try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
+                    int[] findStr2 = new int[47];
+                    while (true) {
+                        for (int i = 0; i < 47; ++i) {
+                            findStr2[i] = inputStream.readUnsignedByte();
+                        }
+                        if ((findStr2[1] - 31 != PPsk)
+                                && (!line.isEmpty())) {
+                            addVerse(line.toString(), currBookIdx, PPrk, PPsk);
+                            line = new StringBuilder();
+                            if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
+                                ++currBookIdx;
+                                // System.out.print("\r" + currBookIdx);
+                            }
+                        }
+                        PPrk = findStr2[0] - 31;
+                        PPsk = findStr2[1] - 31;
+                        line.append(" ").append(decryprt(findStr2));
+                    }
+                } catch (UnknownHostException uhe) {
+                    log.error("No internet, no bible to fetch >> " + uhe);
+                    // throw new RuntimeException(uhe);
+                } catch (Exception e) {
+                    addVerse(line.toString(), currBookIdx, PPrk, PPsk);
+                }
             }
             log.info(torTxt.length() + " total Letters (no spaces)"); // 80% out of with spaces 1,479,010
             log.info(System.currentTimeMillis() - ts + " mSec");
@@ -107,7 +127,7 @@ public class Repo {
         String txt = line.trim().replaceAll(" ", "");
         torTxt.append(suffix(txt));
         totalLetters += txt.length();
-        Pasuk pasuk = new Pasuk(new StringBuilder(bookHeb[currBookIdx]).reverse().toString(), PPrk, PPsk, line.trim(), totalLetters);
+        Pasuk pasuk = new Pasuk(new StringBuilder(bookHeb[currBookIdx]).reverse().toString(), currBookIdx + 1, PPrk, PPsk, line.trim(), totalLetters);
         verses.add(pasuk);
         ++totalVerses;
     }

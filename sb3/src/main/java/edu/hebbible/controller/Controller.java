@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class Controller {
     private Svc svc;
 
     @PostMapping("psukim")
-    public ResponseEntity<Collection<Pasuk>> psukim(@RequestBody String args) {
+    public ResponseEntity<List<Pasuk>> psukim(@RequestBody String args) {
         log.info("/post " + args);
         List<Pasuk> result = svc.psukim(ServiceImpl.engTx(args), false, false);
         return new ResponseEntity<>(result, HttpStatus.OK);
