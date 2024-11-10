@@ -9,6 +9,7 @@ The commit is with
 - bible.txt 1.42 MB
 - bible.gim 46 KB (for gematria)
 - errata.inf (קרי וכתיב)
+- bible.txt.gz Real compression, vs Pascal's
 
 A nice fact: as we need only 27 letters plus period and space (maybe more, I can't remember), 5 bits are enough, so silly compression done to put it on old 1.44 floppy.
 
