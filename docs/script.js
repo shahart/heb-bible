@@ -1,7 +1,7 @@
-import { RepoInit } from "./repoInit.js";
-import Repo from "./repo.js";
-import { Pasuk } from "./pasuk.js";
-import { Dilug } from "./dilug.js";
+import { RepoInit } from "./RepoInit.js";
+import Repo from "./Repo.js";
+import { Pasuk } from "./Pasuk.js";
+import { Dilug } from "./Dilug.js";
 
 new RepoInit();
 
