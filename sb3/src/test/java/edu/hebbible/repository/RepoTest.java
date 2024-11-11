@@ -27,6 +27,7 @@ public class RepoTest {
         assertEquals(36, last.perek());
         assertEquals(23, last.pasuk());
         assertEquals("דברי הימים ב", last.book());
+        assertEquals(39, last.bookNo());
 
         assertEquals(1196930, repo.getTorTxt().length());
         assertEquals(repo.getTorTxt().length() + 1, repo.getTotalLetters());

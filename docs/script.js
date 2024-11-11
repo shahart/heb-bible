@@ -23,10 +23,6 @@ if (totalPsukim !== "") {
     document.getElementById("result").innerHTML = "Total Psukim: " + totalPsukim;
 }
 
-function noName(orig) {
-    return orig.replaceAll("יהוה", "ה'");
-}
-
 document.getElementById('button1').addEventListener('click', () => {
     pasuk.pasuk(); // todo one time Init
 });

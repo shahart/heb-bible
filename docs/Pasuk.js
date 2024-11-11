@@ -45,11 +45,27 @@ class Pasuk {
         }
     }
 
+    noName(orig) {
+        orig = orig.replaceAll("יהוה", "ה'");
+        orig = orig.replaceAll("שדי", "ש-די");
+        orig = orig.replaceAll("אלהים", "א-להים");
+        orig = orig.replaceAll("אלהינו", "א-להינו");
+        orig = orig.replaceAll(" אל ", " א-ל ");
+        orig = orig.replaceAll("שדי", "ש-די");
+        orig = orig.replaceAll("אדני", "א-דני");
+        orig = orig.replaceAll("אלוה", "א-לוה");
+        orig = orig.replaceAll("צבאות", "צ-באות");
+        return orig;
+    }
+
     isValid(i, containsName, args) {
         let line = this.repo.getVerses()[i];
         if ((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)) {
-            this.output += line + " -- " + this.repo.getCurrBook()[i] + " " + this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + "<br/><br/>";
-            return true;
+            if (this.output.indexOf(this.noName(line)) == -1) {
+                // todo https://github.com/Scimonster/js-gematriya/blob/master/gematriya.js for prk
+                this.output += this.noName(line) + " -- " + this.repo.getCurrBook()[i] + " " + this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                return true;
+            }
         }
         return false;
     }
@@ -77,7 +93,6 @@ class Pasuk {
             this.saveInput("input", args);
             this.output = "";
             let found = 0;
-            let foundInclDups = 0;
             for (let i = 1; i < this.repo.getVerses().length; ++i) {
                 if (this.isValid(i, containsName, args)) {
                     ++ found;
@@ -95,9 +110,9 @@ class Pasuk {
               if ( xhrAws.readyState === 4 &&
                     xhrAws.status === 200) {
                 console.log(this.responseText);
-                if (this.responseText != "Total Psukim: " + foundInclDups) {
+                // if (this.responseText != "Total Psukim: " + foundInclDups) {
                     // alert("Total Psukim diff was found, please contact shahar_t AT hotmail. Java " + this.responseText + " -- " + "JS Total Psukim: " + foundInclDups + " -- " + args);
-                }
+                // }
               }
             }
             xhrAws.send();

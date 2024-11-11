@@ -1,5 +1,5 @@
-import { RepoInit } from "../repoInit.js";
-import Repo from "../repo.js";
+import { RepoInit } from "../RepoInit.js";
+import Repo from "../Repo.js";
 
 describe('Mocha tests', function () {
 
