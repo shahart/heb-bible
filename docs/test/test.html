@@ -8,7 +8,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.7.3/mocha.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.7/chai.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script>
+
+    <script>
+
+    function cls() {
+        console.log('cls');
+    }
+
+    $(document).ready(function() {
+        console.debug = function(message) {
+            // mylog("[DEBUG] " + message);
+        }
+        console.log = function(message) {
+            mylog(message);
+        }
+        console.warn = function(message) {
+            mylog("[WARN] " + message);
+        }
+        console.error = function(message) {
+            mylog("ERROR " + message);
+        }
+        mylog = function(message) {
+            if (message === 'cls') {
+                $("#console-log").empty();
+                return;
+            }
+            console.info(message);
+            if ($("#console-log").length === 0) {
+                $("body").append($('<ul id="console-log" onclick="cls()" style="position:fixed; top:0; left:1; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.65); color:white; font-family: monospace;"></ul>'));
+            }
+            $("#console-log").prepend($('<li style="margin-left:none;">&nbsp;&nbsp;&nbsp;' + message + '</li>')); // append
+        }
+    });
+
+    </script>
+
     <script type="module" class="mocha-init">
         mocha.setup('bdd');
     </script>
