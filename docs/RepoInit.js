@@ -18,7 +18,7 @@ class RepoInit {
         var endTime = new Date();
         console.log("Init: " + (endTime - startTime) + " mSec");
         console.log(Repo.getSize());
-        // old fashion
+        // old fashion - todo remove. for now it skips the last verse
         startTime = new Date();
         console.log("2nd Init");
         var xhr = new XMLHttpRequest();
@@ -62,6 +62,7 @@ class RepoInit {
                     repo.addVerse(line);
                     repo.addCntLetter(TOTLETTERS);
                     repo.addCurrBookArr(currBook);
+                    repo.addBookNumArr(currBookIdx);
                     repo.addPPskArr(PPsk);
                     repo.addPPrkArr(PPrk);
                     if (findStr2[0] - 31 === 1 && findStr2[1] - 31 === 1 && findStr2[1] - 31 !== PPsk) {

@@ -2,11 +2,13 @@ import { RepoInit } from "./RepoInit.js";
 import Repo from "./Repo.js";
 import { Pasuk } from "./Pasuk.js";
 import { Dilug } from "./Dilug.js";
+import { Read } from "./Read.js";
 
 new RepoInit();
 
 let pasuk = new Pasuk(Repo);
 let dilug = new Dilug(Repo);
+let read = new Read(Repo);
 
 const params = new URLSearchParams(document.location.search);
 const firstName = params.get("firstName");
@@ -23,11 +25,15 @@ if (totalPsukim !== "") {
     document.getElementById("result").innerHTML = "Total Psukim: " + totalPsukim;
 }
 
-document.getElementById('button1').addEventListener('click', () => {
-    pasuk.pasuk(); // todo one time Init
+document.getElementById('showBook').addEventListener('click', () => {
+    read.read();
 });
 
-if (firstName && firstName !== '') {
+document.getElementById('button1').addEventListener('click', () => {
+    pasuk.pasuk();
+});
+
+if (firstName && firstName.trim() !== '') {
     pasuk.pasuk();
 }
 

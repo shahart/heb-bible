@@ -6,6 +6,7 @@ let cntLetter = [];
 let PPskArr = [];
 let PPrkArr = [];
 let currBookArr = [];
+let bookNumArr = [];
 let TOTLETTERS;
 
 class Repo {
@@ -55,6 +56,10 @@ class Repo {
         return (i !== 31 ?  String.fromCharCode('א'.charCodeAt(0) + i) : " ");
     }
 
+    getBookNumArr() {
+        return bookNumArr;
+    }
+
     addTorTxt(s) {
         torTxt.push(s);
     }
@@ -73,6 +78,10 @@ class Repo {
 
     addCurrBookArr(s) {
         currBookArr.push(s);
+    }
+
+    addBookNumArr(s) {
+        bookNumArr.push(s);
     }
 
     addCntLetter(s) {
@@ -104,6 +113,7 @@ class Repo {
     done() {
         this.enable('button1');
         this.enable('buttonD');
+        this.enable('showBook');
     }
 }
 

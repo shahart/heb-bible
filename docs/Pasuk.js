@@ -73,7 +73,7 @@ class Pasuk {
     pasuk(repo) { // same todo as in Pasuk.html
         let containsName = document.getElementById("containsName").checked;
         document.getElementById("result").innerHTML = "";
-        let args = document.getElementById("text").value;
+        let args = document.getElementById("text").value.trim();
         if (args.length <= 1 || args.charAt(0) > 'ת' || args.charAt(0) < 'א' || args.charAt(args.length-1) > 'ת' || args.charAt(args.length-1) < 'א') {
             document.getElementById("result").innerHTML = "Invalid name";
         }
@@ -93,7 +93,7 @@ class Pasuk {
             this.saveInput("input", args);
             this.output = "";
             let found = 0;
-            for (let i = 1; i < this.repo.getVerses().length; ++i) {
+            for (let i = 0; i < this.repo.getVerses().length; ++i) {
                 if (this.isValid(i, containsName, args)) {
                     ++ found;
                 }
