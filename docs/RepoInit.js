@@ -97,6 +97,8 @@ class RepoInit {
             repo.setTOTLETTERS(TOTLETTERS);
             ++ EndFile;
             repo.addVerse(line);
+            repo.addCntLetter(TOTLETTERS);
+            repo.addBookNumArr(currBookIdx);
             repo.addCurrBookArr(currBook);
             repo.addPPskArr(PPsk);
             repo.addPPrkArr(PPrk);
