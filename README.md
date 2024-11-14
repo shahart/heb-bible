@@ -151,3 +151,9 @@ Via https://fnproject.io/
 
 - `fn inspect function java-app psukim`
 - `curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01J8YZ0S20NG8G00GZJ0000002` --data '{"name":"ajr="}'
+
+### Spring Cloud Function (AWS)
+
+`curl localhost:8080/ -H "Content-Type: text/plain" -d "{name}"`
+
+like ajr=

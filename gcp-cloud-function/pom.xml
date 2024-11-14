@@ -2,9 +2,9 @@
  <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.hebbible</groupId>
-    <artifactId>psukimViaCloudFunction</artifactId>
+    <artifactId>psukimViaGcpCloudFunction</artifactId>
     <version>0.0.1</version>
-    <name>psukimViaCloudFunction</name>
+    <name>psukimViaGcpCloudFunction</name>
 
     <properties>
         <maven.compiler.release>21</maven.compiler.release>

@@ -57,4 +57,7 @@ jobs:
       working-directory: ./sb3
       run: mvn -B package --file pom.xml
       # -Pinteg-test or -Dtest.active.profile=integ-test
-    
+
+    - name: Build Spring Cloud Fn
+      working-directory: ./spring-cloud-function
+      run: mvn -B package --file pom.xml
