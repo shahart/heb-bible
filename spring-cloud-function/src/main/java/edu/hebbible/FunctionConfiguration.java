@@ -1,14 +1,18 @@
 package edu.hebbible;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.service.Svc;
 import edu.hebbible.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
@@ -25,16 +29,23 @@ public class FunctionConfiguration {
    * in the POM to ensure boot plug-in makes the correct entry
    */
   public static void main(String[] args) {
-    // empty unless using Custom runtime at which point it should include
-    // SpringApplication.run(FunctionConfiguration.class, args);
+    SpringApplication.run(FunctionConfiguration.class, args);
   }
 
   @Bean
-  public Function<String, String> psukim() {
-    return value -> {
-      log.info("/get " + value);
-      List<Pasuk> result = svc.psukim(ServiceImpl.engTx(value), false, false);
-      if (!result.isEmpty()) log.info("1st: " + result.getFirst());
+  public Function</*Map<String, Object>*/String, String> psukim() throws Exception {
+    return queryParams -> {
+      log.info("/get " + queryParams);
+        List<Pasuk> result = null;
+        try {
+            result = svc.psukim(
+                    ServiceImpl.engTx(((Map<String, String>)(new ObjectMapper().readValue(queryParams, Map.class))).getOrDefault("name", "")),
+                    false, // Boolean.parseBoolean(queryParams.getOrDefault("containsName", Boolean.FALSE).toString()),
+                    false);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        if (!result.isEmpty()) log.info("1st: " + result.getFirst());
       log.info("Total Psukim: " + result.size());
       return "Total psukim: " + result.size();
     };

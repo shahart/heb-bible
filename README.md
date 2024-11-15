@@ -62,7 +62,7 @@ F,Find ³ חיפוש מחרוזת מבוקשת. לחיפוש מלה הקש רו�
 
 myPsukimViaFunctionApp
 
-### Gcp Cloud Function
+### Google Cloud Platform Cloud Function
 
 https://us-central1-pivotal-racer-435706-c6.cloudfunctions.net/myPsukimViaLambda
 
@@ -81,6 +81,8 @@ Allow _CORS_
 
 At https://eu-north-1.console.aws.amazon.com/lambda/home?region=eu-north-1#/functions/myPsukimViaLambda?tab=configure
 Allow _CORS_, put `access-control-allow-origin` at both Expose/ Allowed headers
+
+handler name is ``
 
 - JavaScript
 
@@ -152,8 +154,15 @@ Via https://fnproject.io/
 - `fn inspect function java-app psukim`
 - `curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01J8YZ0S20NG8G00GZJ0000002` --data '{"name":"ajr="}'
 
-### Spring Cloud Function (AWS)
+### Spring Cloud Function (AWS/ Gcp)
 
 `curl localhost:8080/ -H "Content-Type: text/plain" -d "{name}"`
 
 like ajr=
+
+in the aws console, the handler name is `org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest`
+
+### More...
+
+- https://projectriff.io
+- Apache's Open Whisk, ..

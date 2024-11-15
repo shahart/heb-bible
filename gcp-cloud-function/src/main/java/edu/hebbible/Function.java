@@ -56,6 +56,7 @@ public class Function implements HttpFunction {
   }
 
   // todo upload the function, for now POC via inline editor https://console.cloud.google.com/functions/details/us-central1/myPsukimViaLambda?env=gen2&hl=en&project=pivotal-racer-435706-c6&tab=source
+  // test via queryParams
 
   // Repo
 

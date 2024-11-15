@@ -9,7 +9,7 @@ import edu.hebbible.service.Svc;
 //import org.springframework.stereotype.Service;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-//import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
@@ -80,7 +80,7 @@ public class ServiceImpl implements Svc {
                 PutItemResponse response = dynamodb.putItem(request);
                 // log.info( response.responseMetadata().requestId());
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("putItemInTable failed. " + e);
             }
         }
     }
