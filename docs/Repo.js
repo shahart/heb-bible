@@ -2,7 +2,7 @@ let instance;
 
 let torTxt = [];
 let verses = [];
-let cntLetter = [];
+let cntLetter = []; // [5846] = 304806-1 (Ok!)
 let PPskArr = [];
 let PPrkArr = [];
 let currBookArr = [];
