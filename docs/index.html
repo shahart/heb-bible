@@ -16,7 +16,7 @@
 <noscript>
     <p style="color:red">JavaScript should be enabled!</p>
 </noscript>
-<script src="https://www.hebcal.com/etc/hdate-he-v2.js" crossorigin="anonymous" onerror="alert('No internet!')"></script>
+<script src="https://www.hebcal.com/etc/hdate-he-v2.js" crossorigin="anonymous"></script>
 </br>
 
 <!--<img src="https://www.holyclock.com/pics/language/he/ext-icon.png">-->
@@ -26,9 +26,10 @@
 <!-- HolyClock.com <BODY> code -->
 <script>document.write(typeof _holyclock_tag=="string"?_holyclock_tag:'HolyClock \x26lt;head\x26gt; tag missing!');</script>
 <!-- HolyClock.com <BODY> code -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" onerror="alert('No internet!')"></script>
 </br>
 </br>
+<a id="book"/>
 <select id="BookSelect">
     <optgroup label="תורה">
         <option value="1">בראשית</option>
@@ -92,7 +93,7 @@
 </a>
 </br>
 </br>
-First Name:
+שם פרטי:
 </br>
 <input type="text" id="text" value="">
 </br>
@@ -100,13 +101,13 @@ First Name:
 <input type="checkbox" id="containsName" name="containsName" value="false">
 <label for="containsName"> אות ראשונה ואחרונה, או גם שם בתוך הפסוק</label><br>
 </br>
-<button disabled id="button1">Find my Pasuk</button>
+<button disabled id="button1">מצא את הפסוק שלי</button>
 <p id="result" dir="ltr"></p>
 </br>
 <hr>
 </br></br>
 </br>
-"Dilug" to search:
+דילוג לחיפוש:
 </br>
 <input type="text" id="dilugTxt" value=""/>
 </br>
@@ -116,8 +117,20 @@ to <input type="number" id="skipMax" value="100" min="1" max="9999">
 </br>
 </br>
 </br>
-<button id="buttonD" disabled>Look for the 1st "dilug" </button>
+<button id="buttonD" disabled>מצא את הדילוג הראשון</button>
 <p id="resultDilug" dir="ltr"></p>
+<hr>
+</br></br>
+</br>
+ערך למציאה:
+</br>
+<input type="text" id="gim" value=""/>
+<!--<input type="number" id="gim" value="1000" min="159" max="13639"/>-->
+</br>
+</br>
+</br>
+<button id="buttonG" disabled>מצא</button>
+<p id="resultGim" dir="ltr"></p>
 
 <br/>
 <a href="https://github.com/shahart/heb-bible" target="_blank">
@@ -131,5 +144,6 @@ to <input type="number" id="skipMax" value="100" min="1" max="9999">
 <script src="script.js" type='module'>
 </script>
 <h5><a href="test/test.html">Tests</a></h5>
+<a href="#book">גלול להתחלה</a>
 </body>
 </html>

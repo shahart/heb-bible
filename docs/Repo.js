@@ -7,6 +7,7 @@ let PPskArr = [];
 let PPrkArr = [];
 let currBookArr = [];
 let bookNumArr = [];
+let gims = [];
 let TOTLETTERS;
 
 class Repo {
@@ -26,6 +27,10 @@ class Repo {
 
     getTorTxt() {
         return torTxt;
+    }
+
+    getGims() {
+        return gims;
     }
 
     setTOTLETTERS(i) {
@@ -66,6 +71,7 @@ class Repo {
 
     addVerse(s) {
         verses.push(s);
+        gims.push(this.gim(s.trim()));
     }
 
     addPPskArr(s) {
@@ -113,8 +119,61 @@ class Repo {
     done() {
         this.enable('button1');
         this.enable('buttonD');
+        this.enable('buttonG');
         this.enable('showBook');
     }
+
+    noName(orig) {
+        orig = orig.replaceAll("יהוה", "ה'");
+        orig = orig.replaceAll("שדי", "ש-די");
+        orig = orig.replaceAll("אלהים", "א-להים");
+        orig = orig.replaceAll("אלהינו", "א-להינו");
+        // orig = orig.replaceAll(" אל ", " א-ל ");
+        orig = orig.replaceAll("שדי", "ש-די");
+        orig = orig.replaceAll("אדני", "א-דני");
+        orig = orig.replaceAll("אלוה", "א-לוה");
+        orig = orig.replaceAll("צבאות", "צ-באות");
+        return orig;
+    }
+
+    gim(str) {
+        let sum = 0;
+        const aleph = 1488;
+        for (let i = 0; i < str.length; ++ i) {
+          if (str.charCodeAt(i) >= aleph && str.charCodeAt(i) <= (aleph+10-1)) {
+            sum += str.charCodeAt(i) - (aleph-1);
+          }
+          else if (str.charCodeAt(i) === aleph+10 || str.charCodeAt(i) === aleph+11) {
+            sum += 20;
+          }
+          else if (str.charCodeAt(i) === aleph+12) {
+            sum += 30;
+          }
+          else if (str.charCodeAt(i) === aleph+13 || str.charCodeAt(i) === aleph+14) {
+            sum += 40;
+          }
+          else if (str.charCodeAt(i) === aleph+15 || str.charCodeAt(i) === aleph+16 || str.charCodeAt(i) === 1487) {
+            sum += 50;
+          }
+          else if (str.charCodeAt(i) === aleph+17) {
+            sum += 60;
+          }
+          else if (str.charCodeAt(i) === aleph+18) {
+            sum += 70;
+          }
+          else if (str.charCodeAt(i) === aleph+19 || str.charCodeAt(i) === aleph+20) {
+            sum += 80;
+          }
+          else if (str.charCodeAt(i) === aleph+21 || str.charCodeAt(i) === aleph+22) {
+            sum += 90;
+          }
+          else if (str.charCodeAt(i) >= aleph+23 && str.charCodeAt(i) <= aleph+23+4-1) {
+            sum += 100 * (str.charCodeAt(i) - (aleph+23) + 1);
+          }
+      }
+      return sum;
+    }
+
 }
 
 const repo = Object.freeze(new Repo());

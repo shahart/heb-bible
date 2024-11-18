@@ -45,25 +45,12 @@ class Pasuk {
         }
     }
 
-    noName(orig) {
-        orig = orig.replaceAll("יהוה", "ה'");
-        orig = orig.replaceAll("שדי", "ש-די");
-        orig = orig.replaceAll("אלהים", "א-להים");
-        orig = orig.replaceAll("אלהינו", "א-להינו");
-        orig = orig.replaceAll(" אל ", " א-ל ");
-        orig = orig.replaceAll("שדי", "ש-די");
-        orig = orig.replaceAll("אדני", "א-דני");
-        orig = orig.replaceAll("אלוה", "א-לוה");
-        orig = orig.replaceAll("צבאות", "צ-באות");
-        return orig;
-    }
-
     isValid(i, containsName, args) {
         let line = this.repo.getVerses()[i];
         if ((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)) {
-            if (this.output.indexOf(this.noName(line)) == -1) {
+            if (this.output.indexOf(this.repo.noName(line)) == -1) {
                 // todo https://github.com/Scimonster/js-gematriya/blob/master/gematriya.js for prk
-                this.output += this.noName(line) + " -- " + this.repo.getCurrBook()[i] + " " + this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                this.output += this.repo.noName(line) + " -- " + this.repo.getCurrBook()[i] + " " + this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + "<br/><br/>";
                 return true;
             }
         }

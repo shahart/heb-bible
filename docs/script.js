@@ -3,12 +3,14 @@ import Repo from "./Repo.js";
 import { Pasuk } from "./Pasuk.js";
 import { Dilug } from "./Dilug.js";
 import { Read } from "./Read.js";
+import { Gematria } from "./Gematria.js";
 
 new RepoInit();
 
 let pasuk = new Pasuk(Repo);
 let dilug = new Dilug(Repo);
 let read = new Read(Repo);
+let gematria = new Gematria(Repo);
 
 const params = new URLSearchParams(document.location.search);
 const firstName = params.get("firstName");
@@ -39,4 +41,8 @@ if (firstName && firstName.trim() !== '') {
 
 document.getElementById('buttonD').addEventListener('click', () => {
     dilug.dilug();
+});
+
+document.getElementById('buttonG').addEventListener('click', () => {
+    gematria.gematria();
 });
