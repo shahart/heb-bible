@@ -43,10 +43,11 @@ document.getElementById('buttonD').addEventListener('click', () => {
     dilug.dilug();
 });
 
-document.getElementById('sabort').addEventListener('click', () => {
-    dilug.doAbort();
-});
-
 document.getElementById('buttonG').addEventListener('click', () => {
     gematria.gematria();
 });
+
+//document.getElementById('sabort').addEventListener('click', () => {
+//    dilug.doAbort();
+//});
+
