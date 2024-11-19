@@ -1,8 +1,11 @@
-The bible. 
+The hebrew bible. 
+
+Antique! 1998 --> Now 2024 ported to java/script, Spring Boot, and LambdaS.
+
 
 ![](read-psalm-119.png)
 
-The code requires some time to re-understand. Plus the fact it was done on DOS with hebrew characters (Ascii 128 stands for Aleph).
+The **deprecated** Pascal code requires some time to re-understand. Plus the fact it was done on DOS with hebrew characters (Ascii 128 stands for Aleph).
 
 The commit is with
 
@@ -82,7 +85,7 @@ Allow _CORS_
 At https://eu-north-1.console.aws.amazon.com/lambda/home?region=eu-north-1#/functions/myPsukimViaLambda?tab=configure
 Allow _CORS_, put `access-control-allow-origin` at both Expose/ Allowed headers
 
-handler name is ``
+handler name is `edu.hebbible.Handler::handleRequest`
 
 - JavaScript
 
@@ -93,6 +96,7 @@ handler name is ``
 TODO Pasuk.go
 
 go build Pasuk.go >> ./Pasuk.exe שחר
+
 go run Pasuk.go שחר
 
 ### EC2

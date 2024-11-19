@@ -47,7 +47,7 @@ class Pasuk {
 
     isValid(i, containsName, args) {
         let line = this.repo.getVerses()[i];
-        if ((line.charAt(1) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)) {
+        if ((line.charAt(0) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)) {
             if (this.output.indexOf(this.repo.noName(line)) == -1) {
                 // todo https://github.com/Scimonster/js-gematriya/blob/master/gematriya.js for prk
                 this.output += this.repo.noName(line) + " -- " + this.repo.getCurrBook()[i] + " " + this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + "<br/><br/>";

@@ -2,6 +2,8 @@
 class Dilug {
 
     repo;
+    abort = false;
+    timer;
 
     constructor(repo) {
         this.repo = repo;
@@ -20,6 +22,12 @@ class Dilug {
                 return this.indVrsRange(cntLtr, indMidVrs, indHigVrs);
             }
         }
+    }
+
+    doAbort() {
+        console.log('החיפוש הופסק');
+        this.abort = true;
+        document.getElementById('sabort').disabled = true;
     }
 
     dilug() {
