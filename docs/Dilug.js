@@ -9,21 +9,6 @@ class Dilug {
         this.repo = repo;
     }
 
-    indVrsRange(cntLtr, indLowVrs, indHigVrs) {
-        if (indLowVrs == indHigVrs) {
-            return indLowVrs;
-        }
-        else {
-            var indMidVrs = Math.ceil((indLowVrs + indHigVrs) / 2);
-            if (cntLtr < this.repo.getCntLetter()[indMidVrs]) {
-                return this.indVrsRange(cntLtr, indLowVrs, indMidVrs-1);
-            }
-            else {
-                return this.indVrsRange(cntLtr, indMidVrs, indHigVrs);
-            }
-        }
-    }
-
     doAbort() {
         console.log('החיפוש הופסק');
         this.abort = true;
@@ -50,12 +35,31 @@ class Dilug {
         target = this.repo.suffix(target);
         var targetLen = target.length;
 
-        for (let iSkip = skipMin; iSkip <= skipMax; ++ iSkip) {
-            let lastInd = this.repo.getTOTLETTERS() - (targetLen-1) * iSkip;
+        var indVrsRange = function(cntLtr, indLowVrs, indHigVrs) {
+          if (indLowVrs == indHigVrs) {
+            return indLowVrs;
+          }
+          else {
+            var indMidVrs = Math.ceil((indLowVrs + indHigVrs) / 2);
+            if (cntLtr < repo.getCntLetter()[indMidVrs]) {
+                return indVrsRange(cntLtr, indLowVrs, indMidVrs-1);
+            }
+            else {
+              return indVrsRange(cntLtr, indMidVrs, indHigVrs);
+            }
+          }
+        }
+
+        var repo = this.repo;
+        var el = document.getElementById("resultDilug");
+        var iSkip = skipMin;
+        window.requestAnimationFrame(function loop() {
+            el.innerHTML = iSkip;
+            let lastInd = repo.getTOTLETTERS() - (targetLen-1) * iSkip;
             for (let j = 0; j < lastInd; j++) { // loop on Torah
                 let match = true;
                 for (let k = 0; k < targetLen; k++) { // loop on target
-                    if (this.repo.getTorTxt()[j+k*iSkip] != target[k]) {
+                    if (repo.getTorTxt()[j+k*iSkip] != target[k]) {
                         match = false;
                         break;
                     }
@@ -63,7 +67,7 @@ class Dilug {
                 if (!match) {
                     match = true;
                     for (let k = 0; k < targetLen; k++) { // loop on target
-                        if (this.repo.getTorTxt()[j+k*iSkip] != target[targetLen-k-1]) {
+                        if (repo.getTorTxt()[j+k*iSkip] != target[targetLen-k-1]) {
                             match = false;
                             break;
                         }
@@ -71,12 +75,12 @@ class Dilug {
                 }
                 if (match) {
                     var foundStr = "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
-                    var idx = this.indVrsRange(j+1, 0, this.repo.getVerses().length); // todo fix?
-                    foundStr += this.repo.getVerses()[idx] + " - " + this.repo.getCurrBook()[idx] + " " + this.repo.getPPrk()[idx] + "-" + this.repo.getPPsk()[idx];
+                    var idx = indVrsRange(j+1, 0, repo.getVerses().length); // todo fix?
+                    foundStr += repo.getVerses()[idx] + " - " + repo.getCurrBook()[idx] + " " + repo.getPPrk()[idx] + "-" + repo.getPPsk()[idx];
 
                     let txt = "";
                     for (let h = j; h <= j+ targetLen * iSkip; ++h) {
-                        txt += this.repo.getTorTxt()[h];
+                        txt += repo.getTorTxt()[h];
                     }
                     foundStr += "<pre>";
                     for (let h = 0; h < targetLen; ++h) {
@@ -90,7 +94,11 @@ class Dilug {
                 }
             }
             // todo document.getElementById('buttonD').disabled = false;
-        }
+            ++iSkip;
+            if (iSkip <= skipMax) {
+                window.requestAnimationFrame(loop);
+            }
+        });
         if (found == 0) {
             document.getElementById("resultDilug").innerHTML = "Not found";
         }
