@@ -2,8 +2,6 @@
 class Dilug {
 
     repo;
-    abort = false;
-    timer;
 
     constructor(repo) {
         this.repo = repo;
@@ -11,18 +9,17 @@ class Dilug {
 
     doAbort() {
         console.log('החיפוש הופסק');
-        this.abort = true;
         document.getElementById('sabort').disabled = true;
     }
 
     dilug() {
+        document.getElementById('sabort').disabled = false;
         var skipMin = Math.ceil(document.getElementById("skipMin").value);
         if (skipMin < 0) { skipMin = 1; }
         var skipMax = Math.ceil(document.getElementById("skipMax").value);
         if (skipMax < 0) { skipMax = 1; }
         if (skipMax >= 10000) { skipMax = 9999 ; }
         var startTime = new Date();
-        // todo document.getElementById('buttonD').disabled = true;
         document.getElementById("resultDilug").innerHTML = "";
         let args = document.getElementById("dilugTxt").value;
         var found = 0;
@@ -93,9 +90,8 @@ class Dilug {
                     iSkip = skipMax + 1;
                 }
             }
-            // todo document.getElementById('buttonD').disabled = false;
             ++iSkip;
-            if (iSkip <= skipMax) {
+            if (iSkip <= skipMax && document.getElementById('sabort').disabled == false) {
                 window.requestAnimationFrame(loop);
             }
         });
