@@ -21,6 +21,7 @@ class Dilug {
         if (skipMax >= 10000) { skipMax = 9999 ; }
         var startTime = new Date();
         document.getElementById("resultDilug").innerHTML = "";
+        document.getElementById("resultDilug2").innerHTML = "";
         let args = document.getElementById("dilugTxt").value;
         var found = 0;
 
@@ -50,6 +51,8 @@ class Dilug {
         var repo = this.repo;
         var el = document.getElementById("resultDilug");
         var iSkip = skipMin;
+        var foundStr = "";
+        var startTime = new Date();
         window.requestAnimationFrame(function loop() {
             el.innerHTML = iSkip;
             let lastInd = repo.getTOTLETTERS() - (targetLen-1) * iSkip;
@@ -71,7 +74,7 @@ class Dilug {
                     }
                 }
                 if (match) {
-                    var foundStr = "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
+                    foundStr += "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
                     var idx = indVrsRange(j+1, 0, repo.getVerses().length); // todo fix?
                     foundStr += repo.getVerses()[idx] + " - " + repo.getCurrBook()[idx] + " " + repo.getPPrk()[idx] + "-" + repo.getPPsk()[idx];
 
@@ -84,22 +87,24 @@ class Dilug {
                         foundStr += "<br>" + "<b>" + txt[(h)*iSkip] + "</b>"  + txt.substring(h*iSkip+1, (h+1)*iSkip) ;
                     }
                     foundStr += "</pre>";
-                    document.getElementById("resultDilug").innerHTML = foundStr;
+                    document.getElementById("resultDilug2").innerHTML = foundStr;
                     found++;
-                    j = lastInd;
-                    iSkip = skipMax + 1;
+                    j = lastInd; // TODO remove both to see all results
+                    iSkip = skipMax + 1; //
                 }
             }
             ++iSkip;
             if (iSkip <= skipMax && document.getElementById('sabort').disabled == false) {
                 window.requestAnimationFrame(loop);
             }
+            else {
+                var endTime = new Date();
+                console.log((endTime - startTime) + " mSec");
+            }
         });
-        if (found == 0) {
-            document.getElementById("resultDilug").innerHTML = "Not found";
-        }
-        var endTime = new Date();
-        console.log((endTime - startTime) + " mSec");
+//        if (found == 0) {
+//            document.getElementById("resultDilug2").innerHTML = "Not found";
+//        }
 
         //
         var xhrAws = new XMLHttpRequest();
