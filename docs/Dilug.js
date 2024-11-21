@@ -56,6 +56,7 @@ class Dilug {
         window.requestAnimationFrame(function loop() {
             el.innerHTML = iSkip;
             let lastInd = repo.getTOTLETTERS() - (targetLen-1) * iSkip;
+            let matchFound = false;
             for (let j = 0; j < lastInd; j++) { // loop on Torah
                 let match = true;
                 for (let k = 0; k < targetLen; k++) { // loop on target
@@ -74,6 +75,7 @@ class Dilug {
                     }
                 }
                 if (match) {
+                    matchFound = true;
                     foundStr += "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
                     var idx = indVrsRange(j+1, 0, repo.getVerses().length); // todo fix?
                     foundStr += repo.getVerses()[idx] + " - " + repo.getCurrBook()[idx] + " " + repo.getPPrk()[idx] + "-" + repo.getPPsk()[idx];
@@ -89,9 +91,10 @@ class Dilug {
                     foundStr += "</pre>";
                     document.getElementById("resultDilug2").innerHTML = foundStr;
                     found++;
-                    j = lastInd; // TODO remove both to see all results
-                    iSkip = skipMax + 1; //
                 }
+            }
+            if (matchFound) {
+                iSkip = skipMax + 1; // TODO remove to see all results
             }
             ++iSkip;
             if (iSkip <= skipMax && document.getElementById('sabort').disabled == false) {
