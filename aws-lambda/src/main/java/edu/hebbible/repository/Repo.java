@@ -1,16 +1,22 @@
 package edu.hebbible.repository;
 
 import edu.hebbible.model.Pasuk;
+import org.apache.commons.io.IOUtils;
 //import jakarta.annotation.PostConstruct;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //import org.springframework.stereotype.Repository;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 //@Repository
 public class Repo {
@@ -40,31 +46,48 @@ public class Repo {
             int PPrk = 1;
             StringBuilder line = new StringBuilder();
 //          long ts = System.currentTimeMillis();
-            try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
-                int[] findStr2 = new int[47];
-
-                while (true) {
-                    for (int i = 0; i < 47; ++i) {
-                        findStr2[i] = inputStream.readUnsignedByte();
-                    }
-                    if ((findStr2[1] - 31 != PPsk)
-                            && (!line.isEmpty())) {
-                        Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
-                        store.add(pasuk);
-                        if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
-                            ++currBookIdx;
-                        }
-                        line = new StringBuilder();
-                        ++EndFile;
-                    }
-                    PPrk = findStr2[0] - 31;
-                    PPsk = findStr2[1] - 31;
-                    line.append(" ").append(decryprt(findStr2));
+            try (InputStream is2 = new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz").openStream()) {
+                InputStream is = IOUtils.toBufferedInputStream(is2);
+                BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(is), StandardCharsets.UTF_8));
+                String content;
+                while ((content = br.readLine()) != null) {
+                    String []splits = content.split(",");
+                    Pasuk pasuk = new Pasuk(Integer.parseInt(splits[0].split(":")[0]) - 1, Integer.parseInt(splits[0].split(":")[1]), Integer.parseInt(splits[0].split(":")[2]),
+                            splits[1].trim());
+                    store.add(pasuk);
                 }
-            } catch (Exception e) {
-                Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
-                store.add(pasuk);
-                ++EndFile;
+                EndFile = store.size();
+                System.out.println("Used gzip");
+            }
+            catch (Exception e) {
+                System.err.println("Unable to gUnzip >> " + e);
+                // oldRead();
+                try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
+                    int[] findStr2 = new int[47];
+
+                    while (true) {
+                        for (int i = 0; i < 47; ++i) {
+                            findStr2[i] = inputStream.readUnsignedByte();
+                        }
+                        if ((findStr2[1] - 31 != PPsk)
+                                && (!line.isEmpty())) {
+                            Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
+                            store.add(pasuk);
+                            if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
+                                ++currBookIdx;
+                            }
+                            line = new StringBuilder();
+                            ++EndFile;
+                        }
+                        PPrk = findStr2[0] - 31;
+                        PPsk = findStr2[1] - 31;
+                        line.append(" ").append(decryprt(findStr2));
+                    }
+                } catch (Exception eof) {
+                    Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
+                    store.add(pasuk);
+                    ++EndFile;
+                }
             }
             System.out.println(EndFile + " psukim");
 //          log.info(System.currentTimeMillis() - ts + " msec");

@@ -1,21 +1,23 @@
 package edu.hebbible;
 
-import java.io.BufferedWriter;
+import java.io.*;
 
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
+import org.apache.commons.io.IOUtils;
 
-import java.io.DataInputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 
 public class Function implements HttpFunction {
 
@@ -64,41 +66,64 @@ public class Function implements HttpFunction {
     if (store == null) {
       store = new ArrayList<>();
       int EndFile = 0; // amount of psukim
-      int currBookIdx = 0;
       long ts = System.currentTimeMillis();
-      int PPsk = 999;
-      int PPrk = 1;
-      StringBuilder line = new StringBuilder();
-      try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
-        int[] findStr2 = new int[47];
-        while (true) {
-          for (int i = 0; i < 47; ++i) {
-            findStr2[i] = inputStream.readUnsignedByte();
-          }
-          if ((findStr2[1] - 31 != PPsk)
-                  && (!line.isEmpty())) {
-            if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
-              ++ currBookIdx;
-            }
-            Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
-            store.add(pasuk);
-            line = new StringBuilder();
-            ++EndFile;
-          }
-          PPrk = findStr2[0] - 31;
-          PPsk = findStr2[1] - 31;
-          line.append(" ").append(decryprt(findStr2));
+      try (InputStream is2 = new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz").openStream()) {
+        InputStream is = IOUtils.toBufferedInputStream(is2);
+        BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(is), StandardCharsets.UTF_8));
+        String content;
+        while ((content = br.readLine()) != null) {
+          String[] splits = content.split(",");
+          Pasuk pasuk = new Pasuk(Integer.parseInt(splits[0].split(":")[0]) - 1, Integer.parseInt(splits[0].split(":")[1]), Integer.parseInt(splits[0].split(":")[2]),
+                  splits[1].trim());
+          store.add(pasuk);
         }
+        EndFile = store.size();
+        System.out.println("Used gzip");
+        String prefix = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) + ":INFO ";
+        logger.info(prefix + (System.currentTimeMillis() - ts) + " msec");
+        logger.info(prefix + EndFile + " psukim"); // having the same as 2024-09-15 10:57:33.671:INFO:
       } catch (Exception e) {
-        Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
-        store.add(pasuk);
-        ++EndFile;
+        System.err.println("Unable to gUnzip >> " + e);
+        oldRead();
       }
-
-      String prefix = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) + ":INFO ";
-      logger.info(prefix + (System.currentTimeMillis() - ts) + " msec");
-      logger.info(prefix + EndFile + " psukim"); // having the same as 2024-09-15 10:57:33.671:INFO:
     }
+  }
+
+  void oldRead() {
+    int EndFile = 0; // amount of psukim
+    int currBookIdx = 0;
+    long ts = System.currentTimeMillis();
+    int PPsk = 999;
+    int PPrk = 1;
+    StringBuilder line = new StringBuilder();
+    try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
+      int[] findStr2 = new int[47];
+      while (true) {
+        for (int i = 0; i < 47; ++i) {
+          findStr2[i] = inputStream.readUnsignedByte();
+        }
+        if ((findStr2[1] - 31 != PPsk)
+                && (!line.isEmpty())) {
+          if (findStr2[0] - 31 == 1 && findStr2[1] - 31 == 1 && findStr2[1] - 31 != PPsk) {
+            ++ currBookIdx;
+          }
+          Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
+          store.add(pasuk);
+          line = new StringBuilder();
+          ++EndFile;
+        }
+        PPrk = findStr2[0] - 31;
+        PPsk = findStr2[1] - 31;
+        line.append(" ").append(decryprt(findStr2));
+      }
+    } catch (Exception e) {
+      Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
+      store.add(pasuk);
+      ++EndFile;
+    }
+    String prefix = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) + ":INFO ";
+    logger.info(prefix + (System.currentTimeMillis() - ts) + " msec");
+    logger.info(prefix + EndFile + " psukim"); // having the same as 2024-09-15 10:57:33.671:INFO:
   }
 
   private void getHebChar(StringBuilder s, int i) { // DOS Hebrew/ code page 862 - Aleph is 128. Now it"s unicode

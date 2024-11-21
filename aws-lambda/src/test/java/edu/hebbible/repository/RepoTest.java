@@ -20,9 +20,10 @@ public class RepoTest {
         assertTrue(store.iterator().next().text().contains("בראשית ברא"));
         
         Pasuk last = repo.getStore().get(23_204 - 1);
+        assertTrue(last.text().endsWith("ויעל"));
+        assertEquals(38, last.book());
         assertEquals(36, last.perek());
         assertEquals(23, last.pasuk());
-        assertEquals(38, last.book());
     }
 
     @Test
