@@ -1,4 +1,4 @@
-[![Build Status](https://www.travis-ci.com/shahart/heb-bible.svg?branch=master)](https://www.travis-ci.com/shahart/heb-bible)
+[![CircleCI](https://circleci.com/gh/shahart/heb-bible.svg?style=svg)](https://circleci.com/gh/shahart/heb-bible)
 
 # The hebrew bible #
 
