@@ -1,0 +1,7 @@
+language: java
+jdk:
+  - openjdk21
+install:
+  - mvn install --file sb3/pom.xml -DskipTests=true -B -V
+script:
+  - mvn test

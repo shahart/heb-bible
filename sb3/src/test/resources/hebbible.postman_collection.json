@@ -1,0 +1,28 @@
+{
+  "info": {
+    "name": "Sample Postman Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "description": "A sample collection to demonstrate collections as a set of related requests"
+  },
+  "item": [{
+    "name": "A simple GET request",
+    "event": [{
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('expect response be 200', function () {",
+          "    pm.response.to.be.ok",
+          "})",
+          "pm.test('expect read the whole bible', function () {",
+          "    pm.expect(pm.response.text()).to.be.equal('23204')",
+          "})"
+        ]
+      }
+    }],
+    "request": {
+      "url": "{{host}}/psukim",
+      "method": "GET"
+    }
+  }]
+}

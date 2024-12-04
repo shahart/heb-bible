@@ -1,4 +1,6 @@
-The hebrew bible. 
+[![Build Status](https://www.travis-ci.com/shahart/heb-bible.svg?branch=master)](https://www.travis-ci.com/shahart/heb-bible)
+
+# The hebrew bible #
 
 Antique! 1998 --> Now 2024 ported to java/script, Spring Boot, and LambdaS.
 
@@ -165,6 +167,14 @@ Via https://fnproject.io/
 like ajr=
 
 in the aws console, the handler name is `org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest`
+
+### Newman
+
+A runner for Postman
+
+`npm install -g newman`
+
+`newman run src/test/resources/hebbible.postman_collection.json -g src/test/resources/postman_globals.json`
 
 ### More...
 
