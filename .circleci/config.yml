@@ -1,10 +1,8 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/sb3
     docker:
       - image: cimg/openjdk:21.0.5
     steps:
       - checkout
-      - run: mvn clean install -DskipTests -B -V
-      - run: mvn test
+      - run: mvn clean install --file sb3/pom.xml -B -V
