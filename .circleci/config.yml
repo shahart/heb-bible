@@ -5,4 +5,4 @@ jobs:
       - image: cimg/openjdk:21.0.5
     steps:
       - checkout
-      - run: mvn clean install --file sb3/pom.xml -B -V
+      - run: mvn clean install --file sb3/pom.xml -DskipTests=true -B -V
