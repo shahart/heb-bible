@@ -1,5 +1,6 @@
 package edu.hebbible.service.impl;
 
+import edu.gematria.Calc;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.repository.Repo;
 import edu.hebbible.service.Svc;
@@ -70,6 +71,7 @@ public class ServiceImpl implements Svc {
             }
         }
         log.info(findings + " verses total");
+        log.debug("Gim: {}", Calc.calc(name));
         return result;
     }
 

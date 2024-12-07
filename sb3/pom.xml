@@ -32,6 +32,12 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
+    <repositories>
+        <repository>
+            <id>shahart</id>
+            <url>https://github.com/shahart/maven-repo/raw/releases/</url>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -104,6 +110,11 @@
 <!--            <optional>true</optional>-->
 <!--        </dependency>-->
 
+        <dependency>
+            <groupId>edu.gematria</groupId>
+            <artifactId>gematria</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/shahart/heb-bible.svg?style=svg)](https://circleci.com/gh/shahart/heb-bible)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/shahart/heb-bible/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/shahart/heb-bible/tree/master)
 
 # The hebrew bible #
 
