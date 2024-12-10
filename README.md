@@ -114,7 +114,17 @@ Init'ed with Spring Initializ: https://start.spring.io/
 
 $ java -jar hebbible-0.0.1-SNAPSHOT.war
 
+`mvn --file sb3/pom.xml spring-boot:run`
+
 http://localhost:8080/ >> Swagger/OpenApi
+
+#### https://ollama.com/library/tinyllama
+
+- `docker pull ollama/ollama`
+- `docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama`
+- `docker exec -it ollama ollama run tinyllama`
+- `curl -v --location 'http://localhost:11434/api/generate' --header 'Content-Type: application/json' --data '{"model": "tinyllama","prompt": "why is the sky blue?", "stream": false}'`
+- `http://localhost:8080/v1/chat/list-models`
 
 #### Getting Started with Create React App
 
