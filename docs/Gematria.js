@@ -17,7 +17,7 @@ class Gematria {
 
     gematria(repo) {
         let gim = this.repo.gim(document.getElementById("gim").value);
-        document.getElementById("resultGim").innerHTML = "ערך:" + gim;
+        document.getElementById("resultGim").innerHTML = "ערך: " + gim;
         if (gim < 159 || gim > 13639 ) alert('השתמש באותיות בעברית, שערכן 13,639..159');
         this.output = "";
         let found = 0;

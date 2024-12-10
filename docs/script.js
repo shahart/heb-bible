@@ -24,7 +24,7 @@ if (cookieInput !== "") {
 }
 let totalPsukim = firstName && firstName !== '' ? 0 : pasuk.loadInput("resCount");
 if (totalPsukim !== "") {
-    document.getElementById("result").innerHTML = "Total Psukim: " + totalPsukim;
+    document.getElementById("result").innerHTML = totalPsukim + " פסוקים";
 }
 
 document.getElementById('showBook').addEventListener('click', () => {

@@ -18,7 +18,7 @@ class Read {
             if (this.repo.getBookNumArr()[i] == bookNum-1 ) {
                 ++ psukim;
                 if (this.repo.getPPsk()[i] == 1 || (this.repo.getBookNumArr()[i] == 27-1 && this.repo.getPPrk()[i] == 119 && this.repo.getPPsk()[i] % 8 == 1)) this.output += "</br>";
-                this.output += this.repo.getVerses()[i] + " -- " + this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + "<br/>";
+                this.output += this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + " -- " + this.repo.getVerses()[i] + "<br/>";
                 totLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
                 tevot += this.repo.getVerses()[i].split(' ').length; // - 1;
             }

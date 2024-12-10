@@ -86,7 +86,7 @@ class Pasuk {
                 }
             }
             this.saveInput('resCount', found);
-            document.getElementById("result").innerHTML = "Total Psukim: " + found + "<br/><br/>" + this.output;
+            document.getElementById("result").innerHTML = found + " פסוקים <br/><br/>" + this.output;
 
             //
             var xhrAws = new XMLHttpRequest();
