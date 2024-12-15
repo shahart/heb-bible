@@ -3,13 +3,13 @@ out/
 *.exe
 *.iml
 sb3/build
-sb3/target
+sb3/target/**
 sb3/.gradle
 gcp-cloud-function/target
 azure-functions/target
 alibaba-function-compute/target
 aws-lambda/target
-oracle-clound-fn/target
+oracle-cloud-fn/target
 spring-cloud-function/target
 tencent/target
 heroku/target
