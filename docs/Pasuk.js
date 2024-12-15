@@ -1,9 +1,11 @@
+import { No2gim } from "./No2gim.js";
 
 class Pasuk {
 
     output = "";
     repo;
     EndFile = 0;
+    no2gim = new No2gim();
 
     constructor(repo) {
         this.repo = repo;
@@ -49,8 +51,7 @@ class Pasuk {
         let line = this.repo.getVerses()[i];
         if ((line.charAt(0) === args.charAt(0) && line.charAt(line.length-1) === args.charAt(args.length-1)) || (containsName && line.indexOf(args) >= 0)) {
             if (this.output.indexOf(this.repo.noName(line)) == -1) {
-                // todo https://github.com/Scimonster/js-gematriya/blob/master/gematriya.js for prk
-                this.output += this.repo.noName(line) + " -- " + this.repo.getCurrBook()[i] + " " + this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                this.output += this.repo.noName(line) + " -- " + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "-" + this.repo.getPPsk()[i] + "<br/><br/>";
                 return true;
             }
         }

@@ -1,7 +1,9 @@
+import { No2gim } from "./No2gim.js";
 
 class Read {
 
     repo;
+    no2gim = new No2gim();
 
     constructor(repo) {
         this.repo = repo;
@@ -18,7 +20,7 @@ class Read {
             if (this.repo.getBookNumArr()[i] == bookNum-1 ) {
                 ++ psukim;
                 if (this.repo.getPPsk()[i] == 1 || (this.repo.getBookNumArr()[i] == 27-1 && this.repo.getPPrk()[i] == 119 && this.repo.getPPsk()[i] % 8 == 1)) this.output += "</br>";
-                this.output += this.repo.getPPrk()[i] + "-" + this.repo.getPPsk()[i] + " -- " + this.repo.getVerses()[i] + "<br/>";
+                this.output += this.no2gim.no2gim(this.repo.getPPrk()[i]) + "-" + this.repo.getPPsk()[i] + " -- " + this.repo.getVerses()[i] + "<br/>";
                 totLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
                 tevot += this.repo.getVerses()[i].split(' ').length; // - 1;
             }
