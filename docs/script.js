@@ -13,6 +13,10 @@ let read = new Read(Repo);
 let gematria = new Gematria(Repo);
 
 const params = new URLSearchParams(document.location.search);
+
+const g = params.get("g");
+const r = params.get("r");
+
 const firstName = params.get("firstName");
 if (firstName && firstName !== '') {
     console.info(firstName);
@@ -50,3 +54,16 @@ document.getElementById('buttonG').addEventListener('click', () => {
 document.getElementById('sabort').addEventListener('click', () => {
     dilug.doAbort();
 });
+
+if (g && g.trim() !== '') {
+    document.getElementById("gim").value = g;
+    gematria.gematria();
+}
+
+if (r && r.trim() !== '') {
+    let book = r;
+    if (r.indexOf(",")>0)
+        book=r.split(",")[0];
+    document.getElementById("BookSelect").value = book;
+    read.read(r);
+}

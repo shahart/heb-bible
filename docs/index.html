@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="#">
     <title>Pasuk or Dilug</title>
     <!-- HolyClock.com <HEAD> code for shahart.github.io -->
-    <script>/*<![CDATA[*/_holyclock_id="a587140a291af38d7336f360192e7f83";_holyclock_tag='<s'+'cript src\x3d"//www.holyclock.com/holyclock.js?'+Math.floor(+new Date/864E5)+'">\x3c/script>';null!==document.cookie.match(/(?:^|;)\s*_holyclock_qr=\s*\w/)&&null===window.location.hash.match(/#holyclock=qr(?=#|$)/)&&document.write(_holyclock_tag);//]]></script>
+    <script crossorigin="anonymous">/*<![CDATA[*/_holyclock_id="a587140a291af38d7336f360192e7f83";_holyclock_tag='<s'+'cript src\x3d"//www.holyclock.com/holyclock.js?'+Math.floor(+new Date/864E5)+'">\x3c/script>';null!==document.cookie.match(/(?:^|;)\s*_holyclock_qr=\s*\w/)&&null===window.location.hash.match(/#holyclock=qr(?=#|$)/)&&document.write(_holyclock_tag);//]]></script>
     <!-- HolyClock.com <HEAD> code for shahart.github.io -->
     <link rel="stylesheet" href="mystyle.css">
     <link rel="icon" href="favicon.ico">
@@ -16,11 +16,13 @@
 <noscript>
     <p style="color:red">JavaScript should be enabled!</p>
 </noscript>
+<!-- (new Date).toLocaleString('he',{dateStyle:'full',calendar:"hebrew"}) -->
+<!-- (new Intl.DateTimeFormat('he-u-ca-hebrew',{weekday: 'long', year:'numeric', month:'numeric', day:'numeric'}).format(new Date())); -->
 <script src="https://www.hebcal.com/etc/hdate-he-v2.js" crossorigin="anonymous"></script>
 </br>
 </br>
 <!-- HolyClock.com <BODY> code -->
-<script>document.write(typeof _holyclock_tag=="string"?_holyclock_tag:'HolyClock \x26lt;head\x26gt; tag missing!');</script>
+<script crossorigin="anonymous">document.write(typeof _holyclock_tag=="string"?_holyclock_tag:'HolyClock \x26lt;head\x26gt; tag missing!');</script>
 <!-- HolyClock.com <BODY> code -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" onerror="alert('No internet!')"></script>
 
