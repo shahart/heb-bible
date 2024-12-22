@@ -38,17 +38,18 @@
         <option value="5">דברים</option>
     </optgroup>
     <optgroup label="נביאים">
+        <!-- ראשונים -->
         <option value="6">יהושע</option>
         <option value="7">שופטים</option>
         <option value="8">שמואל א</option>
         <option value="9">שמואל ב</option>
         <option value="10">מלכים א</option>
         <option value="11">מלכים ב</option>
+        <!-- אחרונים -->
         <option value="12">ישעיה</option>
         <option value="13">ירמיה</option>
         <option value="14">יחזקאל</option>
-    </optgroup>
-    <optgroup label="תרי עשר">
+    <option value="15a" disabled>תרי עשר</option>
         <option value="15">הושע</option>
         <option value="16">יואל</option>
         <option value="17">עמוס</option>
@@ -63,9 +64,11 @@
         <option value="26">מלאכי</option>
     </optgroup>
     <optgroup label="כתובים">
+    <option value="27a" disabled>ספרי אמת</option>
         <option value="27">תהלים</option>
-        <option value="28">משלי</option>
+        <option value="28">משלי  </option>
         <option value="29">איוב</option>
+    <option value="30a" disabled>חמש מגילות</option>
         <option value="30">שיר השירים</option>
         <option value="31">רות</option>
         <option value="32">איכה</option>
@@ -132,6 +135,8 @@ to <input type="number" id="skipMax" value="100" min="1" max="9999">
 <!--<input type="number" id="gim" value="1000" min="159" max="13639"/>-->
 </br>
 </br>
+<input type="checkbox" id="partGim" name="partGim" value="false">
+<label for="partGim">גם חלק  מפסוק</label><br>
 </br>
 <button id="buttonG" disabled>מצא פסוק עם גימטריה זהה</button>
 <p id="resultGim" ></p>
