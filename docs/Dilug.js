@@ -87,7 +87,7 @@ class Dilug {
                     }
                     foundStr += "<pre>";
                     for (let h = 0; h < targetLen; ++h) {
-                        foundStr += "<br>" + "<b>" + txt[(h)*iSkip] + "</b>"  + txt.substring(h*iSkip+1, (h+1)*iSkip) ;
+                        foundStr += "<br>" + "<b><span style=\"color:blue;\">" + txt[(h)*iSkip] + "</span></b>"  + txt.substring(h*iSkip+1, (h+1)*iSkip) ;
                     }
                     foundStr += "</pre>";
                     document.getElementById("resultDilug2").innerHTML = foundStr;

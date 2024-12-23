@@ -26,8 +26,16 @@ class Gematria {
                 for (let y = x+1; y <= words.length; ++y) {
                     sum += gims[y-1];
                     if (sum == gim) {
-                        this.output += this.repo.noName(line) + " -- " + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "-" + this.repo.getPPsk()[i];
-                        this.output += " ממילה " + (x) + " ועד מילה " + (y) +  "<br/><br/>"
+                        for (let z = 1; z <= words.length; ++z) {
+                            if (z >=x && z <= y) {
+                                this.output += "<span style=\"color:blue;\">"
+                            }
+                            this.output += this.repo.noName(words[z-1]) + " ";
+                            if (z >=x && z <= y) {
+                                this.output += "</span>"
+                            }
+                        }
+                        this.output += " -- " + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "-" + this.repo.getPPsk()[i] + "<br/><br/>"
                         break;
                     }
                 }
