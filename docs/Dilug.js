@@ -126,4 +126,11 @@ class Dilug {
 
 }
 
+let textArea = document.getElementById("dilugTxt");
+let chars = document.getElementById("chars");
+
+textArea.addEventListener('input', function() {
+    chars.textContent = this.value.length + ' ';
+})
+
 export { Dilug }
