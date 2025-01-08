@@ -48,7 +48,7 @@ exports.handler = async(event, context, callback) => {
   }
   
   var data = [];
-  get("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT", (res) => {
+  get("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.5bit", (res) => {
   	res.on("data", function(chunk) {
   		data.push(chunk); // around 16k of binary data
   		console.log(chunk.length);

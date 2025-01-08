@@ -40,7 +40,7 @@ public class Repo {
         int PPrk = 1;
         StringBuilder line = new StringBuilder();
 //        long ts = System.currentTimeMillis();
-        try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
+        try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.5bit").openStream())) {
             int[] findStr2 = new int[47];
 
             while (true) {

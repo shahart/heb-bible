@@ -62,7 +62,7 @@ public class Repo {
             catch (Exception e) {
                 System.err.println("Unable to gUnzip >> " + e);
                 // oldRead();
-                try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) {
+                try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.5bit").openStream())) {
                     int[] findStr2 = new int[47];
 
                     while (true) {

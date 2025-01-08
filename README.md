@@ -11,7 +11,7 @@ The **deprecated** Pascal code requires some time to re-understand. Plus the fac
 
 The commit is with
 
-- bible.txt 1.42 MB, now also its gzip (0.7 MB)
+- bible.txt.5bit 1.42 MB, now also its gzip (0.7 MB)
 - bible.gim 46 KB (for gematria)
 - errata.inf (קרי וכתיב)
 - bible.txt.gz Real compression, vs Pascal's

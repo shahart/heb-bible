@@ -167,7 +167,7 @@ Begin
   Val(ParamStr(3),Par2,Now);
   if now>1 then
     val(copy(paramstr(3),1,now-1),par2,now);
-  Assign(TextFile,'Bible.Txt');
+  Assign(TextFile,'bible.txt.5bit');
   {$i-} Reset(TextFile); {$i+}
   if ioresult<>0 then begin
     textattr:=cyan;

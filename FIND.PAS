@@ -278,8 +278,8 @@ Begin
   if stop<x then
     error('טווח לא חוקי');
   Count:=0;
-  Assign(Fil2,'Bible.Txt');
-  assign(fil,'bible.txt');
+  Assign(Fil2,'bible.txt.5bit');
+  assign(fil,'bible.txt.5bit');
   if c=#2 then begin
     Assign(F,'Bible.Gim');
     {$i-} Reset(F,46408); {$i+}

@@ -65,7 +65,7 @@ public class Repo {
         int PPsk = 999;
         int PPrk = 1;
         StringBuilder line = new StringBuilder();
-        try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT").openStream())) { // todo gzip - reapply prev commit
+        try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.5bit").openStream())) { // todo gzip - reapply prev commit
             int[] findStr2 = new int[47];
             while (true) {
                 for (int i = 0; i < 47; ++i) {

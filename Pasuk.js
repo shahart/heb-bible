@@ -1,3 +1,4 @@
+// "use strict";
 var http = require("https"); // import { get } from 'https';
 
 function getHebChar(i) {
@@ -41,7 +42,7 @@ function isValid(line, containsName, args) {
 }
 
 var data = [];
-http.get("https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT", (res) => {
+http.get("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.5bit", (res) => {
 	res.on("data", function(chunk) {
 		data.push(chunk); // around 16k of binary data
 	});

@@ -61,7 +61,7 @@ class RepoInit {
         startTime = new Date();
         console.log("2nd Init");
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/BIBLE.TXT', true);
+        xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.5bit', true);
         xhr.overrideMimeType('text/plain; charset=x-user-defined'); // Hack to pass bytes through unprocessed
         xhr.onreadystatechange = function(e) {
           if ( this.readyState === 4 &&
