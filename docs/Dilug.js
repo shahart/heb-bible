@@ -79,7 +79,7 @@ class Dilug {
                     matchFound = true;
                     foundStr += "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
                     var idx = indVrsRange(j+1, 0, repo.getVerses().length); // todo fix?
-                    foundStr += repo.getVerses()[idx] + " - " + repo.getCurrBook()[idx] + " " + new No2gim().no2gim(repo.getPPrk()[idx]) + "-" + repo.getPPsk()[idx];
+                    foundStr += repo.getVerses()[idx] + " - " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (repo.getBookNumArr()[idx]+1) + "," + repo.getPPrk()[idx] + "\"" + " target=\"_blank\">" + repo.getCurrBook()[idx] + " " + new No2gim().no2gim(repo.getPPrk()[idx]) + "</a>-" + repo.getPPsk()[idx];
 
                     let txt = "";
                     for (let h = j; h <= j+ targetLen * iSkip; ++h) {
