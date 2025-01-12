@@ -1,28 +1,47 @@
 package main
 
 import (
+	"bytes"
 	"compress/gzip"
 	"encoding/csv"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
 
-// TODO var store [24000]string
+// TODO var store [24000]string, Rest :8080, duplicates, etc...
 
-func main() {
+func Reverse(s string) string {
+	b := []byte(s)
+	for i, j := 0, len(b)-1; i < len(b)/2; i, j = i+1, j-1 {
+		b[i], b[j] = b[j], b[i]
+	}
+	return string(b)
+}
 
-	siz := 0
-	name := os.Args[1]
+func pasuk(name string, containsName bool) int {
 
-	f, err := os.Open("../bible.txt.gz")
+	resp, err := http.Get("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
+	defer resp.Body.Close()
 
-	gr, err := gzip.NewReader(f)
+	content, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// fmt.Println("Read", len(content), "bytes")
+
+	siz := 0
+
+	reader := bytes.NewReader(content)
+	gr, err := gzip.NewReader(reader)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,13 +54,25 @@ func main() {
 	}
 
 	for err == nil {
-		rec, err = cr.Read()
-		// TODO if line[0] == name[0] && line[len(line)-1] == name[len(name)-1] {
-		if err == nil && strings.Contains(rec[1], name) {
+		if err == nil && ((rec[1][1] == name[1] && rec[1][len(rec[1])-1] == name[len(name)-1]) || (containsName && strings.Contains(rec[1], name))) {
 			siz++
-			// fmt.Println(siz, ":", rec[0], rec[1])
+			fmt.Println(Reverse(rec[1]))
 		}
+		rec, err = cr.Read()
 	}
 
-	fmt.Println(siz, " verses found")
+	// fmt.Println(siz, " verses found")
+	return siz
+}
+
+func main() {
+	name := os.Args[1]
+	containsName := false
+	if len(os.Args) > 2 {
+		containsName, _ = strconv.ParseBool(os.Args[2])
+		// if _ != nil {
+		// fmt.Println("Ignoring 2nd param containsName:", err)
+		// }
+	}
+	fmt.Println(pasuk(name, containsName), "verses found")
 }

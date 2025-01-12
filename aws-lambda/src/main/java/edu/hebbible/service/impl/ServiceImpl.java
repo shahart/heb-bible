@@ -48,6 +48,9 @@ public class ServiceImpl implements Svc {
 
         List<Pasuk> result = new ArrayList<>();
         Collection<Pasuk> psukim = repo.getStore();
+        if (psukim.size() <= 1) {
+            throw new IllegalStateException("Unable to fetch bible");
+        }
         int findings = 0;
         for (Pasuk pasuk: psukim) {
             String line = pasuk.text();

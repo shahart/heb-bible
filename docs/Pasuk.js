@@ -95,9 +95,8 @@ class Pasuk {
             xhrAws.setRequestHeader("Content-Type", "application/json");
             xhrAws.send(JSON.stringify({ "name": args, "containsName": containsName }));
             xhrAws.onreadystatechange = function(e) {
-              if ( xhrAws.readyState === 4 &&
-                    xhrAws.status === 200) {
-                console.log(this.responseText);
+              if ( xhrAws.readyState === 4) {
+                console.debug(xhrAws.status + this.responseText);
                 // if (this.responseText != "Total Psukim: " + foundInclDups) {
                     // alert("Total Psukim diff was found, please contact shahar_t AT hotmail. Java " + this.responseText + " -- " + "JS Total Psukim: " + foundInclDups + " -- " + args);
                 // }

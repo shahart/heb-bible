@@ -35,6 +35,10 @@ public class Repo {
     }
 
     public List<Pasuk> getStore() {
+        if (store.size() <= 1) {
+            store.clear();
+            init();
+        }
         return Collections.unmodifiableList(store);
     }
 
@@ -60,7 +64,7 @@ public class Repo {
                 System.out.println("Used gzip");
             }
             catch (Exception e) {
-                System.err.println("Unable to gUnzip >> " + e);
+                System.err.println("WARN Unable to gUnzip >> " + e);
                 // oldRead();
                 try (DataInputStream inputStream = new DataInputStream(new URL("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.5bit").openStream())) {
                     int[] findStr2 = new int[47];
@@ -84,6 +88,7 @@ public class Repo {
                         line.append(" ").append(decryprt(findStr2));
                     }
                 } catch (Exception eof) {
+                    System.err.println("ERROR Unable to Unzip 5bit >> " + e);
                     Pasuk pasuk = new Pasuk(currBookIdx, PPrk, PPsk, line.toString().trim());
                     store.add(pasuk);
                     ++EndFile;
