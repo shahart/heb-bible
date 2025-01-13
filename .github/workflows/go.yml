@@ -14,5 +14,7 @@ jobs:
         with:
           go-version: '1.21.x'
       - name: Build
-        working-directory: ./go
+        working-directory: ./go/pasuk
         run: go build -v ./...
+      - name: Test
+        run: go test pasuk_test.go

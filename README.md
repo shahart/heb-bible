@@ -95,9 +95,11 @@ handler name is `edu.hebbible.Handler::handleRequest`
 
 ### GoLang
 
-go build Pasuk.go >> ./Pasuk.exe שחר
+go build pasuk.go
+go test pasuk_test.go
 
-go run Pasuk.go שחר true
+go build main.go
+go run main.go שחר true
 
 ### EC2
 

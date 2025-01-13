@@ -1,15 +1,12 @@
-package main
+package pasuk
 
 import (
 	"bytes"
 	"compress/gzip"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"strings"
 )
 
@@ -23,7 +20,7 @@ func Reverse(s string) string {
 	return string(b)
 }
 
-func pasuk(name string, containsName bool) int {
+func Pasuk(name string, containsName bool) int {
 
 	resp, err := http.Get("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz")
 	if err != nil {
@@ -56,23 +53,11 @@ func pasuk(name string, containsName bool) int {
 	for err == nil {
 		if err == nil && ((rec[1][1] == name[1] && rec[1][len(rec[1])-1] == name[len(name)-1]) || (containsName && strings.Contains(rec[1], name))) {
 			siz++
-			fmt.Println(Reverse(rec[1]))
+			// fmt.Println(Reverse(rec[1]))
 		}
 		rec, err = cr.Read()
 	}
 
 	// fmt.Println(siz, " verses found")
 	return siz
-}
-
-func main() {
-	name := os.Args[1]
-	containsName := false
-	if len(os.Args) > 2 {
-		containsName, _ = strconv.ParseBool(os.Args[2])
-		// if _ != nil {
-		// fmt.Println("Ignoring 2nd param containsName:", err)
-		// }
-	}
-	fmt.Println(pasuk(name, containsName), "verses found")
 }

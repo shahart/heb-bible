@@ -44,7 +44,7 @@ class Read {
                     this.output += this.no2gim.no2gim(this.repo.getPPrk()[i]);
                     if (this.repo.getPPsk()[i] == 1)
                         this.output += "</a>";
-                    let rashiUrl = "<a href=\"" + "https://wiki.jewishbooks.org.il/mediawiki/wiki/%D7%A8%D7%A9%22%D7%99/" + bookHeb + "/" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "#" + this.no2gim.no2gim(this.repo.getPPsk()[i]) + "\"" + " target=\"_blank\">" + this.repo.getPPsk()[i] + "</a>";
+                    let rashiUrl = "<a href=\"" + "https://wiki.jewishbooks.org.il/mediawiki/wiki/%D7%A8%D7%A9%22%D7%99/" + bookHeb + "/" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "#" + this.no2gim.no2gim(this.repo.getPPsk()[i]) + "\"" + " target=\"_new\">" + this.repo.getPPsk()[i] + "</a>";
                     this.output += "-" + rashiUrl + " -- " + this.repo.getVerses()[i] + "<br/>";
                     totLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
                     tevot += this.repo.getVerses()[i].split(' ').length; // - 1;
@@ -65,7 +65,7 @@ class Read {
                 '20','21','22','23','24','26','28','27','30','29',
                 '32','31','33','34','35a','35b','25a','25b']; // 39 books
             let pointer = pointerArr[bookNum-1];
-            let engTrans = "<a href=\"https://mechon-mamre.org/p/pt/pt" + pointer + "01.htm\" target=\"_blank\">" + bookeng[bookNum-1] + "</a>";
+            let engTrans = "<a href=\"https://mechon-mamre.org/p/pt/pt" + pointer + "01.htm\" target=\"_new\">" + bookeng[bookNum-1] + "</a>";
             this.output = engTrans + "</br></br>" + "פסוקים: " + psukim + "</br>" + "אותיות: " + totLetters + "</br>" + "תיבות: " + tevot + "</br></br>" + headers + "</br>" + this.output;
         }
         document.getElementById("bibleResult").innerHTML = this.output;
