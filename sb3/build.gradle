@@ -35,6 +35,9 @@ repositories {
 
 dependencies {
 
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.2.1")
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-dynamodb'
+
     implementation(platform("software.amazon.awssdk:bom:2.27.21"))
     implementation 'software.amazon.awssdk:dynamodb'
 

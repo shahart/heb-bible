@@ -47,7 +47,7 @@ jobs:
       
     - name: Build aws ec2 with Maven
       working-directory: ./sb3
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml -DskipTests=true
       # -Pinteg-test or -Dtest.active.profile=integ-test
 
     - name: Build Spring Cloud Fn

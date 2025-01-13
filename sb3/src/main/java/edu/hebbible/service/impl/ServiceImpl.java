@@ -1,6 +1,8 @@
 package edu.hebbible.service.impl;
 
 import edu.gematria.Calc;
+import edu.hebbible.model.Dilugim;
+import edu.hebbible.model.Psukim;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.repository.Repo;
 import edu.hebbible.service.Svc;
@@ -11,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.*;
+import io.awspring.cloud.dynamodb.DynamoDbTemplate;
+import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 
 import java.util.*;
 
@@ -27,28 +26,49 @@ public class ServiceImpl implements Svc {
     @Autowired
     protected Repo repo;
 
-    DynamoDbClient dynamodb;
+//    DynamoDbClient dynamodb;
 
     @Value("${spring.profiles.active:prod}")
     String profile;
 
+    @Autowired
+    DynamoDbTemplate dynamoDbTemplate;
+
     @PostConstruct
     public void initDb() {
-        if (! "test".equalsIgnoreCase(profile)) {
-            // from .aws/cred file
-            AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
-                    "access-key-id",
-                    "secret-access-key");
+//        if (! "test".equalsIgnoreCase(profile)) {
+//            // from .aws/cred file
+//            AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
+//                    "access-key-id",
+//                    "secret-access-key");
+//
+//            dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
+//                    .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+//                    .build();
+//        }
 
-            dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
-                    .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                    .build();
+        if (dynamoDbTemplate != null) {
+            PageIterable<Psukim> pageIterable = dynamoDbTemplate.scanAll(Psukim.class);
+            if (pageIterable != null) {
+                System.out.println("---psukim---");
+                for (Psukim psukim : pageIterable.items()) {
+                    System.out.println(psukim);
+                }
+            }
+            //
+            PageIterable<Dilugim> pagedIterable = dynamoDbTemplate.scanAll(Dilugim.class);
+            if (pagedIterable != null) {
+                System.out.println("---dilugim---");
+                for (Dilugim dilugim : pagedIterable.items()) {
+                    System.out.println(dilugim);
+                }
+            }
         }
     }
 
     @Override
     public List<Pasuk> psukim(String name, boolean containsName, boolean withDups) {
-        putItemInTable(dynamodb, name);
+        putItemInTable(name);
 
         if (withDups) {
             log.warn("withDups: on");
@@ -86,18 +106,21 @@ public class ServiceImpl implements Svc {
         return repo.getTotalVerses();
     }
 
-    public static void putItemInTable(DynamoDbClient dynamodb, String name) {
-        if (dynamodb != null) {
-            HashMap<String, AttributeValue> itemValues = new HashMap<>();
-            itemValues.put("name", AttributeValue.builder().s(name).build());
-            try {
-                PutItemRequest request = PutItemRequest.builder().tableName("psukim").item(itemValues).build();
-                // PutItemResponse response = // findBugs: Medium: Dead store
-                dynamodb.putItem(request);
-                // log.info( response.responseMetadata().requestId());
-            } catch (Exception e) {
-                log.warn("putItemInTable. " + e);
-            }
+    public void putItemInTable(String name) {
+//            HashMap<String, AttributeValue> itemValues = new HashMap<>();
+//            itemValues.put("name", AttributeValue.builder().s(name).build());
+
+        Psukim psukim = new Psukim();
+        psukim.setName(name);
+
+        try {
+            dynamoDbTemplate.save(psukim);
+//                PutItemRequest request = PutItemRequest.builder().tableName("psukim").item(itemValues).build();
+            // PutItemResponse response = // findBugs: Medium: Dead store
+//                dynamodb.putItem(request);
+            // log.info( response.responseMetadata().requestId());
+        } catch (Exception e) {
+            log.warn("putItemInTable. " + e);
         }
     }
 
@@ -108,13 +131,13 @@ public class ServiceImpl implements Svc {
         }
         String eng = "%D7%90%D7%91%D7%92%D7%93%D7%94%D7%95%D7%96%D7%97%D7%98%D7%99%D7%9A%D7%9B%D7%9C%D7%9D%D7%9E%D7%9F%D7%A0%D7%A1%D7%A2%D7%A3%D7%A4%D7%A5%D7%A6%D7%A7%D7%A8%D7%A9%D7%AA=";
         String heb =  "אבגדהוזחטיךכלםמןנסעףפץצקרשת";
-        var output = "";
+        StringBuilder output = new StringBuilder();
         for (int i = 0; i < arg.length()/6; ++ i) { // 6 = "%D7%90".length
             var idx = eng.indexOf(arg.substring(i*6, (i+1)*6));
-            output += (idx >= 0 ? heb.charAt(idx/6) : arg.charAt(i));
+            output.append(idx >= 0 ? heb.charAt(idx / 6) : arg.charAt(i));
         }
         log.info(" >> /post " + output);
-        return output;
+        return output.toString();
     }
 
     int indVrsRange(int cntLtr, int indLowVrs, int indHigVrs) {
