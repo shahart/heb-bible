@@ -17,4 +17,5 @@ jobs:
         working-directory: ./go/pasuk
         run: go build -v ./...
       - name: Test
+        working-directory: ./go/pasuk
         run: go test pasuk_test.go
