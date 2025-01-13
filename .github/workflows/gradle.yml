@@ -20,6 +20,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sb3
 
     steps:
     - uses: actions/checkout@v4
@@ -31,7 +34,6 @@ jobs:
     - name: Change wrapper permissions
       run: chmod +x ./gradlew        
     - name: Build with Gradle
-      working-directory: ./sb3
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build -x test
