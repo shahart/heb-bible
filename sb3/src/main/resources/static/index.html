@@ -26,7 +26,8 @@
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + " Error: " + errorThrown);
             },
-            data: document.getElementById('text').value
+            data: document.getElementById('text').value,
+            contentType : 'text/plain'
         });
     }
 
@@ -42,6 +43,7 @@
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + " Error: " + errorThrown);
             },
+            contentType : 'text/plain',
             data: document.getElementById('dilugimTxt').value
         });
     }

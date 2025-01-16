@@ -1,7 +1,6 @@
 package edu.hebbible.repository;
 
 import edu.hebbible.model.Pasuk;
-import edu.hebbible.service.impl.ServiceImpl;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -31,12 +30,6 @@ public class RepoTest {
 
         assertEquals(1196930, repo.getTorTxt().length());
         assertEquals(repo.getTorTxt().length() + 1, repo.getTotalLetters());
-    }
-
-    @Test
-    void engTx() {
-        assertEquals("שחר", ServiceImpl.engTx("שחר"));
-        assertEquals("שחר", ServiceImpl.engTx("%D7%A9%D7%97%D7%A8="));
     }
 
     @Test

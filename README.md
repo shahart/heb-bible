@@ -96,9 +96,11 @@ handler name is `edu.hebbible.Handler::handleRequest`
 ### GoLang
 
 go build pasuk.go
+
 go test pasuk_test.go
 
 go build main.go
+
 go run main.go שחר true
 
 ### EC2
@@ -110,7 +112,7 @@ Init'ed with Spring Initializ: https://start.spring.io/
 - `docker build -t hebbible-app .`
 - `docker run -p 8080:8080 hebbible-app`
 
-- `curl -H "Content-Type: application/json" -d 'שחר' http://localhost:8080/[hebBible/]psukim`
+- `curl -H "Content-Type: application/json" -d "שחר" http://localhost:8080/[hebBible/]psukim`
 
 $ java -jar hebbible-0.0.1-SNAPSHOT.war
 
@@ -158,6 +160,7 @@ Via https://fnproject.io/
 
 - `fn start [--log-level DEBUG]`
 - `fn init --runtime java psukim`
+- `/c/repos/fn delete app java-app`
 - `fn create app java-app`
 
 
@@ -170,11 +173,11 @@ Via https://fnproject.io/
 - `fn inspect function java-app psukim`
 - `curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01J8YZ0S20NG8G00GZJ0000002` --data '{"name":"ajr="}'
 
+- `fn stop`
+
 ### Spring Cloud Function (AWS/ Gcp)
 
-`curl localhost:8080/ -H "Content-Type: text/plain" -d "{name}"`
-
-like ajr=
+`curl localhost:8080/ -H "Content-Type: application/json" -d "{\"name\":\"שחר\"}"`
 
 in the aws console, the handler name is `org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest`
 

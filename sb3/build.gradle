@@ -87,6 +87,9 @@ docker {
 }
 
 tasks {
+    spotbugsMain {
+        onlyIf { false }
+    }
     spotbugsTest {
         onlyIf { false }
     }

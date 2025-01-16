@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 
+// import java.net.URLDecoder;
 import java.util.*;
 
 @Service
@@ -52,7 +53,7 @@ public class ServiceImpl implements Svc {
             if (pageIterable != null) {
                 System.out.println("---psukim---");
                 for (Psukim psukim : pageIterable.items()) {
-                    System.out.println(psukim);
+                    // System.out.println(psukim);
                 }
             }
             //
@@ -60,7 +61,7 @@ public class ServiceImpl implements Svc {
             if (pagedIterable != null) {
                 System.out.println("---dilugim---");
                 for (Dilugim dilugim : pagedIterable.items()) {
-                    System.out.println(dilugim);
+                    // System.out.println(dilugim);
                 }
             }
         }
@@ -125,19 +126,7 @@ public class ServiceImpl implements Svc {
     }
 
     public static String engTx(String arg) {
-        // todo solve the encoding stuff
-        if (! (arg.endsWith("=") && arg.startsWith("%"))) {
-            return arg;
-        }
-        String eng = "%D7%90%D7%91%D7%92%D7%93%D7%94%D7%95%D7%96%D7%97%D7%98%D7%99%D7%9A%D7%9B%D7%9C%D7%9D%D7%9E%D7%9F%D7%A0%D7%A1%D7%A2%D7%A3%D7%A4%D7%A5%D7%A6%D7%A7%D7%A8%D7%A9%D7%AA=";
-        String heb =  "אבגדהוזחטיךכלםמןנסעףפץצקרשת";
-        StringBuilder output = new StringBuilder();
-        for (int i = 0; i < arg.length()/6; ++ i) { // 6 = "%D7%90".length
-            var idx = eng.indexOf(arg.substring(i*6, (i+1)*6));
-            output.append(idx >= 0 ? heb.charAt(idx / 6) : arg.charAt(i));
-        }
-        log.info(" >> /post " + output);
-        return output.toString();
+        return arg; // URLDecoder.decode(arg);
     }
 
     int indVrsRange(int cntLtr, int indLowVrs, int indHigVrs) {
