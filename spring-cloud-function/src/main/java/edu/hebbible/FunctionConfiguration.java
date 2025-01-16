@@ -36,10 +36,10 @@ public class FunctionConfiguration {
   public Function</*Map<String, Object>*/String, String> psukim() throws Exception {
     return queryParams -> {
       log.info("/get " + queryParams);
-        List<Pasuk> result = null;
+        List<Pasuk> result;
         try {
             result = svc.psukim(
-                    ServiceImpl.engTx(((Map<String, String>)(new ObjectMapper().readValue(queryParams, Map.class))).getOrDefault("name", "")),
+                    (((Map<String, String>)(new ObjectMapper().readValue(queryParams, Map.class))).getOrDefault("name", "")),
                     false, // Boolean.parseBoolean(queryParams.getOrDefault("containsName", Boolean.FALSE).toString()),
                     false);
         } catch (JsonProcessingException e) {

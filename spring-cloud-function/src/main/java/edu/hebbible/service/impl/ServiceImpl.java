@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,17 +51,9 @@ public class ServiceImpl implements Svc {
     }
 
     public static String engTx(String arg) {
-        // todo solve the encoding stuff, from %D7%A9%D7%97%D7%A8= to שחר
-        if (! arg.endsWith("=")) {
-            return arg;
-        }
-        String eng = "qwertyuiopasdfghjkl;'zxcvbnm,./'";
-        String heb =  "/'קראטוןםפשדגכעיחלךף,זסבהנמצתץ.'";
-        var output = "";
-        for (int i = 0; i < arg.length()-1; ++ i) {
-            var idx = eng.indexOf(arg.charAt(i));
-            output += (idx >= 0 ? heb.charAt(idx) : arg.charAt(i));
-        }
+        System.err.println("/post " + arg);
+        var output = URLDecoder.decode(arg);
+        System.err.println(" >> /post " + output);
         return output;
     }
 

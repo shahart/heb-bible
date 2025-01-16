@@ -27,14 +27,14 @@ public class FunctionTest {
 
     @Test
     public void engTx() throws Exception {
-        String arg = "{\"name\":\"ajr=\"}";
+        String arg = "{\"name\":\"שחר\"}";
         assertThat(ServiceImpl.engTx(((Map<String, String>) (new ObjectMapper().readValue(arg, Map.class))).getOrDefault("name", ""))).
                 isEqualTo("שחר");
     }
 
     @Disabled
     public void psukim() throws Exception {
-        String arg = "ajr=";
+        String arg = "שחר";
         assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/psukim/" + arg, String.class)).
                 isEqualTo("Total psukim: 25");
     }
