@@ -121,6 +121,7 @@ class Repo {
         this.enable('buttonD');
         this.enable('buttonG');
         this.enable('showBook');
+        this.enable('buttonF');
     }
 
     noName(orig) {

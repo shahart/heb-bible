@@ -4,6 +4,7 @@ import { Pasuk } from "./Pasuk.js";
 import { Dilug } from "./Dilug.js";
 import { Read } from "./Read.js";
 import { Gematria } from "./Gematria.js";
+import { Find } from "./Find.js";
 
 new RepoInit();
 
@@ -11,6 +12,7 @@ let pasuk = new Pasuk(Repo);
 let dilug = new Dilug(Repo);
 let read = new Read(Repo);
 let gematria = new Gematria(Repo);
+let find = new Find(Repo);
 
 const params = new URLSearchParams(document.location.search);
 
@@ -49,6 +51,10 @@ document.getElementById('buttonD').addEventListener('click', () => {
 
 document.getElementById('buttonG').addEventListener('click', () => {
     gematria.gematria();
+});
+
+document.getElementById('buttonF').addEventListener('click', () => {
+    find.find();
 });
 
 document.getElementById('sabort').addEventListener('click', () => {
