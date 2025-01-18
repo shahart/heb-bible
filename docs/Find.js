@@ -15,10 +15,12 @@ class Find {
         // todo? in chosen book
         this.output = ""; 
         let findStr = document.getElementById("find").value;
-        if (findStr.length >= 2)
-        for (let i = 0; i < this.repo.getVerses().length; ++i) {
+        let found = false;
+        if (findStr.length >= 2) {
+          for (let i = 0; i < this.repo.getVerses().length; ++i) {
             let line = this.repo.getVerses()[i];
             if (line.includes(findStr)) {
+                found = true;
                 let idx = line.indexOf(findStr);
                 this.output += line.substring(0, idx);
                 this.output += "<span style=\"color:blue;\">";
@@ -27,8 +29,10 @@ class Find {
                 this.output += line.substring(idx + findStr.length);
                 this.output += " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
             }
+          }
         }
-        document.getElementById("resultFind").innerHTML = "<br/><br/>" + this.output;
+        if (!found) this.output += "לא נמצא";
+        document.getElementById("resultFind").innerHTML = "<br/>" + this.output;
     }
 
 }
