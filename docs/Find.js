@@ -15,6 +15,9 @@ class Find {
         // todo? in chosen book
         this.output = ""; 
         let findStr = document.getElementById("find").value;
+        if (!(/^[\u05D0-\u05EA]+$/).test(findStr)) {
+          alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
+      }
         let found = false;
         if (findStr.length >= 2) {
           for (let i = 0; i < this.repo.getVerses().length; ++i) {

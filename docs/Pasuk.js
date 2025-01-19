@@ -62,8 +62,11 @@ class Pasuk {
         let containsName = document.getElementById("containsName").checked;
         document.getElementById("result").innerHTML = "";
         let args = document.getElementById("text").value.trim();
+        if (!(/^[\u05D0-\u05EA]+$/).test(args)) {
+            alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
+        }
         if (args.length <= 1 || args.charAt(0) > 'ת' || args.charAt(0) < 'א' || args.charAt(args.length-1) > 'ת' || args.charAt(args.length-1) < 'א') {
-            document.getElementById("result").innerHTML = "Invalid name";
+            document.getElementById("result").innerHTML = "ערך לא חוקי";
         }
         else {
             if (! containsName) {

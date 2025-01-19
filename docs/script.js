@@ -65,11 +65,20 @@ document.getElementById('sabort').addEventListener('click', () => {
 });
 
 if (r && r.trim() !== '') {
-    let book = r;
-    if (r.indexOf(",")>0)
+    try {
+      let book = r;
+      let prk = undefined;
+      if (r.indexOf(",")>0) {
         book=r.split(",")[0];
-    document.getElementById("BookSelect").value = book;
-    read.read();
+        prk = r;
+      }
+      document.getElementById("BookSelect").value = book;
+      read.read(prk);
+    }
+    catch (e) {
+      console.error(e);
+      alert("מספר הספר אינו חוקי, 39..1" );
+    }
 }
 
 
