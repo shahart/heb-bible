@@ -16,8 +16,11 @@ let find = new Find(Repo);
 
 const params = new URLSearchParams(document.location.search);
 
-const g = params.get("g");
 const r = params.get("r");
+const p = params.get("p");
+const s = params.get("s"); // (s)kip
+const g = params.get("g");
+const q = params.get("q"); // (q)uery
 
 const firstName = params.get("firstName");
 if (firstName && firstName !== '') {
@@ -61,15 +64,38 @@ document.getElementById('sabort').addEventListener('click', () => {
     dilug.doAbort();
 });
 
-if (g && g.trim() !== '') {
-    document.getElementById("gim").value = g;
-    gematria.gematria();
-}
-
 if (r && r.trim() !== '') {
     let book = r;
     if (r.indexOf(",")>0)
         book=r.split(",")[0];
     document.getElementById("BookSelect").value = book;
-    read.read(r);
+    read.read();
 }
+
+
+if (p && p.trim() !== '') {
+    document.getElementById("text").value = p;
+    document.getElementById("tab2").checked = true;
+    pasuk.pasuk();
+}
+
+if (s && s.trim() !== '') {
+    document.getElementById("dilugTxt").value = s;
+    document.getElementById("tab3").checked = true;
+    document.getElementById("chars").textContent = s.length + ' '; 
+    dilug.dilug();
+}
+
+if (g && g.trim() !== '') {
+    document.getElementById("gim").value = g;
+    gematria.gematria();
+    document.getElementById("tab4").checked = true;
+}
+
+if (q && q.trim() !== '') {
+    document.getElementById("find").value = q;
+    document.getElementById("tab5").checked = true;
+    find.find();
+}
+
+
