@@ -13,7 +13,13 @@ plugins {
     id "com.github.spotbugs" version('6.0.21')
     id 'com.palantir.docker' version('0.36.0')
     id 'jacoco'
+    // id 'edu.sc.seis.launch4j' version '2.5.4'
 }
+
+// launch4j {
+    // mainClassName = 'edu.hebbible.HebBible'
+    // bundledJrePath = 'C:\\Users\\shaha\\.jdks\\openjdk-21.0.2\\bin'
+// }
 
 gitProperties {
     keys = ['git.commit.id.abbrev', 'git.branch', 'git.commit.time']
