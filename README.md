@@ -189,6 +189,18 @@ A runner for Postman
 
 `newman run src/test/resources/hebbible.postman_collection.json -g src/test/resources/postman_globals.json`
 
+### Python
+
+`python3 -m venv env`
+
+`source env/bin/activate`
+
+`pip install -r requirements.txt`
+
+`python3 app.py`
+
+`pytest tests`
+
 ### More...
 
 - https://projectriff.io

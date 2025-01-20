@@ -16,3 +16,5 @@ heroku/target
 ibm/target
 kotlin/.gradle
 kotlin/build
+python/env
+python/__pycache__/
