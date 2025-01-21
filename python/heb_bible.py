@@ -10,7 +10,7 @@ class HebBible:
                 # if response.status_code == 200: 
                         # file_content = response.text 
 
-                with gzip.open('/repos/heb-bible/bible.txt.gz') as f:
+                with gzip.open('../bible.txt.gz') as f:
                         for line in f:
                                 lin = line.decode('utf8').strip()
                                 self.repo.append(lin.split(",")[1])

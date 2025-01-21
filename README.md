@@ -63,6 +63,8 @@ F,Find ³ חיפוש מחרוזת מבוקשת. לחיפוש מלה הקש רו�
 
 ³ הבא.
 
+## Java
+
 ### Azure Function App
 
 myPsukimViaFunctionApp
@@ -93,15 +95,6 @@ handler name is `edu.hebbible.Handler::handleRequest`
 
 `node Pasuk.mjs שחר` >> TODO lambda/index.mjs
 
-### GoLang
-
-go build pasuk.go
-
-go test pasuk_test.go
-
-go build main.go
-
-go run main.go שחר true
 
 ### EC2
 
@@ -181,7 +174,7 @@ Via https://fnproject.io/
 
 in the aws console, the handler name is `org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest`
 
-### Newman
+## Newman
 
 A runner for Postman
 
@@ -189,7 +182,22 @@ A runner for Postman
 
 `newman run src/test/resources/hebbible.postman_collection.json -g src/test/resources/postman_globals.json`
 
-### Python
+
+## JavaScript
+
+via the site (docs folder)
+
+## GoLang
+
+go build pasuk.go
+
+go test pasuk_test.go
+
+go build main.go
+
+go run main.go שחר true
+
+## Python
 
 `python3 -m venv env`
 
@@ -201,7 +209,7 @@ A runner for Postman
 
 `pytest tests`
 
-### More...
+## More...
 
 - https://projectriff.io
 - Apache's Open Stack/ Whisk, ..
