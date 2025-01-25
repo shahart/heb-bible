@@ -56,7 +56,7 @@ class Read {
                 }
             }
             else if (this.repo.getBookNumArr()[i] > bookNum-1 ) {
-                if (bookeng[bookNum-1] in ('Isaiah','Malachi'))
+                if (bookeng[bookNum-1] === 'Isaiah')
                     this.output += "<br/>" + this.repo.getVerses()[i-2];
                 else if (bookeng[bookNum-1] === 'Malachi')
                     this.output += "<br/>" + this.repo.getVerses()[i-2];
