@@ -56,6 +56,16 @@ class Read {
                 }
             }
             else if (this.repo.getBookNumArr()[i] > bookNum-1 ) {
+                if (bookeng[bookNum-1] in ('Isaiah','Malachi'))
+                    this.output += "<br/>" + this.repo.getVerses()[i-2];
+                else if (bookeng[bookNum-1] === 'Malachi')
+                    this.output += "<br/>" + this.repo.getVerses()[i-2];
+                else if (bookeng[bookNum-1] === 'Song of songs')
+                    this.output += "<br/>" + this.repo.getVerses()[i-2];
+                else if (bookeng[bookNum-1] === 'Lamentations')
+                    this.output += "<br/>" + this.repo.getVerses()[i-2];
+                else if (bookeng[bookNum-1] === 'Ecclesiastes')
+                    this.output += "<br/>" + this.repo.getVerses()[i-2];
                 break;
             }
         }
