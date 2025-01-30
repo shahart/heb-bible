@@ -45,7 +45,7 @@ class Read {
                     if (this.repo.getPPsk()[i] == 1)
                         this.output += "</a>";
                     let rashiUrl = "<a href=\"" + "https://wiki.jewishbooks.org.il/mediawiki/wiki/%D7%A8%D7%A9%22%D7%99/" + bookHeb + "/" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "#" + this.no2gim.no2gim(this.repo.getPPsk()[i]) + "\"" + " target=\"_new\">" + this.repo.getPPsk()[i] + "</a>";
-                    this.output += "-" + rashiUrl + " -- " + this.repo.getVerses()[i] + "<br/>";
+                    this.output += "-" + rashiUrl + " -- " + this.repo.noName(this.repo.getVerses()[i]) + "<br/>";
                     totLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
                     tevot += this.repo.getVerses()[i].split(' ').length; // - 1;
                     if (bookPrk)
