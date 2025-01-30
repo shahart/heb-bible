@@ -14,6 +14,25 @@
     <meta name="description" content="התנך הממוחשב">
     <style>
 
+        .share {
+            font-weight: bold;
+            position: relative;
+        }
+        .share:before {
+            content: ".";
+            font-size: 2.2em;
+            position: absolute;
+            bottom: -2.5px;
+            left: -4px;
+        }
+        .share:after {
+            content: ":";
+            font-size: 2em;
+            position: absolute;
+            bottom: -6px;
+            right: -7px;
+        }
+
         .content1,
         .content2,
         .content3,
@@ -179,6 +198,9 @@
 <h5><a href="test/test.html">Tests</a></h5>
 
 <a href="https://www.holyclock.com" target="_blank"> <img alt="שומר-שבת" src="https://www.holyclock.com/pics/language/en/ext-icon.png"></a>
+<br/><br/>
+<span class="share">&gt;</span>
+&nbspקישור לפעולתך האחרונה ישותף בלוח
 
     </div>
     <div class="content2" id="content2">
@@ -195,7 +217,7 @@
 </br>
 <input type="checkbox" id="containsName" name="containsName" value="false">
 <label for="containsName"> אות ראשונה ואחרונה, או גם שם בתוך הפסוק</label><br>
-</br></br>
+</br></br><br/>
 <button disabled id="button1">מצא את הפסוק שלי</button>
 <p id="result"></p>
 

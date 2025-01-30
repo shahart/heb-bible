@@ -108,7 +108,8 @@ class Dilug {
         });
 //        if (found == 0) {
 //            document.getElementById("resultDilug2").innerHTML = "Not found";
-//        }
+//        } else
+        navigator.clipboard.writeText("https://shahart.github.io/heb-bible?s=" + target);
 
         //
         var xhrAws = new XMLHttpRequest();

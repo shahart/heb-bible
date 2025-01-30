@@ -46,6 +46,9 @@ class Find {
           }
         }
         if (!found) this.output += "לא נמצא";
+        // else {
+          navigator.clipboard.writeText("https://shahart.github.io/heb-bible?q=" + findStr);
+        // }
         document.getElementById("resultFind").innerHTML = "<br/>" + this.output;
     }
 
