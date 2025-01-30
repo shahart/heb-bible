@@ -15,7 +15,7 @@ class Find {
         // todo? in chosen book
         this.output = ""; 
         let findStr = document.getElementById("find").value;
-        if (!(/^[\u05D0-\u05EA]+$/).test(findStr)) {
+        if (!(/^[\u05D0-\u05EA]+$/).test(findStr.replace(/\s+/g, ''))) { 
           alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
       }
         let found = false;
