@@ -25,12 +25,23 @@ class Find {
             if (line.includes(findStr)) {
                 found = true;
                 let idx = line.indexOf(findStr);
-                this.output += line.substring(0, idx);
-                this.output += "<span style=\"color:blue;\">";
-                this.output += line.substring(idx, idx + findStr.length);
-                this.output += "</span>";
-                this.output += line.substring(idx + findStr.length);
-                this.output += " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                let noNameFind = this.repo.noName(findStr);
+                if (noNameFind !== findStr) {
+                  this.output += line.substring(0, idx);
+                  this.output += "<span style=\"color:blue;\">";
+                  this.output += line.substring(idx, idx + findStr.length);
+                  this.output += "</span>";
+                  this.output += line.substring(idx + findStr.length);
+                  this.output += " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                }
+                else {
+                  this.output += this.repo.noName(line.substring(0, idx));
+                  this.output += "<span style=\"color:blue;\">";
+                  this.output += this.repo.noName(line.substring(idx, idx + findStr.length));
+                  this.output += "</span>";
+                  this.output += this.repo.noName(line.substring(idx + findStr.length));
+                  this.output += " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                }
             }
           }
         }
