@@ -54,7 +54,8 @@ class Gematria {
         for (let i = 0; i < this.repo.getVerses().length; ++i) {
             this.isGim(i, gim, this.repo, partGim);
         }
-        document.getElementById("resultGim").innerHTML += "<br/><br/>" + this.output;
+        document.getElementById("resultGim").innerHTML += "<br/><br/>" + this.output + 
+            "<span class=\"share\">&gt;</span></br></br>https://shahart.github.io/heb-bible?g=" + document.getElementById("gim").value;
     }
 
 }

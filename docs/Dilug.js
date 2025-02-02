@@ -90,6 +90,7 @@ class Dilug {
                         foundStr += "<br>" + "<b><span style=\"color:blue;\">" + txt[(h)*iSkip] + "</span></b>"  + txt.substring(h*iSkip+1, (h+1)*iSkip) ;
                     }
                     foundStr += "</pre>";
+                    foundStr += "<span class=\"share\">&gt;</span></br></br>https://shahart.github.io/heb-bible?s=" + target;
                     document.getElementById("resultDilug2").innerHTML = foundStr;
                     found++;
                 }

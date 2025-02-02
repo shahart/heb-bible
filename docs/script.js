@@ -108,47 +108,29 @@ if (q && q.trim() !== '') {
 }
 
 document.getElementById("text").addEventListener('keyup', function(e) {
-    if (e.keyCode === 13) {
+    if (e.key === "Enter") {
         pasuk.pasuk();
     }
 })
 
 document.getElementById("dilugTxt").addEventListener('keyup', function(e) {
-    if (e.keyCode === 13) {
+    if (e.key === "Enter") {
         dilug.dilug();
     }
 })
 
 document.getElementById("gim").addEventListener('keyup', function(e) {
-    if (e.keyCode === 13) {
+    if (e.key === "Enter") {
         gematria.gematria();
     }
 })
 
 document.getElementById("find").addEventListener('keyup', function(e) {
-    if (e.keyCode === 13) {
+    if (e.key === "Enter") {
         find.find();
     }
 })
 
-document.getElementById("shareRead").addEventListener('click', function() {
-    navigator.clipboard.writeText("https://shahart.github.io/heb-bible?r=" + document.getElementById('BookSelect').value);
-})
 
-document.getElementById("shareDilug").addEventListener('click', function() {
-    navigator.clipboard.writeText("https://shahart.github.io/heb-bible?s=" + document.getElementById("dilugTxt").value);
-})
-
-document.getElementById("shareGim").addEventListener('click', function() {
-    navigator.clipboard.writeText("https://shahart.github.io/heb-bible?g=" + document.getElementById('gim').value);
-})
-
-document.getElementById("shareFind").addEventListener('click', function() {
-    navigator.clipboard.writeText("https://shahart.github.io/heb-bible?q=" + document.getElementById('find').value);
-})
-
-document.getElementById("sharePasuk").addEventListener('click', function() {
-    navigator.clipboard.writeText("https://shahart.github.io/heb-bible?p=" + document.getElementById('text').value);
-})
 
 

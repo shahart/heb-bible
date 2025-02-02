@@ -78,7 +78,8 @@ class Read {
             let engTrans = "<a href=\"https://mechon-mamre.org/p/pt/pt" + pointer + "01.htm\" target=\"_new\">" + bookeng[bookNum-1] + "</a>";
             this.output = engTrans + "</br></br>" + "פסוקים: " + psukim + "</br>" + "אותיות: " + totLetters + "</br>" + "תיבות: " + tevot + "</br></br>" + headers + "</br>" + this.output;
         }
-        document.getElementById("bibleResult").innerHTML = this.output;
+        document.getElementById("bibleResult").innerHTML = this.output +
+            "<br/><span class=\"share\">&gt;</span></br></br>https://shahart.github.io/heb-bible?r=" + bookNum;
     }
 
 }
