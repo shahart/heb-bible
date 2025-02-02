@@ -46,7 +46,7 @@ class Find {
           }
         }
         if (!found) this.output += "לא נמצא";
-        else this.output += "<span class=\"share\">&gt;</span></br></br>https://shahart.github.io/heb-bible?q=" + findStr;
+        else this.output += "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?q=" + findStr + "</p>";
         document.getElementById("resultFind").innerHTML = "<br/>" + this.output;
     }
 

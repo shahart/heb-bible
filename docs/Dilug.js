@@ -90,7 +90,6 @@ class Dilug {
                         foundStr += "<br>" + "<b><span style=\"color:blue;\">" + txt[(h)*iSkip] + "</span></b>"  + txt.substring(h*iSkip+1, (h+1)*iSkip) ;
                     }
                     foundStr += "</pre>";
-                    foundStr += "<span class=\"share\">&gt;</span></br></br>https://shahart.github.io/heb-bible?s=" + target;
                     document.getElementById("resultDilug2").innerHTML = foundStr;
                     found++;
                 }
@@ -106,6 +105,7 @@ class Dilug {
                 var endTime = new Date();
                 console.log((endTime - startTime) + " mSec");
             }
+            document.getElementById("resultDilug2").innerHTML = foundStr + "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?s=" + target + "</p>";
         });
         var xhrAws = new XMLHttpRequest();
         xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
