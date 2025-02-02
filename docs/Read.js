@@ -79,7 +79,6 @@ class Read {
             this.output = engTrans + "</br></br>" + "פסוקים: " + psukim + "</br>" + "אותיות: " + totLetters + "</br>" + "תיבות: " + tevot + "</br></br>" + headers + "</br>" + this.output;
         }
         document.getElementById("bibleResult").innerHTML = this.output;
-        navigator.clipboard.writeText("https://shahart.github.io/heb-bible?r=" + bookNum);
     }
 
 }

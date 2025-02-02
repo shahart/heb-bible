@@ -106,12 +106,6 @@ class Dilug {
                 console.log((endTime - startTime) + " mSec");
             }
         });
-//        if (found == 0) {
-//            document.getElementById("resultDilug2").innerHTML = "Not found";
-//        } else
-        navigator.clipboard.writeText("https://shahart.github.io/heb-bible?s=" + target);
-
-        //
         var xhrAws = new XMLHttpRequest();
         xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
         xhrAws.setRequestHeader("Content-Type", "application/json");

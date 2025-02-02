@@ -91,8 +91,6 @@ class Pasuk {
             }
             this.saveInput('resCount', found);
             document.getElementById("result").innerHTML = found + " פסוקים <br/><br/>" + this.output;
-            navigator.clipboard.writeText("https://shahart.github.io/heb-bible?p=" + args);
-
             //
             var xhrAws = new XMLHttpRequest();
             xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
