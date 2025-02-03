@@ -42,11 +42,13 @@ public class HandlerTest {
     public void testHandleRequestFromPostman() {
         Map<String, Object> payload = new HashMap<>();
         payload.put("name", "שחר");
+        payload.put("type", "Pasuk");
+        payload.put("extra", "containsName-" + false);
         String response = handler.handleRequest(payload, context);
-        assertTrue(response.contains(": 25"));
-        payload.put("containsName", true);
+        assertTrue("response: " + response, response.contains(": 25"));
+        payload.put("extra", "containsName-" + true);
         response = handler.handleRequest(payload, context);
-        assertTrue(response.contains(": 75"));
+        assertTrue("response: " + response, response.contains(": 75"));
     }
 
     @Ignore

@@ -1,17 +1,53 @@
 package edu.hebbible.model;
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+//import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+//import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-@DynamoDbBean
-public class Psukim extends Major {
+//@DynamoDbBean
+public class Psukim {
 
-    private boolean containsName;
+//    @Getter
+//    @Setter
+    protected String name;
+    protected String date;
+    private String extra;
+    private String feature;
 
-    public boolean isContainsName() {
-        return containsName;
+//    @DynamoDbPartitionKey
+    public String getName() {
+        return name;
     }
 
-    public void setContainsName(boolean containsName) {
-        this.containsName = containsName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return name + "-" + date + "-" + feature;
+    }
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
+
+    public String getFeature() {
+        return feature;
+    }
+
+    public void setFeature(String feature) {
+        this.feature = feature;
     }
 }

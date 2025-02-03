@@ -56,6 +56,17 @@ class Gematria {
         }
         document.getElementById("resultGim").innerHTML += "<br/><br/>" + this.output + 
             "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?g=" + document.getElementById("gim").value + "</p>";
+        //
+        var xhrAws = new XMLHttpRequest();
+        xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
+        xhrAws.setRequestHeader("Content-Type", "application/json");
+        xhrAws.send(JSON.stringify({ "name": document.getElementById("gim").value, "extra": "", "type": "Gim" }));
+        xhrAws.onreadystatechange = function(e) {
+          if ( xhrAws.readyState === 4) {
+            console.debug(xhrAws.status + this.responseText);
+          }
+        }
+        xhrAws.send();
     }
 
 }

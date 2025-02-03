@@ -35,17 +35,20 @@ public class Handler implements RequestHandler<Map<String, Object>, String> {
                 request = gson.fromJson((String) request.get("body"), Map.class);
             }
             bodyParams.put("name", request.get("name").toString());
-            bodyParams.put("containsName", request.getOrDefault("containsName", Boolean.FALSE).toString());
-            if (request.containsKey("dilugim")) {
-                svc.logDilugim(bodyParams.get("name"), Boolean.parseBoolean(request.getOrDefault("found", Boolean.FALSE).toString()));
-                return "dilugim";
-            }
-            else {
+            bodyParams.put("extra", request.getOrDefault("extra", "").toString());
+            String feature = request.getOrDefault("type", "").toString();
+            if (feature.equals("Pasuk")) {
+                String extra = bodyParams.getOrDefault("extra", "containsName-false");
                 List<Pasuk> result = svc.psukim( // findPsukim(log,
-                        bodyParams.get("name"), Boolean.parseBoolean(bodyParams.getOrDefault("containsName", "false")));
-                if (!result.isEmpty()) log.log("1st: " + result.iterator().next(), LogLevel.DEBUG);
+                        bodyParams.get("name"), Boolean.parseBoolean(extra.substring("containsName-".length())));
+                if (!result.isEmpty()) log.log("1st: " + result.iterator().next(), LogLevel.INFO);
+                // System.err.println(result.iterator().next());
                 log.log("Total Psukim: " + result.size()); // + " 1st: " + result.subList(0, 1));
                 return "Total Psukim: " + result.size();
+            }
+            else {
+                svc.logMoreFeatures(bodyParams.get("name"), request.getOrDefault("extra", "").toString(), feature);
+                return feature;
             }
         }
         catch (Exception e) {

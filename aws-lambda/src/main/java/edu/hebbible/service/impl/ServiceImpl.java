@@ -44,7 +44,7 @@ public class ServiceImpl implements Svc {
                  // .credentialsProvider(StaticCredentialsProvider.create(awsCreds)) //
                 .build();
         }
-        putItemInTable(dynamodb, name, containsName, false);
+        putItemInTable(dynamodb, name, "containsName-" + containsName, "Pasuk");
 
         List<Pasuk> result = new ArrayList<>();
         Collection<Pasuk> psukim = repo.getStore();
@@ -71,15 +71,16 @@ public class ServiceImpl implements Svc {
         return repo.getStore().size();
     }
 
-    public static void putItemInTable(DynamoDbClient dynamodb, String name, boolean containsName, boolean isDilugim) {
+    public static void putItemInTable(DynamoDbClient dynamodb, String name, String extraInfo, String tableName) {
         if (dynamodb != null) {
             HashMap<String, AttributeValue> itemValues = new HashMap<>();
+            itemValues.put("feature", AttributeValue.builder().s(getTableName(tableName)).build());
             itemValues.put("name", AttributeValue.builder().s(name).build());
-            itemValues.put(isDilugim ? "found" : "containsName", AttributeValue.builder().bool(containsName).build());
+            itemValues.put("extra", AttributeValue.builder().s(extraInfo).build());
             itemValues.put("date", AttributeValue.builder().s(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).build());
             // todo? userAgent user-agent
             try {
-                PutItemRequest request = PutItemRequest.builder().tableName(isDilugim ? "dilugim" : "psukim").item(itemValues).build();
+                PutItemRequest request = PutItemRequest.builder().tableName("psukim").item(itemValues).build();
                 PutItemResponse response = dynamodb.putItem(request);
                 // log.info( response.responseMetadata().requestId());
             } catch (Exception e) {
@@ -88,13 +89,20 @@ public class ServiceImpl implements Svc {
         }
     }
 
+    private static String getTableName(String tableName) {
+        switch (tableName) {
+            case "Read", "Pasuk", "Dilug", "Find", "Gim": return tableName;
+            default: throw new IllegalArgumentException("wrong feature: " + tableName);
+        }
+    }
+
     @Override
-    public void logDilugim(String name, boolean found) {
+    public void logMoreFeatures(String name, String extra, String tableName) {
         if (dynamodb == null) {
             dynamodb = DynamoDbClient.builder().region(Region.EU_NORTH_1)
                      // .credentialsProvider(StaticCredentialsProvider.create(awsCreds)) //
                     .build();
         }
-        putItemInTable(dynamodb, name, found, true);
+        putItemInTable(dynamodb, name, extra, tableName);
     }
 }

@@ -2,12 +2,12 @@ package edu.hebbible.service;
 
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.repository.Repo;
-import io.awspring.cloud.dynamodb.DynamoDbTemplate;
+//import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+//import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Map;
@@ -21,8 +21,8 @@ public class SvcTest {
     @Autowired
     private Svc svc;
 
-    @MockBean
-    DynamoDbTemplate dynamoDbTemplate;
+//    @MockBean
+//    DynamoDbTemplate dynamoDbTemplate;
 
     @Test
     void psukim() {

@@ -10,6 +10,6 @@ public interface Svc {
 
     int repoSize();
 
-    void logDilugim(String name, boolean found);
+    void logMoreFeatures(String name, String extra, String tableName);
 
 }

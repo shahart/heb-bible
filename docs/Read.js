@@ -80,6 +80,18 @@ class Read {
         }
         document.getElementById("bibleResult").innerHTML = this.output +
             "<br/><br/><span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?r=" + bookNum + "</p>";
+        /*
+        var xhrAws = new XMLHttpRequest();
+        xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
+        xhrAws.setRequestHeader("Content-Type", "application/json");
+        xhrAws.send(JSON.stringify({ "name": bookHeb, "extra": "", "type": "Read" }));
+        xhrAws.onreadystatechange = function(e) {
+          if ( xhrAws.readyState === 4) {
+            console.debug(xhrAws.status + this.responseText);
+          }
+        }
+        xhrAws.send();
+        */
     }
 
 }

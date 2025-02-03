@@ -96,7 +96,7 @@ class Pasuk {
             var xhrAws = new XMLHttpRequest();
             xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
             xhrAws.setRequestHeader("Content-Type", "application/json");
-            xhrAws.send(JSON.stringify({ "name": args, "containsName": containsName }));
+            xhrAws.send(JSON.stringify({ "name": args, "extra": "containsName-" + containsName, "type": "Pasuk" }));
             xhrAws.onreadystatechange = function(e) {
               if ( xhrAws.readyState === 4) {
                 console.debug(xhrAws.status + this.responseText);
