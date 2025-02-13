@@ -18,6 +18,17 @@ class Read {
         var bookHebArr = ['תישארב','תומש','ארקיו','רבדמב','םירבד','עשוהי','םיטפוש','א לאומש','ב לאומש', 'א םיכלמ','ב םיכלמ','היעשי','הימרי','לאקזחי','עשוה','לאוי','סומע','הידבוע','הנוי','הכימ','םוחנ','קוקבח','הינפצ', 'יגח','הירכז','יכאלמ','םיליהת','ילשמ','בויא','םירישה ריש','תור','הכיא','תלהק','רתסא','לאינד','ארזע','הימחנ', 'א םימיה ירבד','ב םימיה ירבד']; // 39 books
         let bookHeb = bookHebArr[bookNum-1].split('').reverse().join('')
         // console.debug(bookNum + " --> " + bookHeb);
+        let bookPsk = undefined;
+        let amount = undefined;
+        if (bookPrk.split(",").length == 3) {
+            if (bookPrk.split(",")[2].indexOf("-") > 0) {
+                bookPsk = Number(bookPrk.split(",")[2].split("-")[0]);
+                amount = Number(bookPrk.split(",")[2].split("-")[1]);
+            }
+            else {
+                bookPsk = Number(bookPrk.split(",")[2]);
+            }
+        }
         if (bookPrk) bookPrk=Number(bookPrk.split(",")[1]);
         var bookeng = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Samuel 1',
             'Samuel 2','Kings 1','Kings 2','Isaiah','Jeremiah','Ezekiel','Hosea','Joel','Amos','Obadiah','Jonah','Micha','Nachum',
@@ -29,7 +40,7 @@ class Read {
         let tevot = 0;
         let totLetters = 0;
         let headers = "";
-        if (bookPrk) {
+        if (bookPrk && !!!bookPsk) {
             this.output = "<span style=\"color:blue;\"> פרק " + this.no2gim.no2gim(bookPrk) + "  </span></br>";
         }
         for (let i = 0; i < this.repo.getVerses().length; ++i) {
@@ -37,21 +48,23 @@ class Read {
                 if (!!!bookPrk || Number(this.repo.getPPrk()[i]) == bookPrk) {
                     if (bookPrk)
                         this.output += "<span style=\"color:blue;\">";
-                    ++ psukim;
-                    if (this.repo.getPPsk()[i] == 1 || (this.repo.getBookNumArr()[i] == 27-1 && this.repo.getPPrk()[i] == 119 && this.repo.getPPsk()[i] % 8 == 1)) this.output += "</br>";
-                    if (this.repo.getPPsk()[i] == 1)
-                        this.output += "<a id=\"prk" + this.repo.getPPrk()[i] + "\"/>" + "<a href=\"#book\">";
-                    this.output += this.no2gim.no2gim(this.repo.getPPrk()[i]);
-                    if (this.repo.getPPsk()[i] == 1)
-                        this.output += "</a>";
-                    let rashiUrl = "<a href=\"" + "https://wiki.jewishbooks.org.il/mediawiki/wiki/%D7%A8%D7%A9%22%D7%99/" + bookHeb + "/" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "#" + this.no2gim.no2gim(this.repo.getPPsk()[i]) + "\"" + " target=\"_new\">" + this.repo.getPPsk()[i] + "</a>";
-                    this.output += "-" + rashiUrl + " -- " + this.repo.noName(this.repo.getVerses()[i]) + "<br/>";
-                    totLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
-                    tevot += this.repo.getVerses()[i].split(' ').length; // - 1;
-                    if (bookPrk)
-                        this.output += "</span>";
-                    if (this.repo.getPPsk()[i] == 1) {
-                        headers += "<a id=\"book\"/><a href=\"#prk" + this.repo.getPPrk()[i] + "\">" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a> ";
+                    if (((!!!bookPsk || Number(this.repo.getPPsk()[i]) >= bookPsk)) && (!!!amount || psukim < amount)) {
+                        ++ psukim;
+                        if (this.repo.getPPsk()[i] == 1 || (this.repo.getBookNumArr()[i] == 27-1 && this.repo.getPPrk()[i] == 119 && this.repo.getPPsk()[i] % 8 == 1)) this.output += "</br>";
+                        if (this.repo.getPPsk()[i] == 1)
+                            this.output += "<a id=\"prk" + this.repo.getPPrk()[i] + "\"/>" + "<a href=\"#book\">";
+                        this.output += this.no2gim.no2gim(this.repo.getPPrk()[i]);
+                        if (this.repo.getPPsk()[i] == 1)
+                            this.output += "</a>";
+                        let rashiUrl = "<a href=\"" + "https://wiki.jewishbooks.org.il/mediawiki/wiki/%D7%A8%D7%A9%22%D7%99/" + bookHeb + "/" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "#" + this.no2gim.no2gim(this.repo.getPPsk()[i]) + "\"" + " target=\"_new\">" + this.repo.getPPsk()[i] + "</a>";
+                        this.output += "-" + rashiUrl + " -- " + this.repo.noName(this.repo.getVerses()[i]) + "<br/>";
+                        totLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
+                        tevot += this.repo.getVerses()[i].split(' ').length; // - 1;
+                        if (bookPrk)
+                            this.output += "</span>";
+                        if (this.repo.getPPsk()[i] == 1) {
+                            headers += "<a id=\"book\"/><a href=\"#prk" + this.repo.getPPrk()[i] + "\">" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a> ";
+                        }
                     }
                 }
             }
