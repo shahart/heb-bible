@@ -20,7 +20,7 @@ class Read {
         // console.debug(bookNum + " --> " + bookHeb);
         let bookPsk = undefined;
         let amount = undefined;
-        if (bookPrk.split(",").length == 3) {
+        if (bookPrk && bookPrk.split(",").length == 3) {
             if (bookPrk.split(",")[2].indexOf("-") > 0) {
                 bookPsk = Number(bookPrk.split(",")[2].split("-")[0]);
                 amount = Number(bookPrk.split(",")[2].split("-")[1]);
