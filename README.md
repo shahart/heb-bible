@@ -111,6 +111,10 @@ $ java -jar hebbible-0.0.1-SNAPSHOT.war
 
 `mvn --file sb3/pom.xml spring-boot:run`
 
+##### https://github.com/spring-projects-experimental/spring-boot-thin-launcher
+
+`java -Dthin.debug=true -jar hebbible-0.0.1-SNAPSHOT.jar`
+
 http://localhost:8080/ >> Swagger/OpenApi
 
 #### https://ollama.com/library/tinyllama
