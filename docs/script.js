@@ -131,6 +131,12 @@ document.getElementById("find").addEventListener('keyup', function(e) {
     }
 })
 
+document.getElementById('siddur1B').addEventListener('click', () => {
+    document.getElementById('siddur1').innerHTML = (document.getElementById('siddur1').innerHTML !== "") ? "" : read.read("27,104,1-2");
+})
 
+document.getElementById('siddur2B').addEventListener('click', () => {
+    document.getElementById('siddur2').innerHTML = (document.getElementById('siddur2').innerHTML !== "") ? "" : read.read("27,36,8-4");
+})
 
-
+document.getElementById('p119').innerHTML = read.read("27,119",true);

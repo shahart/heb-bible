@@ -11,10 +11,19 @@ class Find {
         this.repo = repo;
     }
 
+    lucene(t) {
+      this.repo.lucene(t);
+    }
+
     find(repo) {
         // todo? in chosen book
         this.output = ""; 
         let findStr = document.getElementById("find").value;
+        let lucene = document.getElementById("lucene").checked;
+        if (lucene) {
+          this.lucene(findStr);
+          // alert("LunrJs -> check console.log");
+        }
         if (!(/^[\u05D0-\u05EA]+$/).test(findStr.replace(/\s+/g, ''))) { 
           alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
       }

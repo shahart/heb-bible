@@ -1,0 +1,19 @@
+openapi: 3.0.1
+info:
+  title: psukim Api
+  description: |
+    the psukim Api allows you to ...
+  version: 1.0.0
+  contact: { }
+servers:
+  - description: local dev
+    url: http://localhost:8080
+tags:
+  - name: psukim
+paths:
+  /v1/psukim:
+    get:
+      summary: total amount
+      operationId: total
+      tags:
+        - psukim

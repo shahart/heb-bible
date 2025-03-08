@@ -193,8 +193,14 @@
     </svg>
     <<
 </a>
-<script src="script.js" type='module'>
-</script>
+
+<script src="https://unpkg.com/lunr/lunr.js"></script>
+<script src="lunr.stemmer.support.js"></script>
+<script src="lunr.he.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script>
+
+<script src="script.js" type='module'></script>
 <h5><a href="test/test.html">Tests</a></h5>
 
 <a href="https://www.holyclock.com" target="_blank"> <img alt="שומר-שבת" src="https://www.holyclock.com/pics/language/en/ext-icon.png"></a>
@@ -266,8 +272,14 @@ to <input type="number" id="skipMax" value="100" min="1" max="9999">
 </br>
 </br>
 <button id="buttonF" disabled>חיפוש</button>
+</br>
+</br>
+<input type="checkbox" id="lucene" name="lucene" value="false">
+<label for="lucene"> חיפוש Lucene</label><br>
+</br></br><br/>
 <p id="resultFind" ></p>
     
+
 </body>
 </div></div>
 </html>

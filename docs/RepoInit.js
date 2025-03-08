@@ -50,7 +50,9 @@ class RepoInit {
                 ++ torTxtLength;
                 repo.addTorTxt(pasuk[g]);
             }
+            repo.addDoc(line.split(",")[0], line1);
         }
+          
 
         var endTime = new Date();
         console.log("Init: " + (endTime - startTime) + " mSec");

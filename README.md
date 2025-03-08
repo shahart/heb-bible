@@ -79,6 +79,8 @@ CLI: gcloud functions list
 
 ### AWS Lambda
 
+#### this can be tested also on LocalStack.cloud ####
+
 Api GW /v1/pasuk with POST method.
 Allow _CORS_
 
@@ -110,6 +112,8 @@ Init'ed with Spring Initializ: https://start.spring.io/
 $ java -jar hebbible-0.0.1-SNAPSHOT.war
 
 `mvn --file sb3/pom.xml spring-boot:run`
+
+OWASP security vuln.: mvn dependency-check:check
 
 ##### https://github.com/spring-projects-experimental/spring-boot-thin-launcher
 

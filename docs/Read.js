@@ -13,8 +13,17 @@ class Read {
         read(undefined);
     }
 
-    read(bookPrk) {
-        let bookNum = document.getElementById('BookSelect').value;
+    read(bookPrk,siddurCall) {
+        let bookNum;
+        if (bookPrk && bookPrk.indexOf(",") == 0) {
+            bookNum = document.getElementById('BookSelect').value;
+        }
+        else if (bookPrk) {
+            bookNum = bookPrk.split(",")[0];
+        }
+        else {
+            bookNum = document.getElementById('BookSelect').value;
+        }
         var bookHebArr = ['תישארב','תומש','ארקיו','רבדמב','םירבד','עשוהי','םיטפוש','א לאומש','ב לאומש', 'א םיכלמ','ב םיכלמ','היעשי','הימרי','לאקזחי','עשוה','לאוי','סומע','הידבוע','הנוי','הכימ','םוחנ','קוקבח','הינפצ', 'יגח','הירכז','יכאלמ','םיליהת','ילשמ','בויא','םירישה ריש','תור','הכיא','תלהק','רתסא','לאינד','ארזע','הימחנ', 'א םימיה ירבד','ב םימיה ירבד']; // 39 books
         let bookHeb = bookHebArr[bookNum-1].split('').reverse().join('')
         // console.debug(bookNum + " --> " + bookHeb);
@@ -35,6 +44,7 @@ class Read {
             'Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Psalms','Proverbs','Job','Song of songs','Ruth','Lamentations',
             'Ecclesiastes','Esther','Daniel','Ezra','Nehemiah','Cronicles 1','Cronicles 2']; // 39 books
         this.output = "";
+        let clearText = "";
         let letters = 0;
         let psukim = 0;
         let tevot = 0;
@@ -65,6 +75,7 @@ class Read {
                         if (this.repo.getPPsk()[i] == 1) {
                             headers += "<a id=\"book\"/><a href=\"#prk" + this.repo.getPPrk()[i] + "\">" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a> ";
                         }
+                        clearText += this.repo.getVerses()[i] + ": ";
                     }
                 }
             }
@@ -91,8 +102,13 @@ class Read {
             let engTrans = "<a href=\"https://mechon-mamre.org/p/pt/pt" + pointer + "01.htm\" target=\"_new\">" + bookeng[bookNum-1] + "</a>";
             this.output = engTrans + "</br></br>" + "פסוקים: " + psukim + "</br>" + "אותיות: " + totLetters + "</br>" + "תיבות: " + tevot + "</br></br>" + headers + "</br>" + this.output;
         }
-        document.getElementById("bibleResult").innerHTML = this.output +
-            "<br/><br/><span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?r=" + bookNum + "</p>";
+        this.output += "<br/><br/><span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?r=" + bookNum;
+        if (bookPrk) 
+            this.output += "," + bookPrk;
+        if (!!!siddurCall)
+            document.getElementById("bibleResult").innerHTML = this.output +
+             "</p>";
+        return clearText;
         /*
         var xhrAws = new XMLHttpRequest();
         xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
