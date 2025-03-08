@@ -20,14 +20,18 @@ class Find {
         this.output = ""; 
         let findStr = document.getElementById("find").value;
         let lucene = document.getElementById("lucene").checked;
-        if (lucene) {
+        if (lucene && findStr.length >= 2) {
           this.lucene(findStr);
           // alert("LunrJs -> check console.log");
+        }
+        else {
+          document.getElementById("resultFind").innerHTML = "";
         }
         if (!(/^[\u05D0-\u05EA]+$/).test(findStr.replace(/\s+/g, ''))) { 
           alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
       }
         let found = false;
+        let findings = 0;
         if (findStr.length >= 2) {
           for (let i = 0; i < this.repo.getVerses().length; ++i) {
             let line = this.repo.getVerses()[i];
@@ -35,6 +39,7 @@ class Find {
                 found = true;
                 let idx = line.indexOf(findStr);
                 let noNameFind = this.repo.noName(findStr);
+                ++ findings;
                 if (noNameFind !== findStr) {
                   this.output += line.substring(0, idx);
                   this.output += "<span style=\"color:blue;\">";
@@ -55,8 +60,8 @@ class Find {
           }
         }
         if (!found) this.output += "לא נמצא";
-        else this.output += "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?q=" + findStr + "</p>";
-        document.getElementById("resultFind").innerHTML = "<br/>" + this.output;
+        else this.output += "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?q=" + findStr + "</p>" + findings + " ממצאים ";
+        document.getElementById("resultFind").innerHTML += "<br/>" + this.output;
         //
         var xhrAws = new XMLHttpRequest();
         xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');

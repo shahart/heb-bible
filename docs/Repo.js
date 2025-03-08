@@ -10,7 +10,7 @@ let bookNumArr = [];
 let gims = [];
 let TOTLETTERS;
 let documents = [];
-let idx;
+let idx = [];
 
 class Repo {
 
@@ -124,19 +124,6 @@ class Repo {
         this.enable('buttonG');
         this.enable('showBook');
         this.enable('buttonF');
-        // for tests:   
-        if (typeof lunr != "undefined") {
-            idx = lunr(function () {
-                this.use(lunr.he);
-                this.ref('name')
-                this.field('text')
-                // this.metadataWhitelist = ['position']
-            
-                documents.forEach(function (doc) {
-                this.add(doc)
-                }, this)
-            })
-        }
     }
 
     noName(orig) {
@@ -198,17 +185,26 @@ class Repo {
     }
 
     lucene(t) {
-        let message = idx.search(t);
-        console.info(message);
-        $("#console-log").empty();
-        if ($("#console-log").length === 0) {
-            $("body").append($('<ul id="console-log" style="position:fixed; top:0; left:1; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.65); color:white; font-family: monospace;"></ul>'));
+        if (typeof lunr != "undefined") {
+            if (idx.length == 0) {
+                idx = lunr(function () {
+                    this.use(lunr.he);
+                    this.ref('name')
+                    this.field('text')
+                    // this.metadataWhitelist = ['position']
+                
+                    documents.forEach(function (doc) {
+                        this.add(doc)
+                    }, this)
+                })
+                }
         }
+        let message = idx.search(t);
         let toS = "";
         for (let i=0; i<message.length; ++i) {
-            toS += "</br>ref" + message[i].ref + " ," + "score:" + message[i].score;
+            toS += "</br>" + message[i].ref + ", " + "Score: " + message[i].score;
         }
-        $("#console-log").prepend($('<li style="margin-left:none;">&nbsp;&nbsp;&nbsp;' + toS + '</li>')); 
+        document.getElementById("resultFind").innerHTML = toS + "</br></br>" + message.length + ' ממצאים ' + "</br>";
     }
 
 }
