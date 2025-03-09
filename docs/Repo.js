@@ -1,3 +1,5 @@
+import { No2gim } from "./No2gim.js";
+
 let instance;
 
 let torTxt = [];
@@ -13,6 +15,8 @@ let documents = [];
 let idx = [];
 
 class Repo {
+
+    no2gim = new No2gim();
 
     suffix(target) {
         target = target.replace(/\u05DA/g, 'כ');
@@ -180,8 +184,9 @@ class Repo {
       return sum;
     }
 
-    addDoc(ref,txt) {
-        documents.push({'text':txt, 'name': ref + "," + txt});
+    addDoc(bookName, ref,txt) {
+        let splits = ref.split(":");
+        documents.push({'text':txt, 'name': bookName + "-" + this.no2gim.no2gim(splits[1]) + ":" + splits[2] + "," + txt});
     }
 
     lucene(t) {
@@ -202,7 +207,7 @@ class Repo {
         let message = idx.search(t);
         let toS = "";
         for (let i=0; i<message.length; ++i) {
-            toS += "</br>" + message[i].ref + ", " + "Score: " + message[i].score;
+            toS += "</br>" + this.noName(message[i].ref) + ", " + "Score: " + message[i].score;
         }
         document.getElementById("resultFind").innerHTML = toS + "</br></br>" + message.length + ' ממצאים ' + "</br>";
     }

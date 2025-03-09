@@ -21,6 +21,7 @@ const p = params.get("p");
 const s = params.get("s"); // (s)kip
 const g = params.get("g");
 const q = params.get("q"); // (q)uery
+const l = params.get("l");
 
 const firstName = params.get("firstName");
 if (firstName && firstName !== '') {
@@ -107,6 +108,10 @@ if (q && q.trim() !== '') {
     find.find();
 }
 
+if (l) {
+    document.getElementById("tab6").checked = true;
+}
+
 document.getElementById("text").addEventListener('keyup', function(e) {
     if (e.key === "Enter") {
         pasuk.pasuk();
@@ -131,12 +136,16 @@ document.getElementById("find").addEventListener('keyup', function(e) {
     }
 })
 
-document.getElementById('siddur1B').addEventListener('click', () => {
-    document.getElementById('siddur1').innerHTML = (document.getElementById('siddur1').innerHTML !== "") ? "" : read.read("27,104,1-2");
+// document.getElementById('siddur1B').addEventListener('click', () => {
+    // document.getElementById('siddur1').innerHTML = (document.getElementById('siddur1').innerHTML !== "") ? "" : read.read("27,104,1-2", true);
+// })
+
+// document.getElementById('siddur2B').addEventListener('click', () => {
+    // document.getElementById('siddur2').innerHTML = (document.getElementById('siddur2').innerHTML !== "") ? "" : read.read("27,36,8-4", true);
+// })
+
+document.getElementById('lucene').addEventListener('click', () => {
+    document.getElementById('lunrJsTip').innerHTML = (document.getElementById('lunrJsTip').innerHTML !== "") ? "" : "for Joker; See also: `+Foo Bar -Baz` FOR *<br/>contains Foo Must, Bar Maybe, Baz Not";
 })
 
-document.getElementById('siddur2B').addEventListener('click', () => {
-    document.getElementById('siddur2').innerHTML = (document.getElementById('siddur2').innerHTML !== "") ? "" : read.read("27,36,8-4");
-})
-
-document.getElementById('p119').innerHTML = read.read("27,119",true);
+// document.getElementById('p119').innerHTML = read.read("27,119",true);

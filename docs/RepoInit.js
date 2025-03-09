@@ -38,7 +38,8 @@ class RepoInit {
             repo.addVerse(line1);
             let currBook = line0[0];
             repo.addBookNumArr(currBook-1);
-            repo.addCurrBookArr((bookheb[currBook-1]).split('').reverse().join(''));
+            let bookName = (bookheb[currBook-1]).split('').reverse().join('');
+            repo.addCurrBookArr(bookName);
             repo.addPPrkArr(line0[1]);
             repo.addPPskArr(line0[2]);
             let pasuk = line1.replace(/\s+/g, '');
@@ -50,7 +51,7 @@ class RepoInit {
                 ++ torTxtLength;
                 repo.addTorTxt(pasuk[g]);
             }
-            repo.addDoc(line.split(",")[0], line1);
+            repo.addDoc(bookName, line.split(",")[0], line1);
         }
           
 
