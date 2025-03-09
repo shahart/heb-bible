@@ -186,7 +186,7 @@ class Repo {
 
     addDoc(bookName, ref,txt) {
         let splits = ref.split(":");
-        documents.push({'text':txt, 'name': bookName + "-" + this.no2gim.no2gim(splits[1]) + ":" + splits[2] + "," + txt});
+        documents.push({'text':txt, 'name': txt + " -- " + bookName + " " + this.no2gim.no2gim(splits[1]) + "-" + splits[2]});
     }
 
     lucene(t) {
@@ -207,7 +207,7 @@ class Repo {
         let message = idx.search(t);
         let toS = "";
         for (let i=0; i<message.length; ++i) {
-            toS += "</br>" + this.noName(message[i].ref) + ", " + "Score: " + message[i].score;
+            toS += "<br/></br>" + this.noName(message[i].ref) + ", " + "Score: " + message[i].score;
         }
         document.getElementById("resultFind").innerHTML = toS + "</br></br>" + message.length + ' ממצאים ' + "</br>";
     }
