@@ -27,7 +27,7 @@ class Find {
         else {
           document.getElementById("resultFind").innerHTML = "";
         }
-        if (!(/^[\u05D0-\u05EA]+$/).test(findStr.replace(/\s+/g, ''))) { 
+        if (!lucene && !(/^[\u05D0-\u05EA]+$/).test(findStr.replace(/\s+/g, ''))) { 
           alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
       }
         let found = false;

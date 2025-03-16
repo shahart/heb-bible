@@ -53,6 +53,9 @@ class Read {
         if (bookPrk && !!!bookPsk) {
             this.output = "<span style=\"color:blue;\"> פרק " + this.no2gim.no2gim(bookPrk) + "  </span></br>";
         }
+        if (bookNum == 27) {
+            this.output += "</br>ליום ראשון - א, ליום שני - ל, ליום שלישי - נא, ליום רביעי - עג, ליום חמישי - צ, ליום שישי - קז, ליום השבת - קכ " + "</br>";
+        }
         for (let i = 0; i < this.repo.getVerses().length; ++i) {
             if (this.repo.getBookNumArr()[i] == bookNum-1 ) {
                 if (!!!bookPrk || Number(this.repo.getPPrk()[i]) == bookPrk) {
