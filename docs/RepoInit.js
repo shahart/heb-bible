@@ -19,8 +19,9 @@ class RepoInit {
             ungzipedData = localStorage.getItem('unzip') || "";
         }
         if (ungzipedData == "") {
-            if (!(typeof(pako) != 'undefined'))
-                console.error("No internet!");
+            if (!(typeof(pako) != 'undefined')) {
+                alert("No internet!");
+            }
             ungzipedData = new TextDecoder().decode(pako.ungzip(gzipedDataArray));
             if (typeof (Storage) !== "undefined") {
                 localStorage.setItem('unzip', ungzipedData);

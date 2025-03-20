@@ -6,6 +6,12 @@ import { Read } from "./Read.js";
 import { Gematria } from "./Gematria.js";
 import { Find } from "./Find.js";
 
+window.onerror = function(message) { 
+    alert(message); 
+    console(message); 
+    return true; 
+};
+
 new RepoInit();
 
 let pasuk = new Pasuk(Repo);
@@ -82,7 +88,6 @@ if (r && r.trim() !== '') {
     }
 }
 
-
 if (p && p.trim() !== '') {
     document.getElementById("text").value = p;
     document.getElementById("tab2").checked = true;
@@ -92,6 +97,9 @@ if (p && p.trim() !== '') {
 if (s && s.trim() !== '') {
     document.getElementById("dilugTxt").value = s;
     document.getElementById("tab3").checked = true;
+    const from = params.get("from"); 
+    if (from && from.trim() !== '')
+        document.getElementById("skipMin").value = from;
     document.getElementById("chars").textContent = s.length + ' '; 
     dilug.dilug();
 }
