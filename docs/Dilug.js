@@ -79,7 +79,7 @@ class Dilug {
                     matchFound = true;
                     foundStr += "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
                     var idx = indVrsRange(j+1, 0, repo.getVerses().length); // todo fix?
-                    foundStr += repo.getVerses()[idx] + " - " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (repo.getBookNumArr()[idx]+1) + "," + repo.getPPrk()[idx] + "\"" + " target=\"_new\">" + repo.getCurrBook()[idx] + " " + new No2gim().no2gim(repo.getPPrk()[idx]) + "</a>-" + repo.getPPsk()[idx];
+                    foundStr += repo.getVerses()[idx+1] + " - " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (repo.getBookNumArr()[idx]+1) + "," + repo.getPPrk()[idx] + "\"" + " target=\"_new\">" + repo.getCurrBook()[idx] + " " + new No2gim().no2gim(repo.getPPrk()[idx]) + "</a>-" + repo.getPPsk()[idx];
 
                     let txt = "";
                     for (let h = j; h <= j+ targetLen * iSkip; ++h) {
@@ -105,7 +105,7 @@ class Dilug {
                 var endTime = new Date();
                 console.log((endTime - startTime) + " mSec");
             }
-            document.getElementById("resultDilug2").innerHTML = foundStr + "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?s=" + target + "</p>";
+            document.getElementById("resultDilug2").innerHTML = foundStr + "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?s=" + target + "&from=" + skipMin + "</p>";
         });
         //
         var xhrAws = new XMLHttpRequest();

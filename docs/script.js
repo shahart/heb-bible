@@ -6,11 +6,13 @@ import { Read } from "./Read.js";
 import { Gematria } from "./Gematria.js";
 import { Find } from "./Find.js";
 
+/*
 window.onerror = function(message) { 
     alert(message); 
     console(message); 
     return true; 
 };
+*/
 
 new RepoInit();
 
