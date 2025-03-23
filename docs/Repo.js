@@ -186,7 +186,7 @@ class Repo {
 
     addDoc(bookName, ref,txt) {
         let splits = ref.split(":");
-        documents.push({'text':txt, 'name': txt + " -- " + bookName + " " + this.no2gim.no2gim(splits[1]) + "-" + splits[2]});
+        documents.push({'text':txt, 'name': txt + " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + splits[0] + "," + splits[1] + "\"" + " target=\"_new\">" + bookName + " " + this.no2gim.no2gim(splits[1]) + "</a>-" + splits[2]});
     }
 
     lucene(t) {

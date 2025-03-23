@@ -53,8 +53,8 @@ class Read {
         if (bookPrk && !!!bookPsk) {
             this.output = "<span style=\"color:blue;\"> פרק " + this.no2gim.no2gim(bookPrk) + "  </span></br>";
         }
-        if (bookNum == 27) {
-            this.output += "</br>ליום ראשון - א, ליום שני - ל, ליום שלישי - נא, ליום רביעי - עג, ליום חמישי - צ, ליום שישי - קז, ליום השבת - קכ " + "</br>";
+        if (bookNum == 27 && !!!bookPrk) {
+            this.output += "</br>ליום ראשון - א, ליום שני - <a id=\"book\"/><a href=\"#prk30\">ל</a> , ליום שלישי - <a id=\"book\"/><a href=\"#prk51\">נא</a> , ליום רביעי - <a id=\"book\"/><a href=\"#prk73\">עג</a> , ליום חמישי - <a id=\"book\"/><a href=\"#prk90\">צ</a> , ליום שישי - <a id=\"book\"/><a href=\"#prk107\">קז</a> , ליום השבת - <a id=\"book\"/><a href=\"#prk120\">קכ</a>  " + "</br>";
         }
         for (let i = 0; i < this.repo.getVerses().length; ++i) {
             if (this.repo.getBookNumArr()[i] == bookNum-1 ) {
