@@ -2,7 +2,7 @@
 
 # The hebrew bible #
 
-Antique! 1998 --> Now 2024 ported to java/script, Spring Boot, and LambdaS.
+Antique! 1994 --> Now 2024 ported to java/script, Spring Boot, and LambdaS.
 
 
 ![](read-psalm-119.png)
