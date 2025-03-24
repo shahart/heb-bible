@@ -4,12 +4,17 @@ class RepoInit {
 
     loadFile(filePath) {
         var res = null;
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", filePath, false);
-        xmlhttp.overrideMimeType('text/plain; charset=x-user-defined');
-        xmlhttp.send();
-        if (xmlhttp.status == 200) {
-            res = xmlhttp.responseText;
+        try {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", filePath, false);
+            xmlhttp.overrideMimeType('text/plain; charset=x-user-defined');
+            xmlhttp.send();
+            if (xmlhttp.status == 200) {
+                res = xmlhttp.responseText;
+            }
+        }
+        catch (err) {
+            alert(err);
         }
         return res;
     }

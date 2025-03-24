@@ -159,3 +159,27 @@ document.getElementById('lucene').addEventListener('click', () => {
 })
 
 // document.getElementById('p119').innerHTML = read.read("27,119",true);
+
+if (!navigator.onLine) {
+    console.log('offline'); 
+}
+
+const registerServiceWorker = async () => {
+    if ('serviceWorker' in navigator) {
+        try {
+            let serviceWorker = await navigator.serviceWorker.register('sw.js')
+            if (serviceWorker.installing) {
+                console.log("Service worker installing");
+            } else if (serviceWorker.waiting) {
+                console.log("Service worker installed");
+            } else if (serviceWorker.active) {
+                console.log("Service worker active");
+            }
+            console.log(`Service worker registered ${serviceWorker}`)
+        } catch (err) {
+            console.error(`Failed to register service worker: ${err}`)
+        }
+    }
+}
+
+registerServiceWorker();
