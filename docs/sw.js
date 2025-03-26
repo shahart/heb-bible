@@ -1,10 +1,11 @@
 const addResourcesToCache = async (resources) => {
-    const cache = await caches.open('v1');
+    const cache = await caches.open('v2');
     await cache.addAll(resources);
   };
   
   const putInCache = async (request, response) => {
-    const cache = await caches.open('v1');
+    if (!/^https?:$/i.test(new URL(request.url).protocol)) return;
+    const cache = await caches.open('v2');
     await cache.put(request, response);
   };
   
@@ -44,7 +45,7 @@ const addResourcesToCache = async (resources) => {
       // when even the fallback response is not available,
       // there is nothing we can do, but we must always
       // return a Response object
-      return new Response('Network error happened', {
+      return new Response('Network error happened ' + request.url, {
         status: 408,
         headers: { 'Content-Type': 'text/plain' },
       });

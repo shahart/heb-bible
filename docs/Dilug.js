@@ -54,6 +54,7 @@ class Dilug {
         var iSkip = skipMin;
         var foundStr = "";
         var startTime = new Date();
+        var foundSkip = skipMin;
         window.requestAnimationFrame(function loop() {
             el.innerHTML = iSkip;
             let lastInd = repo.getTOTLETTERS() - (targetLen-1) * iSkip;
@@ -95,6 +96,7 @@ class Dilug {
                 }
             }
             if (matchFound) {
+                foundSkip = iSkip;
                 iSkip = skipMax + 1; // TODO remove to see all results
             }
             ++iSkip;
@@ -105,7 +107,7 @@ class Dilug {
                 var endTime = new Date();
                 console.log((endTime - startTime) + " mSec");
             }
-            document.getElementById("resultDilug2").innerHTML = foundStr + "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?s=" + target + "&from=" + skipMin + "</p>";
+            document.getElementById("resultDilug2").innerHTML = foundStr + "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?s=" + target + "&from=" + foundSkip + "</p>";
         });
         //
         var xhrAws = new XMLHttpRequest();

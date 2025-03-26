@@ -37,9 +37,10 @@
         .content2,
         .content3,
         .content4,
-        .content5 {
+        .content5,
+        .content6 {
             display: none;
-            padding: 10px;
+            padding: 5px;
             border-top: 2px solid #999999;
         }
 
@@ -54,7 +55,7 @@
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            width: 55px;
+            width: 40px;
             height: 30px;
             border-style: solid solid none solid;
             border-width: 2px;
@@ -80,6 +81,10 @@
         #tab5:checked+label {
           border-color: #999999;
         }
+ 
+        #tab6:checked+label {
+          border-color: #999999;
+        }
 
         #tab1:checked~.content1 {
          display: block;
@@ -101,7 +106,12 @@
          display: block;
         }
 
+        #tab6:checked~.content6 {
+         display: block;
+        }
+
     </style>
+
 </head>
 <body>
 <noscript>
@@ -118,6 +128,8 @@
     <label for="tab4">גימטריה</label>
     <input type="radio" name="tab" id="tab5">
     <label for="tab5">חיפוש</label>
+    <input type="radio" name="tab" id="tab6">
+    <label for="tab6">⭐</label>
 
     <div class="content1" id="content1">
 
@@ -198,6 +210,9 @@
 <script src="lunr.stemmer.support.js"></script>
 <script src="lunr.he.js"></script>
 
+<!-- <script src="https://raw.githubusercontent.com/avisaradir/lunr-languages-he/refs/heads/master/lunr.stemmer.support.js"></script> -->
+<!-- <script src="https://raw.githubusercontent.com/avisaradir/lunr-languages-he/refs/heads/master/lunr.he.js"></script> -->
+
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script>
 
 <script src="script.js" type='module'></script>
@@ -277,7 +292,19 @@ to <input type="number" id="skipMax" value="100" min="1" max="9999">
 <label for="lucene">ℹ️ חיפוש LunrJS</label><br>
 </br></br><br/>
 <p id="resultFind" ></p>
+</div>
 
+<div class="content6" id="content6">
+  
+
+יְהִי רָצוֹן מִלְפָנֶיךָ יְהֹוָה אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ קוֹנֵה שָׁמַיִם וָאָרֶץ שֶׁתּוֹלִיכֵנוּ לְשָׁלוֹם, וְתַטִּיסֵנוּ לְשָׁלוֹם, וְתַגִּיעֵנוּ לִמְחוֹז חֶפְצֵנוּ לְשָׁלוֹם, וּתְמַלְטֵנוּ מֵרוּחַ סוֹעָה וָסַעַר, וּמִשָׁעוֹת רָעוֹת הַמִּתְרַגְּשׁוֹת לָבוֹא לָעוֹלָם, וּמִכָּל מִינֵי תַקָּלוֹת וּפֻּרְעָנֻיּוֹת, שֹׁמְרֵנוּ וְהַצִילֵנוּ בְּתוֹךְ כָּל אַחֵינוּ בְּנֵי יִשְׂרָאֵל הַטָּסִים בִּנְתִיבֵי אֲוִיר, וְהָעוֹבְרִים בְּאֹרְחוֹת יָם ודַרְכֵי יַבָּשָׁה מִכַּף כָּל-אוֹיֵב וְאוֹרֵב, וּמִכֹּל אָסוֹן וָנֵזֶק, וּמִכֹּל צַעַר וְצָרָה. אָנָּא אַמֵּץ יְדֵי הָאוֹחֲזִים בַּהֶגֶה, וְהָכֵן רוּחָם לְהַנְהִגֵנוּ לְשָׁלוֹם, כִּי בְּךָ בִּלְבַד חָסִינוּ מֵעַתָּה וְעַד עוֹלָם. כִּי אֵל שׁוֹמֵעַ תְּפִלָּה וְתַחֲנוּן אָתָּה. בָּרוּךְ אַתָּה ה' שׁוֹמֵעַ תְּפִלָּה:
+
+    </br>
+    </br>
+    
+    <img style="width: 25%; height: auto" loading="lazy" src="https://www.kindpng.com/picc/m/376-3766518_work-in-progress-clipart-hd-png-download.png" alt="Work In Progress Clipart, HD Png Download@kindpng.com">
+</div>
+   
+</div>
 </body>
-</div></div>
 </html>
