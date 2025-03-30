@@ -8,6 +8,17 @@ const addResourcesToCache = async (resources) => {
     const cache = await caches.open('v2');
     await cache.put(request, response);
   };
+
+  const deleteCache = async (key) => {
+    await caches.delete(key);
+  };
+  
+  const deleteOldCaches = async () => {
+    const cacheKeepList = ["v2"];
+    const keyList = await caches.keys();
+    const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
+    await Promise.all(cachesToDelete.map(deleteCache));
+  };
   
   const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
     // First try to get the resource from the cache
@@ -60,6 +71,7 @@ const addResourcesToCache = async (resources) => {
   };
   
   self.addEventListener('activate', (event) => {
+    event.waitUntil(deleteOldCaches());
     event.waitUntil(enableNavigationPreload());
   });
   
