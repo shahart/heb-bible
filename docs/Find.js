@@ -60,7 +60,12 @@ class Find {
           }
         }
         if (!found) this.output += "חיפוש רגיל - לא נמצא";
-        else this.output += " חיפוש רגיל - ממצאים " + findings + "<br/><br/><span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?q=" + findStr + "</p>";
+        else { 
+          let findStrToUse = findStr;
+          if (/iPhone|Android/i.test(navigator.userAgent)) 
+            findStrToUse = findStrToUse.replace(' ', '%20');
+          this.output += " חיפוש רגיל - ממצאים " + findings + "<br/><br/><span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?q=" + findStrToUse + "</p>";
+        }
         document.getElementById("resultFind").innerHTML += "<br/>" + this.output;
         //
         var xhrAws = new XMLHttpRequest();

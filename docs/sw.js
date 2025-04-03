@@ -6,6 +6,7 @@ const addResourcesToCache = async (resources) => {
   const putInCache = async (request, response) => {
     if (!/^https?:$/i.test(new URL(request.url).protocol)) return;
     const cache = await caches.open('v3');
+    // if (request.method != 'POST')
     await cache.put(request, response);
   };
 

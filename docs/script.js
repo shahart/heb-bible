@@ -108,12 +108,12 @@ if (s && s.trim() !== '') {
 
 if (g && g.trim() !== '') {
     document.getElementById("gim").value = g;
-    gematria.gematria();
     document.getElementById("tab4").checked = true;
+    gematria.gematria();
 }
 
 if (q && q.trim() !== '') {
-    document.getElementById("find").value = q;
+    document.getElementById("find").value = q.replace("%20", ' ');
     document.getElementById("tab5").checked = true;
     find.find();
 }
