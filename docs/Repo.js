@@ -4,6 +4,7 @@ let instance;
 
 let torTxt = [];
 let verses = [];
+let nikkudVerses = [];
 let cntLetter = []; // [5846] = 304806-1 (Ok!)
 let PPskArr = [];
 let PPrkArr = [];
@@ -13,6 +14,7 @@ let gims = [];
 let TOTLETTERS;
 let documents = [];
 let idx = [];
+let kris = new Map();
 
 class Repo {
 
@@ -51,6 +53,10 @@ class Repo {
         return verses;
     }
 
+    getNikkudVerses() {
+        return nikkudVerses;
+    }
+
     getPPrk() {
         return PPrkArr;
     }
@@ -78,6 +84,10 @@ class Repo {
     addVerse(s) {
         verses.push(s);
         gims.push(this.gim(s.trim()));
+    }
+
+    addNikkudVerse(s) {
+        nikkudVerses.push(s);
     }
 
     addPPskArr(s) {
@@ -211,6 +221,31 @@ class Repo {
             toS += "<br/></br>" + this.noName(message[i].ref) + ", " + "Score: " + message[i].score;
         }
         document.getElementById("resultFind").innerHTML = toS + "</br></br>" + message.length + ' ממצאים ' + "</br>";
+    }
+
+    getKris() {
+        return kris;
+    }  
+
+    kri(pos, kriKtiv) {
+        // console.debug(k.trim() + " --> " + ktiv.trim());
+        let exist = kris.get(pos);
+        if (exist) {
+            // console.warn("Not a dup " + exist + "-" + pos + "-" + kriKtiv);
+            pos += "-2";
+            exist = kris.get(pos);
+            if (exist) {
+                console.warn("Not a 2dup " + exist + "-" + pos + "-" + kriKtiv);
+                pos += "-3";
+                exist = kris.get(pos);
+                if (exist) {
+                    console.warn("Not a 3dup " + exist + "-" + pos + "-" + kriKtiv);
+                    pos += "-4";
+                }
+            }
+        }
+
+        kris.set(pos, kriKtiv);
     }
 
 }

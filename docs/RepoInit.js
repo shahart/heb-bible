@@ -19,6 +19,44 @@ class RepoInit {
         return res;
     }
 
+    errata() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://raw.githubusercontent.com/shahart/heb-bible/master/pascal/ERRATA.INF', true);
+        xhr.overrideMimeType('text/plain; charset=x-user-defined'); // Hack to pass bytes through unprocessed
+        xhr.onreadystatechange = function(e) {
+          if ( this.readyState === 4 &&
+                this.status === 200) {
+            var binStr = this.responseText;
+            let content = Uint8Array.from(binStr, c => c.charCodeAt(0));
+            var eof = 0;
+            var startTime = new Date();
+            while (eof < binStr.length) {
+                let kri = "";
+                for (var k = eof + 12; k >= eof + 1; --k) {
+                    let ch = content[k] - 1;
+                    // s += getHebChar(binStr.charAt(k)-1);
+                    kri += (ch !== 31 ?  String.fromCharCode('א'.charCodeAt(0) + ch - 127) : " ");
+                }
+                eof += 13;
+                let ktiv = "";
+                for (var k = eof + 12; k >= eof + 1; --k) {
+                    let ch = content[k] - 1;
+                    // s += getHebChar(binStr.charAt(k)-1);
+                    ktiv += (ch !== 31 ?  String.fromCharCode('א'.charCodeAt(0) + ch - 127) : " ");
+                }
+                // console.debug(kri.trim() + " --> " + ktiv.trim() + " -- " + (content[eof + 13] - 31) + "- " + (content[eof + 14] - 31) + "- " + (content[eof + 15] - 31));
+                var repo = Repo.getInstance();
+                repo.kri("" + (content[eof + 13] - 31) + ":" + (content[eof + 14] - 31) + ":" + (content[eof + 15] - 31), kri.trim() + ":" + ktiv.trim());
+                eof += 16;
+            }
+            console.log("Errata: " + eof/29);
+            var endTime = new Date();
+            console.log("Init Errata: " + (endTime - startTime) + " mSec");
+          }
+        }
+        xhr.send();
+    }
+
     init() {
         if (Repo.getInstance().getSize() > 0) {
             console.log("Already init'ed");
@@ -53,6 +91,7 @@ class RepoInit {
             let line1 = line.split(",")[1];
             let line0 = line.split(",")[0].split(":");
             repo.addVerse(line1);
+            // repo.addNikkudVerse(nline1);
             let currBook = line0[0];
             repo.addBookNumArr(currBook-1);
             let bookName = (bookheb[currBook-1]).split('').reverse().join('');
@@ -75,6 +114,7 @@ class RepoInit {
         console.log("Init: " + (endTime - startTime) + " mSec");
         console.log(Repo.getSize());
         repo.done();
+        // this.errata();
     }
 
     constructor() {
