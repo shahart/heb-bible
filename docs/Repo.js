@@ -214,7 +214,7 @@ class Repo {
                 })
                 }
         }
-        if (!!idx) alert('Offline >> Lunr might not work');
+        if (!!idx) console.warn('Offline?! >> Lunr might not work');
         let message = idx.search(t);
         let toS = "";
         for (let i=0; i<message.length; ++i) {

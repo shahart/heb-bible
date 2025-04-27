@@ -6,7 +6,7 @@ const addResourcesToCache = async (resources) => {
   const putInCache = async (request, response) => {
     if (!/^https?:$/i.test(new URL(request.url).protocol)) return;
     if (request.method == 'POST') return; // Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Request method 'POST' is unsupported
-    const cache = await caches.open('v3');
+    const cache = await caches.open('v4');
     await cache.put(request, response);
   };
 

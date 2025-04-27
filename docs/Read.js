@@ -56,6 +56,7 @@ class Read {
         if (bookNum == 27 && !!!bookPrk) {
             this.output += "</br>ליום ראשון - א, ליום שני - <a id=\"book\"/><a href=\"#prk30\">ל</a> , ליום שלישי - <a id=\"book\"/><a href=\"#prk51\">נא</a> , ליום רביעי - <a id=\"book\"/><a href=\"#prk73\">עג</a> , ליום חמישי - <a id=\"book\"/><a href=\"#prk90\">צ</a> , ליום שישי - <a id=\"book\"/><a href=\"#prk107\">קז</a> , ליום השבת - <a id=\"book\"/><a href=\"#prk120\">קכ</a>  " + "</br>";
         }
+        // todo output += בראשית נח לך-לך וירא and maybe with pointer
         for (let i = 0; i < this.repo.getVerses().length; ++i) {
             if (this.repo.getBookNumArr()[i] == bookNum-1 ) {
                 if (!!!bookPrk || Number(this.repo.getPPrk()[i]) == bookPrk) {
@@ -63,14 +64,22 @@ class Read {
                         this.output += "<span style=\"color:blue;\">";
                     if (((!!!bookPsk || Number(this.repo.getPPsk()[i]) >= bookPsk)) && (!!!amount || psukim < amount)) {
                         ++ psukim;
-                        if (this.repo.getPPsk()[i] == 1 || (this.repo.getBookNumArr()[i] == 27-1 && this.repo.getPPrk()[i] == 119 && this.repo.getPPsk()[i] % 8 == 1)) this.output += "</br>";
+                        if (this.repo.getPPsk()[i] == 1 || (this.repo.getBookNumArr()[i] == 27-1 && this.repo.getPPrk()[i] == 119 && this.repo.getPPsk()[i] % 8 == 1)) 
+                            this.output += "</br>";
+                        // todo if psk,prk,book in Parashot, + br
                         if (this.repo.getPPsk()[i] == 1)
                             this.output += "<a id=\"prk" + this.repo.getPPrk()[i] + "\"/>" + "<a href=\"#book\">";
                         this.output += this.no2gim.no2gim(this.repo.getPPrk()[i]);
                         if (this.repo.getPPsk()[i] == 1)
                             this.output += "</a>";
                         let rashiUrl = "<a href=\"" + "https://wiki.jewishbooks.org.il/mediawiki/wiki/%D7%A8%D7%A9%22%D7%99/" + bookHeb + "/" + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "#" + this.no2gim.no2gim(this.repo.getPPsk()[i]) + "\"" + " target=\"_new\">" + this.repo.getPPsk()[i] + "</a>";
-                        this.output += "-" + rashiUrl + " -- " + this.repo.noName(this.repo.getVerses()[i]) + "<br/>";
+                        this.output += "-" + rashiUrl + " -- ";
+                        if (this.repo.getNikkudVerses()[i].length >= 1) { 
+                            this.output += this.repo.getNikkudVerses()[i] + "<br/>";
+                        }
+                        else {
+                            this.output += this.repo.noName(this.repo.getVerses()[i]) + "<br/>";
+                        }
                         totLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
                         tevot += this.repo.getVerses()[i].split(' ').length; // - 1;
                         if (bookPrk)

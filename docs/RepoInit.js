@@ -14,7 +14,7 @@ class RepoInit {
             }
         }
         catch (err) {
-            alert(err);
+            console.error(err);
         }
         return res;
     }
@@ -67,8 +67,10 @@ class RepoInit {
         var startTime = new Date();
         var repo = Repo.getInstance();
         var ungzipedData = "";
+        var nData = "";
         if (typeof (Storage) !== "undefined") {
             ungzipedData = localStorage.getItem('unzip') || "";
+            nData = localStorage.getItem('nData') || "";
         }
         if (ungzipedData == "") {
             if (!(typeof(pako) != 'undefined')) {
@@ -77,11 +79,16 @@ class RepoInit {
             const gezipedData = this.loadFile("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz"); 
             const gzipedDataArray = Uint8Array.from(gezipedData, c => c.charCodeAt(0));
             ungzipedData = new TextDecoder().decode(pako.ungzip(gzipedDataArray));
+            const nData2 = this.loadFile("https://raw.githubusercontent.com/shahart/heb-bible/master/bible-niqqud.txt"); // todo gzip once content is ready
+            const nDataArr = nData2 == null ? null : Uint8Array.from(nData2, c => c.charCodeAt(0));
+            nData = nDataArr == null ? null : new TextDecoder().decode(nDataArr);
             if (typeof (Storage) !== "undefined") {
                 localStorage.setItem('unzip', ungzipedData);
+                localStorage.setItem('nData', nData);
             }
         }
         let arr = ungzipedData.split("\n");
+        let narr = nData == null ? null : nData.split("\n");
         console.log('Psukim: ', arr.length - 1);
         var TOTLETTERS = 1;
         var torTxtLength = 0;
@@ -91,7 +98,7 @@ class RepoInit {
             let line1 = line.split(",")[1];
             let line0 = line.split(",")[0].split(":");
             repo.addVerse(line1);
-            // repo.addNikkudVerse(nline1);
+            repo.addNikkudVerse(narr == null || narr.length == 1 ? "" : narr[j].trim().split(",")[1]);
             let currBook = line0[0];
             repo.addBookNumArr(currBook-1);
             let bookName = (bookheb[currBook-1]).split('').reverse().join('');
