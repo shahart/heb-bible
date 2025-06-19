@@ -186,7 +186,7 @@ in the aws console, the handler name is `org.springframework.cloud.function.adap
 
 A runner for Postman
 
-`npm install -g newman`
+`pnpm install -g newman`
 
 `newman run src/test/resources/hebbible.postman_collection.json -g src/test/resources/postman_globals.json`
 

@@ -1,6 +1,7 @@
 import { RepoInit } from "../RepoInit.js";
 import Repo from "../Repo.js";
 import { Read } from "../Read.js";
+import { No2gim } from "../No2gim.js";
 
 describe('Mocha tests', function () {
 
@@ -18,6 +19,36 @@ describe('Mocha tests', function () {
         let read = new Read(Repo);
         let psk = read.read("27,119,12-1", true);
         chai.assert.equal(psk, 'ברוך אתה יהוה למדני חקיך: ');
+    });
+
+    it('No2gim - single digit', function() {
+        let n2g = new No2gim();
+        chai.assert.equal(n2g.no2gim(7), 'ז');
+    });
+
+    it('No2gim - double digits', function() {
+        let n2g = new No2gim();
+        chai.assert.equal(n2g.no2gim(42), 'מב');
+    });
+
+    it('No2gim - triple digits', function() {
+        let n2g = new No2gim();
+        chai.assert.equal(n2g.no2gim(123), 'קכג');
+    });
+
+    it('No2gim - special case 15', function() {
+        let n2g = new No2gim();
+        chai.assert.equal(n2g.no2gim(15), 'טו');
+    });
+
+    it('No2gim - special case 16', function() {
+        let n2g = new No2gim();
+        chai.assert.equal(n2g.no2gim(16), 'טז');
+    });
+
+    it('No2gim - large number', function() {
+        let n2g = new No2gim();
+        chai.assert.equal(n2g.no2gim(5782), 'ה\'תשפב');
     });
 
 });
