@@ -58,37 +58,54 @@ class Pasuk {
         return false;
     }
 
+    /**
+     * Pure function for searching psukim, returns found count for testability.
+     */
+    searchPasuk(args, containsName) {
+        if (!(/^[\u05D0-\u05EA]+$/).test(args)) {
+            throw new Error("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
+        }
+        if (args.length <= 1 || args.charAt(0) > 'ת' || args.charAt(0) < 'א' || args.charAt(args.length-1) > 'ת' || args.charAt(args.length-1) < 'א') {
+            throw new Error( "ערך לא חוקי" );
+        }
+        this.output = "";
+        let found = 0;
+        if (! containsName) {
+            var dictionary = {};
+            dictionary["אא"] = 43;
+            dictionary["אב"] = 34;
+            dictionary["אג"] = 2;
+            dictionary["אד"] = 33;
+            // todo see SvcTest.java output
+            var shortName = args.charAt(0) + args.charAt(args.length-1);
+            if (dictionary[shortName]) {
+                this.output = "Total Psukim: " + dictionary[shortName];
+                return dictionary[shortName];
+            }
+        }
+        for (let i = 0; i < this.repo.getVerses().length; ++i) {
+            if (this.isValid(i, containsName, args)) {
+                ++found;
+            }
+        }
+        return found;
+    }
+
     pasuk(repo) { // same todo as in Pasuk.html
         let containsName = document.getElementById("containsName").checked;
         document.getElementById("result").innerHTML = "";
         let args = document.getElementById("text").value.trim();
-        if (!(/^[\u05D0-\u05EA]+$/).test(args)) {
-            alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
+        let found;
+        try {
+            found = this.searchPasuk(args, containsName);
+        } catch (e) {
+            alert(e.message);
+            return;
         }
-        if (args.length <= 1 || args.charAt(0) > 'ת' || args.charAt(0) < 'א' || args.charAt(args.length-1) > 'ת' || args.charAt(args.length-1) < 'א') {
-            document.getElementById("result").innerHTML = "ערך לא חוקי";
-        }
-        else {
-            if (! containsName) {
-                var dictionary = {};
-                dictionary["אא"] = 43;
-                dictionary["אב"] = 34;
-                dictionary["אג"] = 2;
-                dictionary["אד"] = 33;
-                // todo see SvcTest.java output
-                var shortName = args.charAt(0) + args.charAt(args.length-1);
-                if (dictionary[shortName]) {
-                    document.getElementById("result").innerHTML = "Total Psukim: " + dictionary[shortName];
-                }
-            }
+        if (this.output === "ערך לא חוקי") {
+            document.getElementById("result").innerHTML = this.output;
+        } else {
             this.saveInput("input", args);
-            this.output = "";
-            let found = 0;
-            for (let i = 0; i < this.repo.getVerses().length; ++i) {
-                if (this.isValid(i, containsName, args)) {
-                    ++ found;
-                }
-            }
             this.saveInput('resCount', found);
             document.getElementById("result").innerHTML = found + " פסוקים <br/><br/>" + this.output +
                 "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?p=" + args + "</p>";

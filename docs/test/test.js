@@ -2,6 +2,7 @@ import { RepoInit } from "../RepoInit.js";
 import Repo from "../Repo.js";
 import { Read } from "../Read.js";
 import { No2gim } from "../No2gim.js";
+import { Pasuk } from "../Pasuk.js";
 
 describe('Mocha tests', function () {
 
@@ -19,6 +20,14 @@ describe('Mocha tests', function () {
         let read = new Read(Repo);
         let psk = read.read("27,119,12-1", true);
         chai.assert.equal(psk, 'ברוך אתה יהוה למדני חקיך: ');
+    });
+
+    it('count-pasuk-starts-ends', function() {
+        let pasuk = new Pasuk(Repo);
+        let psk = pasuk.searchPasuk("שחר", true);
+        chai.assert.equal(psk, 74);
+        psk = pasuk.searchPasuk("שחר", false);
+        chai.assert.equal(psk, 25);
     });
 
     it('No2gim - single digit', function() {
