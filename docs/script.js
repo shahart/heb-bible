@@ -146,19 +146,53 @@ document.getElementById("find").addEventListener('keyup', function(e) {
     }
 })
 
-// document.getElementById('siddur1B').addEventListener('click', () => {
-    // document.getElementById('siddur1').innerHTML = (document.getElementById('siddur1').innerHTML !== "") ? "" : read.read("27,104,1-2", true);
-// })
+document.getElementById('psalms1B').addEventListener('click', () => {
+    document.getElementById('psalms1').innerHTML = (document.getElementById('psalms1').innerHTML !== "") ? "" : read.read("27,1", true);
+})
 
-// document.getElementById('siddur2B').addEventListener('click', () => {
-    // document.getElementById('siddur2').innerHTML = (document.getElementById('siddur2').innerHTML !== "") ? "" : read.read("27,36,8-4", true);
-// })
+document.getElementById('psalms6B').addEventListener('click', () => {
+    document.getElementById('psalms6').innerHTML = (document.getElementById('psalms6').innerHTML !== "") ? "" : read.read("27,6", true);
+})
+
+document.getElementById('psalms13B').addEventListener('click', () => {
+    document.getElementById('psalms13').innerHTML = (document.getElementById('psalms13').innerHTML !== "") ? "" : read.read("27,13", true);
+})
+
+document.getElementById('psalms20B').addEventListener('click', () => {
+    document.getElementById('psalms20').innerHTML = (document.getElementById('psalms20').innerHTML !== "") ? "" : read.read("27,20", true);
+})
+
+document.getElementById('psalms38B').addEventListener('click', () => {
+    document.getElementById('psalms38').innerHTML = (document.getElementById('psalms38').innerHTML !== "") ? "" : read.read("27,38", true);
+})
+
+document.getElementById('psalms83B').addEventListener('click', () => {
+    document.getElementById('psalms83').innerHTML = (document.getElementById('psalms83').innerHTML !== "") ? "" : read.read("27,83", true);
+})
+
+document.getElementById('psalms85B').addEventListener('click', () => {
+    document.getElementById('psalms85').innerHTML = (document.getElementById('psalms85').innerHTML !== "") ? "" : read.read("27,85", true);
+})
+
+document.getElementById('psalms102B').addEventListener('click', () => {
+    document.getElementById('psalms102').innerHTML = (document.getElementById('psalms102').innerHTML !== "") ? "" : read.read("27,102", true);
+})
+
+document.getElementById('psalms106B').addEventListener('click', () => {
+    document.getElementById('psalms106').innerHTML = (document.getElementById('psalms106').innerHTML !== "") ? "" : read.read("27,106", true);
+})
+
+document.getElementById('psalms130B').addEventListener('click', () => {
+    document.getElementById('psalms130').innerHTML = (document.getElementById('psalms130').innerHTML !== "") ? "" : read.read("27,130", true);
+})
+
+document.getElementById('psalms142B').addEventListener('click', () => {
+    document.getElementById('psalms142').innerHTML = (document.getElementById('psalms142').innerHTML !== "") ? "" : read.read("27,142", true);
+})
 
 document.getElementById('lucene').addEventListener('click', () => {
     document.getElementById('lunrJsTip').innerHTML = (document.getElementById('lunrJsTip').innerHTML !== "") ? "" : "for Joker; See also: `+Foo Bar -Baz` FOR *<br/>contains Foo Must, Bar Maybe, Baz Not";
 })
-
-// document.getElementById('p119').innerHTML = read.read("27,119",true);
 
 if (!navigator.onLine) {
     console.log('offline'); 
