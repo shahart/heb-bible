@@ -109,7 +109,13 @@ class Read {
                         }
                         prkLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
                         prkTevot += this.repo.getVerses()[i].split(' ').length; // - 1;
-                        clearText += this.repo.getVerses()[i] + ": ";
+                        if (this.repo.getNikkudVerses()[i].length >= 1) { 
+                            clearText += this.repo.getNikkudVerses()[i];
+                        }
+                        else {
+                            clearText += this.repo.getVerses()[i];
+                        }
+                        clearText += ": ";
                     }
                 }
             }
