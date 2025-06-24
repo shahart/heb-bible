@@ -109,6 +109,9 @@ class Read {
                         }
                         prkLetters += this.repo.getVerses()[i].replace(/\s+/g, '').length;
                         prkTevot += this.repo.getVerses()[i].split(' ').length; // - 1;
+                        if (amount !== 1) {
+                            clearText += "(" + (this.repo.getPPsk()[i]) + ") ";
+                        }
                         if (this.repo.getNikkudVerses()[i].length >= 1) { 
                             clearText += this.repo.getNikkudVerses()[i];
                         }
