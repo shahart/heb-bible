@@ -190,6 +190,22 @@ document.getElementById('psalms142B').addEventListener('click', () => {
     document.getElementById('psalms142').innerHTML = (document.getElementById('psalms142').innerHTML !== "") ? "" : read.read("27,142", true);
 })
 
+document.getElementById('psalms22B').addEventListener('click', () => {
+    document.getElementById('psalms22').innerHTML = (document.getElementById('psalms22').innerHTML !== "") ? "" : read.read("27,22", true);
+})
+
+document.getElementById('psalms25B').addEventListener('click', () => {
+    document.getElementById('psalms25').innerHTML = (document.getElementById('psalms25').innerHTML !== "") ? "" : read.read("27,25", true);
+})
+
+document.getElementById('psalms121B').addEventListener('click', () => {
+    document.getElementById('psalms121').innerHTML = (document.getElementById('psalms121').innerHTML !== "") ? "" : read.read("27,121", true);
+})
+
+document.getElementById('psalms86B').addEventListener('click', () => {
+    document.getElementById('psalms86').innerHTML = (document.getElementById('psalms86').innerHTML !== "") ? "" : read.read("27,86", true);
+})
+
 document.getElementById('MiSheb1B').addEventListener('click', () => {
     document.getElementById('MiSheb1').innerHTML = (document.getElementById('MiSheb1').innerHTML !== "") ? "" : "מִי שֶׁבֵּרַךְ אֲבוֹתֵינוּ אַבְרָהָם יִצְחָק וְיַעֲקֹב הוּא יְבָרֵךְ אֶת חַיָּלֵי צְבָא הֲגַנָּה לְיִשְׂרָאֵל, הָעוֹמְדִים עַל מִשְׁמַר אַרְצֵנוּ וְעָרֵי אֱלהֵינוּ מִגְּבוּל הַלְּבָנוֹן וְעַד מִדְבַּר מִצְרַיִם וּמִן הַיָּם הַגָּדוֹל עַד לְבוֹא הָעֲרָבָה בַּיַּבָּשָׁה בָּאֲוִיר וּבַיָּם. יִתֵּן ה' אֶת אוֹיְבֵינוּ הַקָּמִים עָלֵינוּ נִגָּפִים לִפְנֵיהֶם. הַקָּדוֹשׁ בָּרוּךְ הוּא יִשְׁמֹר וְיַצִּיל אֶת חַיָלֵינוּ מִכָּל צָרָה וְצוּקָה וּמִכָּל נֶגַע וּמַחְלָה וְיִשְׁלַח בְּרָכָה וְהַצְלָחָה בְּכָל מַעֲשֵׂה יְדֵיהֶם. יַדְבֵּר שׂוֹנְאֵינוּ תַּחְתֵּיהֶם וִיעַטְרֵם בְּכֶתֶר יְשׁוּעָה וּבְעֲטֶרֶת נִצָּחוֹן. וִיקֻיַּם בָּהֶם הַכָּתוּב: כִּי ה' אֱלֹהֵיכֶם הַהֹלֵךְ עִמָּכֶם לְהִלָּחֵם לָכֶם עִם איבֵיכֶם לְהוֹשִׁיעַ אֶתְכֶם: וְנאמַר אָמֵן";
 })
