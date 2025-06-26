@@ -146,64 +146,73 @@ document.getElementById("find").addEventListener('keyup', function(e) {
     }
 })
 
+function handleChapter(c) {
+    document.getElementById('psalms'+c)    .innerHTML = (document.getElementById('psalms'+c)    .innerHTML !== "") ? "" : read.read("27,"+c, true);
+    document.getElementById('psalms'+c+'B').innerHTML = (document.getElementById('psalms'+c+'B').innerHTML == "+") ? "-" : "+";
+}
+
 document.getElementById('psalms1B').addEventListener('click', () => {
-    document.getElementById('psalms1').innerHTML = (document.getElementById('psalms1').innerHTML !== "") ? "" : read.read("27,1", true);
+    handleChapter(1);
 })
 
 document.getElementById('psalms6B').addEventListener('click', () => {
-    document.getElementById('psalms6').innerHTML = (document.getElementById('psalms6').innerHTML !== "") ? "" : read.read("27,6", true);
+    handleChapter(6);
 })
 
 document.getElementById('psalms13B').addEventListener('click', () => {
-    document.getElementById('psalms13').innerHTML = (document.getElementById('psalms13').innerHTML !== "") ? "" : read.read("27,13", true);
+    handleChapter(13);
 })
 
 document.getElementById('psalms20B').addEventListener('click', () => {
-    document.getElementById('psalms20').innerHTML = (document.getElementById('psalms20').innerHTML !== "") ? "" : read.read("27,20", true);
+    handleChapter(20);
 })
 
 document.getElementById('psalms38B').addEventListener('click', () => {
-    document.getElementById('psalms38').innerHTML = (document.getElementById('psalms38').innerHTML !== "") ? "" : read.read("27,38", true);
+    handleChapter(38);
 })
 
 document.getElementById('psalms83B').addEventListener('click', () => {
-    document.getElementById('psalms83').innerHTML = (document.getElementById('psalms83').innerHTML !== "") ? "" : read.read("27,83", true);
+    handleChapter(83);
 })
 
 document.getElementById('psalms85B').addEventListener('click', () => {
-    document.getElementById('psalms85').innerHTML = (document.getElementById('psalms85').innerHTML !== "") ? "" : read.read("27,85", true);
+    handleChapter(85);
+})
+
+document.getElementById('psalms91B').addEventListener('click', () => {
+    handleChapter(91);
 })
 
 document.getElementById('psalms102B').addEventListener('click', () => {
-    document.getElementById('psalms102').innerHTML = (document.getElementById('psalms102').innerHTML !== "") ? "" : read.read("27,102", true);
+    handleChapter(102);
 })
 
 document.getElementById('psalms106B').addEventListener('click', () => {
-    document.getElementById('psalms106').innerHTML = (document.getElementById('psalms106').innerHTML !== "") ? "" : read.read("27,106", true);
+    handleChapter(106);
 })
 
 document.getElementById('psalms130B').addEventListener('click', () => {
-    document.getElementById('psalms130').innerHTML = (document.getElementById('psalms130').innerHTML !== "") ? "" : read.read("27,130", true);
+    handleChapter(130);
 })
 
 document.getElementById('psalms142B').addEventListener('click', () => {
-    document.getElementById('psalms142').innerHTML = (document.getElementById('psalms142').innerHTML !== "") ? "" : read.read("27,142", true);
+    handleChapter(142);
 })
 
 document.getElementById('psalms22B').addEventListener('click', () => {
-    document.getElementById('psalms22').innerHTML = (document.getElementById('psalms22').innerHTML !== "") ? "" : read.read("27,22", true);
+    handleChapter(22);
 })
 
 document.getElementById('psalms25B').addEventListener('click', () => {
-    document.getElementById('psalms25').innerHTML = (document.getElementById('psalms25').innerHTML !== "") ? "" : read.read("27,25", true);
+    handleChapter(25);
 })
 
 document.getElementById('psalms121B').addEventListener('click', () => {
-    document.getElementById('psalms121').innerHTML = (document.getElementById('psalms121').innerHTML !== "") ? "" : read.read("27,121", true);
+    handleChapter(121);
 })
 
 document.getElementById('psalms86B').addEventListener('click', () => {
-    document.getElementById('psalms86').innerHTML = (document.getElementById('psalms86').innerHTML !== "") ? "" : read.read("27,86", true);
+    handleChapter(86);
 })
 
 document.getElementById('MiSheb1B').addEventListener('click', () => {
