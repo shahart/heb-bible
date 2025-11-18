@@ -76,6 +76,7 @@ class RepoInit {
             if (!(typeof(pako) != 'undefined')) {
                 alert("No internet!");
             }
+            // for local testing just use loadFile("bible.txt.gz") and have a copy of the file on the docs folder
             const gezipedData = this.loadFile("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz"); 
             const gzipedDataArray = Uint8Array.from(gezipedData, c => c.charCodeAt(0));
             ungzipedData = new TextDecoder().decode(pako.ungzip(gzipedDataArray));
