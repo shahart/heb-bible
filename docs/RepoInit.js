@@ -68,7 +68,8 @@ class RepoInit {
         var repo = Repo.getInstance();
         var ungzipedData = "";
         var nData = "";
-        if (typeof (Storage) !== "undefined") {
+        const url = new URL(window.location.href);
+        if (url.search !== '?refresh' && typeof (Storage) !== "undefined") {
             ungzipedData = localStorage.getItem('unzip') || "";
             nData = localStorage.getItem('nData') || "";
         }
