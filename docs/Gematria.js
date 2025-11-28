@@ -14,7 +14,14 @@ class Gematria {
     isGim(i, gim, repo, partGim) {
         let line = this.repo.getVerses()[i];
         if (this.repo.getGims()[i] == gim) {
-            this.output += this.repo.noName(line) + " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
+            let newLine;
+            if (this.repo.getNikkudVerses()[i].length >= 1) { 
+                newLine = this.repo.getNikkudVerses()[i];
+            }
+            else {
+                newLine = this.repo.noName(line);
+            }
+            this.output += newLine + " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
         }
         else if (partGim) {
             let words = line.split(" ");
