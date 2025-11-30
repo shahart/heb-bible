@@ -1,9 +1,9 @@
-file_path = "C:\\repos\\heb-bible\\bible-teamim-27.txt"
+file_path = "C:\\repos\\heb-bible\\bible-teamim-"
 
 try:
-    with open(file_path, 'r', encoding = 'utf-8') as file:
-        book = 27
-        prk = -1
+    book = 8
+    with open(file_path + str(book) + ".txt", 'r', encoding='utf-8') as file:
+        prk = 0
         psk = 0
         for line in file:
             processed_line = line.strip()
