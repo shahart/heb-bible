@@ -19,7 +19,7 @@ describe('Mocha tests', function () {
     it('read-pasuk', function() {
         let read = new Read(Repo);
         let psk = read.read("27,119,12-1", true);
-        chai.assert.equal(psk, 'ברוך אתה יהוה למדני חקיך: ');
+        chai.assert.equal(psk, 'בָּר֖וּךְ אַתָּ֥ה יְהוָ֗ה לַמְּדֵ֥נִי חֻקֶּֽיךָ: ');
     });
 
     it('count-pasuk-starts-ends', function() {
