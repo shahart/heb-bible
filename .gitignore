@@ -18,3 +18,4 @@ kotlin/.gradle
 kotlin/build
 python/env
 python/__pycache__/
+docs/bible-niqqud.txt
