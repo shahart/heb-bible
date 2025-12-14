@@ -24,12 +24,13 @@ let find = new Find(Repo);
 
 const params = new URLSearchParams(document.location.search);
 
-const r = params.get("r");
+let r = params.get("r");
 const p = params.get("p");
 const s = params.get("s"); // (s)kip
 const g = params.get("g");
 const q = params.get("q"); // (q)uery
 const l = params.get("l");
+const b = params.get("b"); // (b)ook
 
 const firstName = params.get("firstName");
 if (firstName && firstName !== '') {
@@ -72,6 +73,56 @@ document.getElementById('buttonF').addEventListener('click', () => {
 document.getElementById('sabort').addEventListener('click', () => {
     dilug.doAbort();
 });
+
+
+if (b && b.trim() !== '') {
+    if (b.startsWith('Joshua')) {
+        r = '6';
+    }
+    else if (b.startsWith('Judges')) {
+        r = '7';
+    }
+    else if (b.startsWith('I%20Samuel')) {
+        r = '8';
+    }
+    else if (b.startsWith('II%20Samuel')) {
+        r = '9';
+    }
+    else if (b.startsWith('I%20Kings')) {
+        r = '10';
+    }
+    else if (b.startsWith('II%20Kings')) {
+        r = '11';
+    }
+    else if (b.startsWith('Isaiah')) {
+        r = '12';
+    }    
+    else if (b.startsWith('Jeremiah')) {
+        r = '13';
+    }
+    else if (b.startsWith('Ezekiel')) {
+        r = '14';
+    }
+    else if (b.startsWith('Hosea')) {
+        r = '15';
+    }
+    else if (b.startsWith('Amos')) {
+        r = '16';
+    }
+    else if (b.startsWith('Obadiah')) {
+        r = '17';
+    }
+    // יונה
+    else if (b.startsWith('Micah')) {
+        r = '20';
+    }
+    else if (b.startsWith('Zechariah')) {
+        r = '25';
+    } 
+    else if (b.startsWith('Malachi')) {
+        r = '26';
+    } 
+}
 
 if (r && r.trim() !== '') {
     try {
