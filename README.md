@@ -217,6 +217,14 @@ go run main.go שחר true
 
 `pytest tests`
 
+## Rust
+
+`/c/Users/shaha/.cargo/bin/cargo build --verbose`
+
+`./target/debug/hebbible_rs.exe`
+
+`http://localhost:3000/psukim/שחר`
+
 ## More...
 
 - https://projectriff.io
