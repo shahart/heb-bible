@@ -111,15 +111,32 @@ if (b && b.trim() !== '') {
     else if (b.startsWith('Hosea')) {
         r = '15';
     }
-    else if (b.startsWith('Amos')) {
+    else if (b.startsWith('Joel')) {
         r = '16';
     }
-    else if (b.startsWith('Obadiah')) {
+    else if (b.startsWith('Amos')) {
         r = '17';
     }
-    // יונה
+    else if (b.startsWith('Obadiah')) {
+        r = '18';
+    }
+    else if (b.startsWith('Jonah')) {
+        r = '19';
+    }
     else if (b.startsWith('Micah')) {
         r = '20';
+    }
+    else if (b.startsWith('Nachum')) {
+        r = '21';
+    }
+    else if (b.startsWith('Habakkuk')) {
+        r = '22';
+    }
+    else if (b.startsWith('Zephaniah')) {
+        r = '23';
+    }
+    else if (b.startsWith('Haggai')) {
+        r = '24';
     }
     else if (b.startsWith('Zechariah')) {
         r = '25';
