@@ -145,6 +145,7 @@ if (b && b.trim() !== '') {
     else if (b.startsWith('Malachi')) {
         r = '26';
     } 
+    r += "," + b.split(" ")[1] // .split(":")[0];
 }
 
 if (r && r.trim() !== '') {
