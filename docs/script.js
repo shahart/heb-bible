@@ -153,11 +153,11 @@ if (r && r.trim() !== '') {
       let prk = undefined;
       if (r.indexOf(",")>0) {
         book=r.split(",")[0];
-        prk = r;
+        prk = r.split(",")[1];
       }
       document.getElementById("BookSelect").value = book;
-      read.read();
-      // read.read(prk);
+      // read.read();
+      read.read(prk);
     }
     catch (e) {
       console.error(e);
