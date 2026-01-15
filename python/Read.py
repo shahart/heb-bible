@@ -1,4 +1,5 @@
 file_path = "C:\\repos\\heb-bible\\bible-teamim-"
+# https://www.hatanakh.com/tanach/1.0.0
 
 try:
     book = 8
