@@ -1,12 +1,14 @@
+// todo for dev efficiency, ignore cache when url is localhost, or contains .ngrok-free.app
+
 const addResourcesToCache = async (resources) => {
-    const cache = await caches.open('v23');
+    const cache = await caches.open('v24');
     await cache.addAll(resources);
   };
   
   const putInCache = async (request, response) => {
     if (!/^https?:$/i.test(new URL(request.url).protocol)) return;
     if (request.method == 'POST') return; // Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Request method 'POST' is unsupported
-    const cache = await caches.open('v23');
+    const cache = await caches.open('v24');
     await cache.put(request, response);
   };
 

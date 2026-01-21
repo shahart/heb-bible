@@ -73,6 +73,8 @@ class RepoInit {
             ungzipedData = localStorage.getItem('unzip') || "";
             nData = localStorage.getItem('nData') || "";
         }
+        let arr;
+        let narr;
         if (ungzipedData == "") {
             if (!(typeof(pako) != 'undefined')) {
                 alert("No internet!");
@@ -86,12 +88,36 @@ class RepoInit {
             nData = nDataArr == null ? null : new TextDecoder().decode(nDataArr);
             if (typeof (Storage) !== "undefined") {
                 localStorage.setItem('unzip', ungzipedData);
-                localStorage.setItem('nData', nData);
+                try {
+                    localStorage.setItem('nData', nData);
+                } catch (err) {
+                    console.error(err); // QuotaExceededError: The quota has been exceeded
+                    // TODO remove Niqqud items from Tora for example, leave Psalms, .. then setItem again
+                    narr = nData == null ? null : nData.split("\n");
+                    for (var j = 0; j < narr.length-1; ++j) {
+                        let line = narr[j].trim();
+                        let line0 = line.split(",")[0].split(":");
+                        let currBook = line0[0];
+                        if (currBook <= "5") {
+                            narr[j] = line.split(",")[0] + ","; // remove Niqqud text for Torah
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    nData = narr.join("\n");
+                    try {
+                        localStorage.setItem('nData', nData);
+                    } catch (err) {
+                        console.error("2nd try - " + err);
+                    }
+                    // alert(err); 
+                }
             }
         }
-        let arr = ungzipedData.split("\n");
-        let narr = nData == null ? null : nData.split("\n");
-        console.log('Psukim: ', arr.length - 1);
+        arr = ungzipedData.split("\n");
+        narr = nData == null ? null : nData.split("\n");
+        console.log('Psukim: ', narr.length - 1);
         var TOTLETTERS = 1;
         var torTxtLength = 0;
 

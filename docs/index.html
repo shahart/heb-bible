@@ -275,7 +275,7 @@
 <input type="checkbox" id="partGim" name="partGim" value="false">
 <label for="partGim">גם חלק מפסוק</label><br>
 </br>
-<button id="buttonG" enabled>מצא פסוק עם גימטריה זהה</button>
+<button id="buttonG" disabled>מצא פסוק עם גימטריה זהה</button>
 <p id="resultGim" ></p>
 
 </div>
@@ -548,7 +548,7 @@
 </div>
 <script>
     document.getElementById("secretPopup").addEventListener('click', function(e) {
-        alert("Last updated 19/1/26");
+        alert("Last updated 21/1/26");
 
         const deleteCache = async (key) => {
             await caches.delete(key);
