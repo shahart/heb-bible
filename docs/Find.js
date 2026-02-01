@@ -18,7 +18,7 @@ class Find {
     find(repo) {
         // todo? in chosen book
         this.output = ""; 
-        let findStr = document.getElementById("find").value;
+        let findStr = document.getElementById("find").value.replace("-", " ");
         let lucene = document.getElementById("lucene").checked;
         if (lucene && findStr.length >= 2) {
           this.lucene(findStr);

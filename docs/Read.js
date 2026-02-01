@@ -122,7 +122,7 @@ class Read {
                     }
                 }
             }
-            else if (this.repo.getBookNumArr()[i] > bookNum-1 ) {
+            else if (this.repo.getBookNumArr()[i] > bookNum-1 && bookPrk == undefined) { 
                 if (bookeng[bookNum-1] === 'Isaiah')
                     this.output += "<br/>" + this.repo.getVerses()[i-2] + "<br/>";
                 else if (bookeng[bookNum-1] === 'Malachi')
