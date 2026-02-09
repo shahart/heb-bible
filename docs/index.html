@@ -9,7 +9,7 @@
     <!-- HolyClock.com <HEAD> code for shahart.github.io -->
     <script crossorigin="anonymous">/*<![CDATA[*/_holyclock_id="a587140a291af38d7336f360192e7f83";_holyclock_tag='<s'+'cript src\x3d"//www.holyclock.com/holyclock.js?'+Math.floor(+new Date/864E5)+'">\x3c/script>';null!==document.cookie.match(/(?:^|;)\s*_holyclock_qr=\s*\w/)&&null===window.location.hash.match(/#holyclock=qr(?=#|$)/)&&document.write(_holyclock_tag);//]]></script>
     <!-- HolyClock.com <HEAD> code for shahart.github.io -->
-    <link rel="stylesheet" href="mystyle.css">
+    <link rel="stylesheet" href="mystyle.css" media="print" onload="this.media='all'">
     <link rel="icon" href="favicon.ico">
     <meta name="description" content="התנך הממוחשב">
     <style>
@@ -507,7 +507,7 @@
 <br/>
 תהלים ס"ז
 <br/><br/>
-<img id="menora" style="width: 50%; height: auto" loading="lazy" src="./menora.jpg" alt="למנצח בצורת המנורה"/>
+<img id="menora" style="width: 50%; height: auto; min-height: 335px;" loading="lazy" src="./menora.jpg" alt="למנצח בצורת המנורה"/>
 <br/>
 <br/>
     <hr>
@@ -548,7 +548,7 @@
 </div>
 <script>
     document.getElementById("secretPopup").addEventListener('click', function(e) {
-        alert("Last updated 1/2/26");
+        alert("Last updated 9/2/26");
 
         const deleteCache = async (key) => {
             await caches.delete(key);

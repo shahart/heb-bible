@@ -15,6 +15,20 @@ class Find {
       this.repo.lucene(t);
     }
 
+    reportFind(findStr, found) {
+      var xhrAws = new XMLHttpRequest();
+      var xhrAws = new XMLHttpRequest();
+      xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
+      xhrAws.setRequestHeader("Content-Type", "application/json");
+      xhrAws.send(JSON.stringify({ "name": findStr, "extra": "found-" + found, "type": "Find" }));
+      xhrAws.onreadystatechange = function(e) {
+        if ( xhrAws.readyState === 4) {
+          console.debug(xhrAws.status + this.responseText);
+        }
+      }
+      xhrAws.send();
+    }
+
     find(repo) {
         // todo? in chosen book
         this.output = ""; 
@@ -68,17 +82,17 @@ class Find {
         }
         document.getElementById("resultFind").innerHTML += "<br/>" + this.output;
         //
-        var xhrAws = new XMLHttpRequest();
-        xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
-        xhrAws.setRequestHeader("Content-Type", "application/json");
-        xhrAws.send(JSON.stringify({ "name": findStr, "extra": "found-" + found, "type": "Find" }));
-        xhrAws.onreadystatechange = function(e) {
-          if ( xhrAws.readyState === 4) {
-            console.debug(xhrAws.status + this.responseText);
-          }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => {
+            this.reportFind(findStr, found);
+            }, { timeout: 5000 }
+          );
+        } 
+        else {
+          setTimeout(() => {
+            reportFind(findStr, found);}, 0);
         }
-        xhrAws.send();
-    }
+    } 
 
 }
 
