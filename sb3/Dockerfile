@@ -7,6 +7,8 @@ COPY target/hebbible-0.0.1-SNAPSHOT.war  /usr/local/tomcat/webapps/hebBible.war
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
 
+# in case Mvn invocation is done here, COPY .git /usr/src/.git
+
 #FROM jetty:jdk21
 #COPY target/hebbible-0.0.1-SNAPSHOT.war /var/lib/jetty/webapps/root.war
 #EXPOSE 8080
