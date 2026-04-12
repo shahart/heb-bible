@@ -51,14 +51,34 @@ public class RepoTest {
     }
 
     @Disabled
+    // @Test
     void printAll() {
         repo.init();
         // tora - pasuk.bookNo() in 1..5
         // nevi'im - 6..26
         // ktuvim - 27..39
+        int half_1 = 0;
+        int half_2 = 0;
+        int which_half = 1;
         for (int i = 0; i < repo.getTotalVerses(); ++i) {
             Pasuk pasuk = repo.getStore().get(i);
-            System.out.println(pasuk.bookNo() + ":" + pasuk.perek() + ":" + pasuk.pasuk() + "," + pasuk.text());
+            if (pasuk.bookNo() == 6) {
+                break;
+            }
+            if (pasuk.text().contains("דרש דרש")) {
+                which_half = 2;
+                System.out.println(pasuk.text());
+            }
+            else {
+                if (which_half == 1) {
+                    half_1 += pasuk.text().split(" ").length;
+                }
+                else {
+                    half_2 += pasuk.text().split(" ").length;
+                }
+            }
+            // System.out.println(pasuk.bookNo() + ":" + pasuk.perek() + ":" + pasuk.pasuk() + "," + pasuk.text());
         }
+        System.out.println(half_1 + ":" + half_2);
     }
 }
