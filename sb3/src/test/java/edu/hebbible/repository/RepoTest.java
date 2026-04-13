@@ -57,28 +57,66 @@ public class RepoTest {
         // tora - pasuk.bookNo() in 1..5
         // nevi'im - 6..26
         // ktuvim - 27..39
-        int half_1 = 0;
-        int half_2 = 0;
-        int which_half = 1;
+        int half_1_words = 0;
+        int half_2_words = 0;
+        int which_half_words = 1;
+
+        int half_1_letters = 0;
+        int half_2_letters = 0;
+        int which_half_letters = 1;
+
+        int half_1_psks = 0;
+        int half_2_psks = 0;
+        int which_half_psks = 1;
+
         for (int i = 0; i < repo.getTotalVerses(); ++i) {
             Pasuk pasuk = repo.getStore().get(i);
             if (pasuk.bookNo() == 6) {
                 break;
             }
+            // words
             if (pasuk.text().contains("דרש דרש")) {
-                which_half = 2;
-                System.out.println(pasuk.text());
+                which_half_words = 2;
+                System.out.println(pasuk.bookNo() + ":" + pasuk.perek() + ":" + pasuk.pasuk() + "," + pasuk.text());
             }
             else {
-                if (which_half == 1) {
-                    half_1 += pasuk.text().split(" ").length;
+                if (which_half_words == 1) {
+                    half_1_words += pasuk.text().split(" ").length;
                 }
                 else {
-                    half_2 += pasuk.text().split(" ").length;
+                    half_2_words += pasuk.text().split(" ").length;
+                }
+            }
+            // letters
+            if (pasuk.text().contains("הולך על גחון")) {
+                which_half_letters = 2;
+                System.out.println(pasuk.bookNo() + ":" + pasuk.perek() + ":" + pasuk.pasuk() + "," + pasuk.text());
+            }
+            else {
+                if (which_half_letters == 1) {
+                    half_1_letters += pasuk.text().replace(" ", "").length();
+                }
+                else {
+                    half_2_letters += pasuk.text().replace(" ", "").length();
+                }
+            }
+            // psks
+            if (pasuk.text().contains("וישמע משה וייטב בעיניו")) {
+                which_half_psks = 2;
+                System.out.println(pasuk.bookNo() + ":" + pasuk.perek() + ":" + pasuk.pasuk() + "," + pasuk.text());
+            }
+            else {
+                if (which_half_psks == 1) {
+                    half_1_psks += 1;
+                }
+                else {
+                    half_2_psks += 1;
                 }
             }
             // System.out.println(pasuk.bookNo() + ":" + pasuk.perek() + ":" + pasuk.pasuk() + "," + pasuk.text());
         }
-        System.out.println(half_1 + ":" + half_2);
+        System.out.println("words: " + half_1_words + ":" + half_2_words);
+        System.out.println("letters: " + half_1_letters + ":" + half_2_letters);
+        System.out.println("psks: " + half_1_psks + ":" + half_2_psks);
     }
 }
