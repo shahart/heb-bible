@@ -211,11 +211,11 @@ go run main.go שחר true
 
 `source env/bin/activate`
 
-`pip install -r requirements.txt`
+`python3 -m pip install -r requirements.txt`
 
 `python3 app.py`
 
-`pytest tests`
+`python3 -m pytest tests`
 
 ## Rust
 
