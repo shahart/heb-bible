@@ -1,16 +1,13 @@
 import gzip
-import requests
+from pathlib import Path
 
 class HebBible:
         def __init__(self):
                 self.repo = []
-                                
-                # TODO read from remote:
-                # response = requests.get('https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz') 
-                # if response.status_code == 200: 
-                        # file_content = response.text 
 
-                with gzip.open('../bible.txt.gz') as f:
+                data_file = Path(__file__).resolve().parent.parent / 'bible.txt.gz'
+
+                with gzip.open(data_file) as f:
                         for line in f:
                                 lin = line.decode('utf8').strip()
                                 self.repo.append(lin.split(",")[1])
