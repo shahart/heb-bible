@@ -6,14 +6,12 @@ import { Pasuk } from "../Pasuk.js";
 
 describe('Mocha tests', function () {
 
-    it('repo size', function () {
+    it('repo size', async function () {
         console.log(new Date());
-        new RepoInit();
-        // chai.assert.equal('23204', Repo.getSize());
-        setTimeout(function() {
-            console.log(new Date());
-            chai.assert.equal('23204', Repo.getSize()); // TODO work also without dev tools > console
-        }, 10);
+        const repoInit = new RepoInit();
+        await repoInit.ready;
+        console.log(new Date());
+        chai.assert.equal('23204', Repo.getSize()); // TODO work also without dev tools > console
     });
 
     it('read-pasuk', function() {

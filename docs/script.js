@@ -14,7 +14,7 @@ window.onerror = function(message) {
 };
 */
 
-new RepoInit();
+const repoInit = new RepoInit();
 
 let pasuk = new Pasuk(Repo);
 let dilug = new Dilug(Repo);
@@ -148,55 +148,59 @@ if (b && b.trim() !== '') {
     r += "," + b.split(" ")[1] // .split(":")[0];
 }
 
-if (r && r.trim() !== '') {
-    try {
-      let book = r;
-      let prk = undefined;
-      if (r.indexOf(",")>0) {
-        book=r.split(",")[0];
-        prk = r;
-      }
-      document.getElementById("BookSelect").value = book;
-      // read.read();
-      read.read(prk);
+repoInit.ready.then(() => {
+    if (r && r.trim() !== '') {
+        try {
+          let book = r;
+          let prk = undefined;
+          if (r.indexOf(",")>0) {
+            book=r.split(",")[0];
+            prk = r;
+          }
+          document.getElementById("BookSelect").value = book;
+          // read.read();
+          read.read(prk);
+        }
+        catch (e) {
+          console.error(e);
+          alert("מספר הספר אינו חוקי, 39..1" );
+        }
     }
-    catch (e) {
-      console.error(e);
-      alert("מספר הספר אינו חוקי, 39..1" );
+
+    if (p && p.trim() !== '') {
+        document.getElementById("text").value = p;
+        document.getElementById("tab2").checked = true;
+        pasuk.pasuk();
     }
-}
 
-if (p && p.trim() !== '') {
-    document.getElementById("text").value = p;
-    document.getElementById("tab2").checked = true;
-    pasuk.pasuk();
-}
+    if (s && s.trim() !== '') {
+        document.getElementById("dilugTxt").value = s;
+        document.getElementById("tab3").checked = true;
+        const from = params.get("from"); 
+        if (from && from.trim() !== '')
+            document.getElementById("skipMin").value = from;
+        document.getElementById("chars").textContent = s.length + ' '; 
+        dilug.dilug();
+    }
 
-if (s && s.trim() !== '') {
-    document.getElementById("dilugTxt").value = s;
-    document.getElementById("tab3").checked = true;
-    const from = params.get("from"); 
-    if (from && from.trim() !== '')
-        document.getElementById("skipMin").value = from;
-    document.getElementById("chars").textContent = s.length + ' '; 
-    dilug.dilug();
-}
+    if (g && g.trim() !== '') {
+        document.getElementById("gim").value = g;
+        document.getElementById("tab4").checked = true;
+        gematria.gematria();
+    }
 
-if (g && g.trim() !== '') {
-    document.getElementById("gim").value = g;
-    document.getElementById("tab4").checked = true;
-    gematria.gematria();
-}
+    if (q && q.trim() !== '') {
+        document.getElementById("find").value = q.replace("%20", ' ');
+        document.getElementById("tab5").checked = true;
+        find.find();
+    }
 
-if (q && q.trim() !== '') {
-    document.getElementById("find").value = q.replace("%20", ' ');
-    document.getElementById("tab5").checked = true;
-    find.find();
-}
-
-if (l) {
-    document.getElementById("tab6").checked = true;
-}
+    if (l) {
+        document.getElementById("tab6").checked = true;
+    }
+}).catch(err => {
+    console.error(err);
+});
 
 document.getElementById("text").addEventListener('keyup', function(e) {
     if (e.key === "Enter") {

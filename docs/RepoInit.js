@@ -2,21 +2,135 @@ import Repo from "./Repo.js";
 
 class RepoInit {
 
-    loadFile(filePath) {
-        var res = null;
-        try {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", filePath, false);
-            xmlhttp.overrideMimeType('text/plain; charset=x-user-defined');
-            xmlhttp.send();
-            if (xmlhttp.status == 200) {
-                res = xmlhttp.responseText;
+    static DB_NAME = 'heb-bible-cache';
+    static DB_VERSION = 1;
+    static STORE_NAME = 'files';
+
+    constructor() {
+        this.ready = this.init();
+    }
+
+    async openDb() {
+        if (typeof indexedDB === "undefined") {
+            throw new Error("IndexedDB is not available");
+        }
+
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(RepoInit.DB_NAME, RepoInit.DB_VERSION);
+            request.onupgradeneeded = () => {
+                const db = request.result;
+                if (!db.objectStoreNames.contains(RepoInit.STORE_NAME)) {
+                    db.createObjectStore(RepoInit.STORE_NAME);
+                }
+            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async idbGet(key) {
+        const db = await this.openDb();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(RepoInit.STORE_NAME, 'readonly');
+            const store = tx.objectStore(RepoInit.STORE_NAME);
+            const request = store.get(key);
+            request.onsuccess = () => resolve(request.result || "");
+            request.onerror = () => reject(request.error);
+            tx.oncomplete = () => db.close();
+            tx.onerror = () => db.close();
+            tx.onabort = () => db.close();
+        });
+    }
+
+    async idbSet(key, value) {
+        const db = await this.openDb();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(RepoInit.STORE_NAME, 'readwrite');
+            const store = tx.objectStore(RepoInit.STORE_NAME);
+            store.put(value, key);
+            tx.oncomplete = () => {
+                db.close();
+                resolve();
+            };
+            tx.onerror = () => {
+                db.close();
+                reject(tx.error);
+            };
+            tx.onabort = () => {
+                db.close();
+                reject(tx.error);
+            };
+        });
+    }
+
+    async fetchText(candidates) {
+        let lastError = null;
+        for (const filePath of candidates) {
+            try {
+                const response = await fetch(filePath, { cache: 'no-cache' });
+                if (!response.ok) {
+                    lastError = new Error(`Failed to fetch ${filePath}: ${response.status}`);
+                    continue;
+                }
+                return await response.text();
             }
+            catch (err) {
+                lastError = err;
+            }
+        }
+        throw lastError || new Error("Failed to fetch text");
+    }
+
+    async fetchBinary(candidates) {
+        let lastError = null;
+        for (const filePath of candidates) {
+            try {
+                const response = await fetch(filePath, { cache: 'no-cache' });
+                if (!response.ok) {
+                    lastError = new Error(`Failed to fetch ${filePath}: ${response.status}`);
+                    continue;
+                }
+                return new Uint8Array(await response.arrayBuffer());
+            }
+            catch (err) {
+                lastError = err;
+            }
+        }
+        throw lastError || new Error("Failed to fetch binary data");
+    }
+
+    async loadCachedValue(key) {
+        let cachedValue = "";
+        try {
+            cachedValue = await this.idbGet(key);
+        }
+        catch (err) {
+            console.warn(`IndexedDB read failed for ${key}: ${err}`);
+        }
+        if (cachedValue !== "") {
+            return cachedValue;
+        }
+        if (typeof(Storage) !== "undefined") {
+            return localStorage.getItem(key) || "";
+        }
+        return "";
+    }
+
+    async loadCachedData() {
+        return {
+            unzip: await this.loadCachedValue('unzip'),
+            nData: await this.loadCachedValue('nData')
+        };
+    }
+
+    async saveCachedData(unzip, nData) {
+        try {
+            await this.idbSet('unzip', unzip);
+            await this.idbSet('nData', nData);
         }
         catch (err) {
             console.error(err);
         }
-        return res;
     }
 
     errata() {
@@ -57,11 +171,12 @@ class RepoInit {
         xhr.send();
     }
 
-    init() {
+    async init() {
         if (Repo.getInstance().getSize() > 0) {
             console.log("Already init'ed");
             return;
         }
+
         console.log("Init..ing");
         var bookheb = ['תישארב','תומש','ארקיו','רבדמב','םירבד','עשוהי','םיטפוש','א לאומש','ב לאומש', 'א םיכלמ','ב םיכלמ','היעשי','הימרי','לאקזחי','עשוה','לאוי','סומע','הידבוע','הנוי','הכימ','םוחנ','קוקבח','הינפצ', 'יגח','הירכז','יכאלמ','םילהת','ילשמ','בויא','םירישה ריש','תור','הכיא','תלהק','רתסא','לאינד','ארזע','הימחנ', 'א םימיה ירבד','ב םימיה ירבד']; // 39 books
         var startTime = new Date();
@@ -69,54 +184,32 @@ class RepoInit {
         var ungzipedData = "";
         var nData = "";
         const url = new URL(window.location.href);
-        if (url.search !== '?refresh' && typeof (Storage) !== "undefined") {
-            ungzipedData = localStorage.getItem('unzip') || "";
-            nData = localStorage.getItem('nData') || "";
+        if (url.search !== '?refresh') {
+            const cachedData = await this.loadCachedData();
+            ungzipedData = cachedData.unzip;
+            nData = cachedData.nData;
         }
-        let arr;
-        let narr;
-        if (ungzipedData == "") {
-            if (!(typeof(pako) != 'undefined')) {
+
+        if (ungzipedData == "" || nData == "") {
+            if (typeof pako === "undefined") {
                 alert("No internet!");
+                return;
             }
-            // for local testing just use loadFile("bible.txt.gz") and have a copy of the file on the docs folder
-            const gezipedData = this.loadFile("https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz"); 
-            const gzipedDataArray = Uint8Array.from(gezipedData, c => c.charCodeAt(0));
-            ungzipedData = new TextDecoder().decode(pako.ungzip(gzipedDataArray));
-            const nData2 = this.loadFile("https://raw.githubusercontent.com/shahart/heb-bible/master/bible-niqqud.txt"); // todo gzip once content is ready
-            const nDataArr = nData2 == null ? null : Uint8Array.from(nData2, c => c.charCodeAt(0));
-            nData = nDataArr == null ? null : new TextDecoder().decode(nDataArr);
-            if (typeof (Storage) !== "undefined") {
-                localStorage.setItem('unzip', ungzipedData);
-                try {
-                    localStorage.setItem('nData', nData);
-                } catch (err) {
-                    console.error(err); // QuotaExceededError: The quota has been exceeded
-                    // TODO remove Niqqud items from Tora for example, leave Psalms, .. then setItem again
-                    narr = nData == null ? null : nData.split("\n");
-                    for (var j = 0; j < narr.length-1; ++j) {
-                        let line = narr[j].trim();
-                        let line0 = line.split(",")[0].split(":");
-                        let currBook = line0[0];
-                        if (currBook <= "5") {
-                            narr[j] = line.split(",")[0] + ","; // remove Niqqud text for Torah
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    nData = narr.join("\n");
-                    try {
-                        localStorage.setItem('nData', nData);
-                    } catch (err) {
-                        console.error("2nd try - " + err);
-                    }
-                    // alert(err); 
-                }
+
+            if (ungzipedData == "") {
+                const gzipedDataArray = await this.fetchBinary(["./bible.txt.gz", "https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz"]);
+                ungzipedData = new TextDecoder().decode(pako.ungzip(gzipedDataArray));
             }
+
+            if (nData == "") {
+                nData = await this.fetchText(["./bible-niqqud.txt", "https://raw.githubusercontent.com/shahart/heb-bible/master/bible-niqqud.txt"]);
+            }
+
+            await this.saveCachedData(ungzipedData, nData);
         }
-        arr = ungzipedData.split("\n");
-        narr = nData == null ? null : nData.split("\n");
+
+        var arr = ungzipedData.split("\n");
+        var narr = nData == null ? null : nData.split("\n");
         console.log('Psukim: ', narr.length - 1);
         var TOTLETTERS = 1;
         var torTxtLength = 0;
@@ -150,10 +243,6 @@ class RepoInit {
         console.log(Repo.getSize());
         repo.done();
         // this.errata();
-    }
-
-    constructor() {
-        this.init();
     }
 }
 
