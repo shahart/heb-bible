@@ -124,7 +124,7 @@ if (b && b.trim() !== '') {
     else if (b.startsWith('Jonah')) {
         r = '19';
     }
-    else if (b.startsWith('Micah')) {
+    else if (b.startsWith('Micha')) {
         r = '20';
     }
     else if (b.startsWith('Nachum')) {
@@ -145,7 +145,72 @@ if (b && b.trim() !== '') {
     else if (b.startsWith('Malachi')) {
         r = '26';
     } 
-    r += "," + b.split(" ")[1] // .split(":")[0];
+/* eng - no need
+    else if (b.startsWith('יהושע')) {
+        r = '6';
+    }
+    else if (b.startsWith('שופטים')) {
+        r = '7';
+    }
+    else if (b.startsWith('שמואל א')) {
+        r = '8';
+    }
+    else if (b.startsWith('שמואל ב')) {
+        r = '9';
+    }
+    else if (b.startsWith('מלכים א')) {
+        r = '10';
+    }
+    else if (b.startsWith('מלכים ב')) {
+        r = '11';
+    }
+    else if (b.startsWith('ישעיהו')) {
+        r = '12';
+    }    
+    else if (b.startsWith('ירמיהו')) {
+        r = '13';
+    }
+    else if (b.startsWith('יחזקאל')) {
+        r = '14';
+    }
+    else if (b.startsWith('הושע')) {
+        r = '15';
+    }
+    else if (b.startsWith('יואל')) {
+        r = '16';
+    }
+    else if (b.startsWith('עמוס')) {
+        r = '17';
+    }
+    else if (b.startsWith('עובדיה')) {
+        r = '18';
+    }
+    else if (b.startsWith('יונה')) {
+        r = '19';
+    }
+    else if (b.startsWith('מיכה')) {
+        r = '20';
+    }
+    else if (b.startsWith('נחום')) {
+        r = '21';
+    }
+    else if (b.startsWith('חבקוק')) {
+        r = '22';
+    }
+    else if (b.startsWith('צפניה')) {
+        r = '23';
+    }
+    else if (b.startsWith('חגי')) {
+        r = '24';
+    }
+    else if (b.startsWith('זכריה')) {
+        r = '25';
+    } 
+    else if (b.startsWith('מלאכי')) {
+        r = '26';
+    }
+*/
+    r += "," + b.split(" ")[b.split(" ").length-1] // .split(":")[0];
 }
 
 repoInit.ready.then(() => {
