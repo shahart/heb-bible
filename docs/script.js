@@ -255,7 +255,7 @@ repoInit.ready.then(() => {
     }
 
     if (q && q.trim() !== '') {
-        document.getElementById("find").value = q.replace("%20", ' ');
+        document.getElementById("find").value = q.replace(/%20/g, ' ');
         document.getElementById("tab5").checked = true;
         find.find();
     }
