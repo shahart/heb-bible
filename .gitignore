@@ -19,3 +19,5 @@ kotlin/build
 python/env
 python/__pycache__/
 docs/bible-niqqud.txt
+rust/target
+node_modules/

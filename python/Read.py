@@ -1,8 +1,8 @@
-file_path = "C:\\repos\\heb-bible\\bible-teamim-"
+file_path = "../bible-teamim-"
 # https://www.hatanakh.com/tanach/1.0.0
 
 try:
-    book = 8
+    book = 5
     with open(file_path + str(book) + ".txt", 'r', encoding='utf-8') as file:
         prk = 0
         psk = 0

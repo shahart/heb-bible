@@ -219,11 +219,13 @@ go run main.go שחר true
 
 ## Rust
 
-`/c/Users/shaha/.cargo/bin/cargo build --verbose`
+on Mac: `. "$HOME/.cargo/env"`
 
-`./target/debug/hebbible_rs.exe`
+`cargo build --verbose`
 
-`http://localhost:3000/psukim/שחר`
+`./target/debug/hebbible_rs`
+
+`curl http://localhost:3000/psukim/שחר`
 
 ## More...
 

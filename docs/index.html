@@ -73,11 +73,15 @@
             <span class="hero-chip">פסוקים, חיפוש ודילוג</span>
             <span class="hero-chip">מקורות ותפילות</span>
         </div>
+        <div class="font-size-control" role="group" aria-label="גודל טקסט">
+            <span class="font-size-label">גודל טקסט</span>
+            <button class="font-size-button is-active" id="normalFont" type="button" aria-pressed="true">רגיל</button>
+            <button class="font-size-button" id="largeFont" type="button" aria-pressed="false">גדול</button>
+        </div>
     </header>
 <div class="container">
     <div class="tabs-header">
         <p class="tabs-title">בחרו לשונית לפי סוג הפעולה</p>
-        <div class="tiny-note">הממשק נשאר ללא תלות בבאנדלר או ספריה חיצונית חדשה</div>
     </div>
     <input class="tab-toggle" type="radio" name="tab" id="tab1" checked>
     <label class="tab-label" for="tab1">תנ&quot;ך</label>
@@ -536,7 +540,7 @@
 </div>
 <script>
     document.getElementById("secretPopup").addEventListener('click', function(e) {
-        alert("Last updated 8/6/26");
+        alert("Last updated 17/6/26");
 
         const deleteCache = async (key) => {
             await caches.delete(key);

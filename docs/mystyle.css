@@ -100,6 +100,11 @@ textarea {
   position: relative;
 }
 
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
 .hero::after {
   content: "";
   position: absolute;
@@ -138,6 +143,72 @@ textarea {
   border-radius: 999px;
   background: rgba(255, 248, 239, 0.1);
   font-size: 0.92rem;
+}
+
+.font-size-control {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 6px;
+  border: 1px solid rgba(255, 248, 239, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 248, 239, 0.1);
+}
+
+.font-size-label {
+  padding: 0 10px;
+  color: rgba(255, 248, 239, 0.82);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.font-size-button {
+  min-height: 34px;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  color: rgba(255, 248, 239, 0.86);
+  background: transparent;
+  box-shadow: none;
+}
+
+.font-size-button:hover {
+  background: rgba(255, 248, 239, 0.12);
+}
+
+.font-size-button.is-active {
+  color: var(--brand-strong);
+  background: #fff8ef;
+}
+
+body.large-font {
+  font-size: 1.33rem;
+}
+
+body.large-font .hero-subtitle,
+body.large-font .panel-subtitle,
+body.large-font .tabs-title,
+body.large-font .tiny-note {
+  font-size: 1.12rem;
+}
+
+body.large-font .tab-label {
+  min-width: 108px;
+}
+
+body.large-font .content1,
+body.large-font .content2,
+body.large-font .content3,
+body.large-font .content4,
+body.large-font .content5,
+body.large-font .content6,
+body.large-font .result-box {
+  line-height: 1.85;
+}
+
+body.large-font .resource-nav-title {
+  font-size: 1.16rem;
 }
 
 .container {
@@ -475,5 +546,9 @@ button:disabled {
   .tab-label {
     min-width: 82px;
     flex: 1 1 calc(50% - 10px);
+  }
+
+  .font-size-control {
+    border-radius: 18px;
   }
 }

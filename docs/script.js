@@ -22,6 +22,31 @@ let read = new Read(Repo);
 let gematria = new Gematria(Repo);
 let find = new Find(Repo);
 
+const fontSizeKey = "fontSizeMode";
+const normalFontButton = document.getElementById("normalFont");
+const largeFontButton = document.getElementById("largeFont");
+
+function setFontSizeMode(mode) {
+    const useLargeFont = mode === "large";
+
+    document.body.classList.toggle("large-font", useLargeFont);
+    normalFontButton.classList.toggle("is-active", !useLargeFont);
+    largeFontButton.classList.toggle("is-active", useLargeFont);
+    normalFontButton.setAttribute("aria-pressed", String(!useLargeFont));
+    largeFontButton.setAttribute("aria-pressed", String(useLargeFont));
+    localStorage.setItem(fontSizeKey, useLargeFont ? "large" : "normal");
+}
+
+setFontSizeMode(localStorage.getItem(fontSizeKey));
+
+normalFontButton.addEventListener("click", () => {
+    setFontSizeMode("normal");
+});
+
+largeFontButton.addEventListener("click", () => {
+    setFontSizeMode("large");
+});
+
 const params = new URLSearchParams(document.location.search);
 
 let r = params.get("r");
