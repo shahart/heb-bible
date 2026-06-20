@@ -9,13 +9,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Go 1.21.x
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21.x'
+          go-version: '1.26.x'
       - name: Build
         working-directory: ./go/pasuk
         run: go build -v ./...
       - name: Test
-        working-directory: ./go/pasuk
-        run: go test pasuk_test.go
+        working-directory: ./go
+        run: go test ./...
