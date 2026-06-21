@@ -1,19 +1,12 @@
+#include "httplib.h"
 #include "utf8.hpp"
 
 #include <zlib.h>
 
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
 #include <array>
-#include <cerrno>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
+#include <exception>
 #include <iostream>
-#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -22,12 +15,11 @@ namespace {
 
 constexpr int PORT = 3000;
 constexpr size_t MAX_LINE = 8192;
-constexpr size_t BUF_SIZE = 65536;
+constexpr auto JSON = "application/json";
 
-class Bible {
+class BibleRepository {
 public:
-    static Bible load(const char *path) {
-        Bible bible;
+    explicit BibleRepository(const char *path) {
         gzFile file = gzopen(path, "r");
         if (!file) {
             throw std::runtime_error(std::string("Cannot open ") + path);
@@ -35,21 +27,20 @@ public:
 
         std::array<char, MAX_LINE> line{};
         while (gzgets(file, line.data(), static_cast<int>(line.size()))) {
-            char *comma = std::strchr(line.data(), ',');
-            if (!comma) continue;
+            std::string_view row(line.data());
+            const size_t comma = row.find(',');
+            if (comma == std::string_view::npos) continue;
 
-            char *text = comma + 1;
-            size_t len = std::strlen(text);
-            while (len > 0 && (text[len - 1] == '\n' || text[len - 1] == '\r')) {
-                text[--len] = '\0';
+            row.remove_prefix(comma + 1);
+            while (!row.empty() && (row.back() == '\n' || row.back() == '\r')) {
+                row.remove_suffix(1);
             }
 
-            bible.verses_.emplace_back(text);
+            verses_.emplace_back(row);
         }
 
         gzclose(file);
-        std::cerr << bible.verses_.size() << " psukim\n";
-        return bible;
+        std::cerr << verses_.size() << " psukim\n";
     }
 
     size_t count() const {
@@ -63,7 +54,7 @@ public:
         const std::string_view name_last = utf8_last_char(name);
 
         size_t matches = 0;
-        for (const std::string &verse : verses_) {
+        for (const auto &verse : verses_) {
             const std::string_view verse_view(verse);
             if (utf8_char_eq(utf8_first_char(verse_view), name_first) &&
                 utf8_char_eq(utf8_last_char(verse_view), name_last)) {
@@ -78,90 +69,50 @@ private:
     std::vector<std::string> verses_;
 };
 
-int hex_val(char c) {
-    if (c >= '0' && c <= '9') return c - '0';
-    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
-    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
-    return -1;
+std::string count_json(size_t count) {
+    return "{\"count\":" + std::to_string(count) + "}";
 }
 
-std::string url_decode(std::string_view src) {
-    std::string dst;
-    dst.reserve(src.size());
-
-    for (size_t i = 0; i < src.size(); ++i) {
-        if (src[i] == '%' && i + 2 < src.size() &&
-            hex_val(src[i + 1]) >= 0 && hex_val(src[i + 2]) >= 0) {
-            dst.push_back(static_cast<char>((hex_val(src[i + 1]) << 4) | hex_val(src[i + 2])));
-            i += 2;
-        } else if (src[i] == '+') {
-            dst.push_back(' ');
-        } else {
-            dst.push_back(src[i]);
-        }
-    }
-
-    return dst;
+std::string error_json(std::string_view message) {
+    return "{\"error\":\"" + std::string(message) + "\"}";
 }
 
-void write_all(int fd, std::string_view data) {
-    while (!data.empty()) {
-        ssize_t written = write(fd, data.data(), data.size());
-        if (written < 0) {
-            if (errno == EINTR) continue;
+void json(httplib::Response &res, std::string body, int status = 200) {
+    res.status = status;
+    res.set_content(std::move(body), JSON);
+}
+
+void configure_routes(httplib::Server &app, const BibleRepository &bible) {
+    app.Get("/psukim", [&bible](const httplib::Request &, httplib::Response &res) {
+        json(res, count_json(bible.count()));
+    });
+
+    app.Get("/psukim/:name", [&bible](const httplib::Request &req, httplib::Response &res) {
+        const auto name = req.path_params.find("name");
+        if (name == req.path_params.end() || name->second.empty()) {
+            json(res, error_json("missing name"), 400);
             return;
         }
-        data.remove_prefix(static_cast<size_t>(written));
-    }
-}
 
-void handle_client(int client_fd, const Bible &bible) {
-    std::array<char, BUF_SIZE> buf{};
-    ssize_t n = read(client_fd, buf.data(), buf.size() - 1);
-    if (n <= 0) {
-        close(client_fd);
-        return;
-    }
-    buf[static_cast<size_t>(n)] = '\0';
+        json(res, count_json(bible.count_by_name(name->second)));
+    });
 
-    std::istringstream request(std::string(buf.data()));
-    std::string method;
-    std::string path;
-    if (!(request >> method >> path)) {
-        close(client_fd);
-        return;
-    }
+    app.set_error_handler([](const httplib::Request &, httplib::Response &res) {
+        if (res.status == 404) {
+            json(res, error_json("not found"), 404);
+            return;
+        }
+        json(res, error_json("request failed"), res.status);
+    });
 
-    int status = 200;
-    std::string reason = "OK";
-    std::string body;
-
-    if (method != "GET") {
-        status = 405;
-        reason = "Method Not Allowed";
-        body = "{\"error\":\"method not allowed\"}";
-    } else if (path == "/psukim") {
-        body = "{\"count\":" + std::to_string(bible.count()) + "}";
-    } else if (path.rfind("/psukim/", 0) == 0) {
-        const std::string decoded = url_decode(std::string_view(path).substr(8));
-        body = "{\"count\":" + std::to_string(bible.count_by_name(decoded)) + "}";
-    } else {
-        status = 404;
-        reason = "Not Found";
-        body = "{\"error\":\"not found\"}";
-    }
-
-    std::ostringstream response;
-    response << "HTTP/1.1 " << status << ' ' << reason << "\r\n"
-             << "Content-Type: application/json\r\n"
-             << "Content-Length: " << body.size() << "\r\n"
-             << "Connection: close\r\n"
-             << "\r\n"
-             << body;
-
-    const std::string response_text = response.str();
-    write_all(client_fd, response_text);
-    close(client_fd);
+    app.set_exception_handler([](const httplib::Request &, httplib::Response &res, std::exception_ptr ep) {
+        try {
+            if (ep) std::rethrow_exception(ep);
+        } catch (const std::exception &e) {
+            std::cerr << "Request failed: " << e.what() << '\n';
+        }
+        json(res, error_json("internal server error"), 500);
+    });
 }
 
 } // namespace
@@ -169,53 +120,20 @@ void handle_client(int client_fd, const Bible &bible) {
 int main(int argc, char **argv) {
     const char *data_path = argc > 1 ? argv[1] : "../bible.txt.gz";
 
-    Bible bible;
     try {
-        bible = Bible::load(data_path);
+        BibleRepository bible(data_path);
+        httplib::Server app;
+        configure_routes(app, bible);
+
+        std::cout << "Listening on http://0.0.0.0:" << PORT << '\n';
+        if (!app.listen("0.0.0.0", PORT)) {
+            std::cerr << "Failed to listen on port " << PORT << '\n';
+            return 1;
+        }
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         return 1;
     }
 
-    int server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_fd < 0) {
-        perror("socket");
-        return 1;
-    }
-
-    int opt = 1;
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-
-    sockaddr_in addr{};
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(PORT);
-
-    if (bind(server_fd, reinterpret_cast<sockaddr *>(&addr), sizeof(addr)) < 0) {
-        perror("bind");
-        close(server_fd);
-        return 1;
-    }
-
-    if (listen(server_fd, 10) < 0) {
-        perror("listen");
-        close(server_fd);
-        return 1;
-    }
-
-    std::cout << "Listening on http://0.0.0.0:" << PORT << '\n';
-
-    while (true) {
-        sockaddr_in client_addr{};
-        socklen_t client_len = sizeof(client_addr);
-        int client_fd = accept(server_fd, reinterpret_cast<sockaddr *>(&client_addr), &client_len);
-        if (client_fd < 0) {
-            perror("accept");
-            continue;
-        }
-        handle_client(client_fd, bible);
-    }
-
-    close(server_fd);
     return 0;
 }

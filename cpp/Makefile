@@ -1,12 +1,12 @@
 .PHONY: all clean run test
 
 CXX = c++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -pthread
 LDLIBS = -lz
 
 all: heb-bible
 
-heb-bible: main.cpp utf8.cpp utf8.hpp
+heb-bible: main.cpp utf8.cpp utf8.hpp httplib.h
 	$(CXX) $(CXXFLAGS) -o $@ main.cpp utf8.cpp $(LDLIBS)
 
 test_utf8: test_utf8.cpp utf8.cpp utf8.hpp
