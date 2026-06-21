@@ -1,0 +1,25 @@
+name: C
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Compile App
+      run:  |
+        cd c
+        make
+
+    - name: Run Tests
+      run:  |
+        cd c
+        make test
