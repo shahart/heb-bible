@@ -152,6 +152,9 @@ if (b && b.trim() !== '') {
     else if (b.startsWith('Micha')) {
         r = '20';
     }
+    else if (b.startsWith('Micah')) {
+        r = '20';
+    }
     else if (b.startsWith('Nachum')) {
         r = '21';
     }
