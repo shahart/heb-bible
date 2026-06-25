@@ -227,6 +227,14 @@ on Mac: `. "$HOME/.cargo/env"`
 
 `curl http://localhost:3000/psukim/שחר`
 
+## Kotlin
+
+`gradle bootRun`
+
+curl http://localhost:8080/psukim
+
+curl http://localhost:8080/psukim/שחר
+
 ## More...
 
 - https://projectriff.io
