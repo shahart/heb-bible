@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse
 from heb_bible import HebBible
 import uvicorn
@@ -14,6 +14,12 @@ def total_psukim():
 @app.get('/psukim/{name}')
 def psukim_by_name(name):
     result = heb_bible.psukim_by_name(name)
+    return JSONResponse(content=result)
+
+@app.post('/dilugim')
+async def dilugim(request: Request, skip_min: int = Query(1), skip_max: int = Query(100)):
+    body = await request.body()
+    result = heb_bible.dilugim(body.decode('utf-8'), skip_min, skip_max)
     return JSONResponse(content=result)
 
 if __name__ == '__main__':

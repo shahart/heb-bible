@@ -17,3 +17,9 @@ def test_psukim_by_name(client):
     response = client.get("/psukim/שחר")
     assert response.status_code == 200
     assert response.json() == 25
+
+
+def test_dilugim(client):
+    response = client.post("/dilugim?skip_min=5784&skip_max=5784", content="חותים")
+    assert response.status_code == 200
+    assert response.json() >= 1
