@@ -1,0 +1,12 @@
+{
+  "name": "heb-bible-node",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node.js port of the heb-bible Go API",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "node --test"
+  }
+}

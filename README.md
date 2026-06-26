@@ -205,6 +205,10 @@ go build main.go
 
 go run main.go שחר true
 
+## Node-js
+
+node main.js
+
 ## Python
 
 `python3 -m venv env`
