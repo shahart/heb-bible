@@ -1,12 +1,11 @@
 package edu.hebbible;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.microsoft.playwright.*;
 //import org.springframework.test.context.junit.jupiter.EnabledIf;
-
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 // @EnabledIf(expression = "#{systemProperties['os.name'].toLowerCase().startsWith('windows')}", reason = "this os.name is not Linux, which got DevToolsActivePort file doesn't exist")
 class PlayWrightIntegrationTest { // todo with Profile so it will work on my local, but not on github server
@@ -28,8 +27,11 @@ class PlayWrightIntegrationTest { // todo with Profile so it will work on my loc
     }
 
     @Test
-    void psukimTotal() {
-        assertThat(page.locator(".count")).containsText("23204");
+    void anonymousUserSeesLoginFlow() {
+        String url = page.url();
+        Assertions.assertTrue(
+                url.contains("/login") || url.contains("/oauth2/authorization/google") || url.contains("accounts.google.com"),
+                url);
     }
 
     @Test
@@ -43,4 +45,3 @@ class PlayWrightIntegrationTest { // todo with Profile so it will work on my loc
     }
 
 }
-

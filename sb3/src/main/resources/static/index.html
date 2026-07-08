@@ -8,8 +8,29 @@
 <!--integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="-->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" onerror="alert('No internet!')"></script>
 <script>
+    function csrfToken() {
+        var match = document.cookie.match(new RegExp('(^| )XSRF-TOKEN=([^;]+)'));
+        return match ? decodeURIComponent(match[2]) : null;
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            var token = csrfToken();
+            if (token && !/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+                xhr.setRequestHeader('X-XSRF-TOKEN', token);
+            }
+        }
+    });
+
     $.ajax({
-        url: "http://localhost:8080/psukim",
+        url: "/user",
+        success: function(data) {
+            $('.user').text('Signed in as ' + (data.email || data.name));
+        }
+    });
+
+    $.ajax({
+        url: "/psukim",
         success: function(data) {
             console.debug(data);
             $('.count').append(data);
@@ -18,7 +39,7 @@
 
     function pasuk() {
         $.post({
-            url: "http://localhost:8080/psukim",
+            url: "/psukim",
             success: function(data) {
                 console.debug(data.length);
                 $('.result').append('Psukim per name: ' + data.length);
@@ -35,7 +56,7 @@
         var skipMin = Math.ceil(document.getElementById("skipMin").value);
         var skipMax = Math.ceil(document.getElementById("skipMax").value);
         $.post({
-            url: "http://localhost:8080/dilugim?skipMin=" + skipMin + "&skipMax=" + skipMax,
+            url: "/dilugim?skipMin=" + skipMin + "&skipMax=" + skipMax,
             success: function(data) {
                 console.debug(data);
                 $('.dilugimResult').append('Dilugim per name: ' + data);
@@ -47,8 +68,21 @@
             data: document.getElementById('dilugimTxt').value
         });
     }
+
+    function logout() {
+        $.post({
+            url: "/logout",
+            complete: function() {
+                window.location = "/";
+            }
+        });
+    }
 </script>
-<a href="http://localhost:8080/swagger-ui/index.html">Swagger</a>
+<div>
+    <span class="user"></span>
+    <button onclick="logout()">Logout</button>
+</div>
+<a href="/swagger-ui/index.html">Swagger</a>
 <div>
     <p class="count">Total Count is </p>
 </div>

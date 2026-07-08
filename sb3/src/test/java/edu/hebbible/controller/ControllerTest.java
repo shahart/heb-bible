@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,7 +35,7 @@ public class ControllerTest {
     void getPsukim() throws Exception {
         Mockito.when(service.repoSize()).thenReturn(18);
 
-        mvc.perform(get("/psukim")).
+        mvc.perform(get("/psukim").with(oauth2Login())).
                 andExpect(status().isOk()).
                 andExpect(content().string("18")).
                 andDo(print());
@@ -45,12 +47,30 @@ public class ControllerTest {
         Mockito.when(service.psukim(anyString(), anyBoolean(), anyBoolean())).thenReturn(res);
 
         mvc.perform(post("/psukim").
+                        with(oauth2Login()).
+                        with(csrf()).
                         contentType(MediaType.APPLICATION_JSON).
                         content("שחר")).
                 andExpect(status().isOk()).
                 andExpect(content().string(StringContains.containsString(
                         Integer.toString(res.getFirst().pasuk())))).
                 andDo(print());
+    }
+
+    @Test
+    void anonymousRequestsAreRedirectedToLogin() throws Exception {
+        mvc.perform(get("/psukim")).
+                andExpect(status().is3xxRedirection()).
+                andExpect(redirectedUrlPattern("**/oauth2/authorization/google"));
+    }
+
+    @Test
+    void postPsukimRequiresCsrf() throws Exception {
+        mvc.perform(post("/psukim").
+                        with(oauth2Login()).
+                        contentType(MediaType.APPLICATION_JSON).
+                        content("שחר")).
+                andExpect(status().isForbidden());
     }
 
 }
