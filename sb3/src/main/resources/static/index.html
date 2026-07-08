@@ -22,34 +22,41 @@
         }
     });
 
-    $.ajax({
-        url: "/user",
-        success: function(data) {
-            $('.user').text('Signed in as ' + (data.email || data.name));
-        }
-    });
+    $(function() {
+        $.ajax({
+            url: "/user",
+            success: function(data) {
+                $('.user').text('Signed in as ' + (data.email || data.name));
+            }
+        });
 
-    $.ajax({
-        url: "/psukim",
-        success: function(data) {
-            console.debug(data);
-            $('.count').append(data);
-        }
+        $.ajax({
+            url: "/psukim",
+            success: function(data) {
+                console.debug(data);
+                $('.count').append(data);
+            }
+        });
     });
 
     function pasuk() {
-        $.post({
-            url: "/psukim",
-            success: function(data) {
-                console.debug(data.length);
-                $('.result').append('Psukim per name: ' + data.length);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus + " Error: " + errorThrown);
-            },
-            data: document.getElementById('text').value,
-            contentType : 'text/plain'
-        });
+        if (document.getElementById('text').value.length <= 1) {
+            alert('no input');
+        }
+        else {
+            $.post({
+                url: "/psukim",
+                success: function (data) {
+                    console.debug(data.length);
+                    $('.result').append('Psukim per name: ' + data.length); // TODO replace
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Status: " + textStatus + " Error: " + errorThrown);
+                },
+                data: document.getElementById('text').value,
+                contentType: 'text/plain'
+            });
+        }
     }
 
     function dilugim() {
@@ -68,19 +75,12 @@
             data: document.getElementById('dilugimTxt').value
         });
     }
-
-    function logout() {
-        $.post({
-            url: "/logout",
-            complete: function() {
-                window.location = "/";
-            }
-        });
-    }
 </script>
 <div>
     <span class="user"></span>
-    <button onclick="logout()">Logout</button>
+    <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
 </div>
 <a href="/swagger-ui/index.html">Swagger</a>
 <div>

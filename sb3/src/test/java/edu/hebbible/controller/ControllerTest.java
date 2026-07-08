@@ -1,5 +1,6 @@
 package edu.hebbible.controller;
 
+import edu.hebbible.config.SecurityConfig;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.service.Svc;
 import org.hamcrest.Matcher;
@@ -9,13 +10,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(Controller.class)
+@Import(SecurityConfig.class)
 public class ControllerTest {
 
     @MockBean
@@ -48,7 +51,6 @@ public class ControllerTest {
 
         mvc.perform(post("/psukim").
                         with(oauth2Login()).
-                        with(csrf()).
                         contentType(MediaType.APPLICATION_JSON).
                         content("שחר")).
                 andExpect(status().isOk()).
@@ -65,12 +67,45 @@ public class ControllerTest {
     }
 
     @Test
-    void postPsukimRequiresCsrf() throws Exception {
+    void anonymousPostRequestsAreRedirectedToLogin() throws Exception {
         mvc.perform(post("/psukim").
-                        with(oauth2Login()).
                         contentType(MediaType.APPLICATION_JSON).
                         content("שחר")).
-                andExpect(status().isForbidden());
+                andExpect(status().is3xxRedirection()).
+                andExpect(redirectedUrlPattern("**/oauth2/authorization/google"));
+    }
+
+    @Test
+    void logoutRedirectsToLoggedOutLoginPage() throws Exception {
+        mvc.perform(post("/logout").with(oauth2Login())).
+                andExpect(status().is3xxRedirection()).
+                andExpect(redirectedUrl("/logged-out.html")).
+                andExpect(cookie().maxAge("JSESSIONID", 0)).
+                andExpect(cookie().maxAge("XSRF-TOKEN", 0));
+    }
+
+    @Test
+    void loggedOutSessionCannotUsePsukim() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+
+        mvc.perform(get("/psukim").
+                        session(session).
+                        with(oauth2Login())).
+                andExpect(status().isOk());
+
+        mvc.perform(post("/logout").session(session)).
+                andExpect(status().is3xxRedirection()).
+                andExpect(redirectedUrl("/logged-out.html"));
+
+        mvc.perform(get("/psukim").session(session)).
+                andExpect(status().is3xxRedirection()).
+                andExpect(redirectedUrlPattern("**/oauth2/authorization/google"));
+    }
+
+    @Test
+    void loggedOutPageIsPublic() throws Exception {
+        mvc.perform(get("/logged-out.html")).
+                andExpect(status().isOk());
     }
 
 }
