@@ -8,5 +8,9 @@
   "scripts": {
     "start": "node main.js",
     "test": "node --test"
+  },
+  "dependencies": {
+    "multer": ">=2.2.0",
+    "tmp": ">=0.2.6"
   }
 }
