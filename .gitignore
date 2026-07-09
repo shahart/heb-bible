@@ -22,3 +22,5 @@ docs/bible-niqqud.txt
 rust/target
 node_modules/
 typescript/dist/
+
+sb3/src/main/resources/application.properties

@@ -92,6 +92,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.50.2.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-dynamodb</artifactId>
         </dependency>

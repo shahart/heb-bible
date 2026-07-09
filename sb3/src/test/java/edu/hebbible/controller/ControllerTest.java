@@ -3,7 +3,6 @@ package edu.hebbible.controller;
 import edu.hebbible.config.SecurityConfig;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.service.Svc;
-import org.hamcrest.Matcher;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -38,10 +37,13 @@ public class ControllerTest {
     void getPsukim() throws Exception {
         Mockito.when(service.repoSize()).thenReturn(18);
 
-        mvc.perform(get("/psukim").with(oauth2Login())).
+        mvc.perform(get("/psukim").with(oauth2Login().attributes(attributes ->
+                        attributes.put("email", "test@example.com")))).
                 andExpect(status().isOk()).
                 andExpect(content().string("18")).
                 andDo(print());
+
+        Mockito.verify(service, Mockito.never()).recordPsukimUsage(anyString());
     }
 
     @Test
@@ -50,13 +52,16 @@ public class ControllerTest {
         Mockito.when(service.psukim(anyString(), anyBoolean(), anyBoolean())).thenReturn(res);
 
         mvc.perform(post("/psukim").
-                        with(oauth2Login()).
+                        with(oauth2Login().attributes(attributes ->
+                                attributes.put("email", "test@example.com"))).
                         contentType(MediaType.APPLICATION_JSON).
                         content("שחר")).
                 andExpect(status().isOk()).
                 andExpect(content().string(StringContains.containsString(
                         Integer.toString(res.getFirst().pasuk())))).
                 andDo(print());
+
+        Mockito.verify(service).recordPsukimUsage("test@example.com");
     }
 
     @Test

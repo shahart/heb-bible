@@ -1,8 +1,8 @@
 package edu.hebbible.service.impl;
 
 import edu.gematria.Calc;
-import edu.hebbible.model.Psukim;
 import edu.hebbible.model.Pasuk;
+import edu.hebbible.persistence.UsageRepository;
 import edu.hebbible.repository.Repo;
 import edu.hebbible.service.Svc;
 import jakarta.annotation.PostConstruct;
@@ -32,6 +32,9 @@ public class ServiceImpl implements Svc {
 
     @Autowired
     protected Repo repo;
+
+    @Autowired
+    private UsageRepository usageRepository;
 
     DynamoDbClient dynamodb;
 
@@ -67,7 +70,7 @@ public class ServiceImpl implements Svc {
 
     @Override
     public List<Pasuk> psukim(String name, boolean containsName, boolean withDups) {
-        putItemInTable(name);
+        // putItemInTable(name);
 
         if (withDups) {
             log.warn("withDups: on");
@@ -103,6 +106,13 @@ public class ServiceImpl implements Svc {
     public int repoSize() {
         initRepo();
         return repo.getTotalVerses();
+    }
+
+    @Override
+    public int recordPsukimUsage(String userId) {
+        int count = usageRepository.recordInvocation(userId, "psukim");
+        log.info("/psukim user={} count={}", userId, count);
+        return count;
     }
 
     public void putItemInTable(String name) {

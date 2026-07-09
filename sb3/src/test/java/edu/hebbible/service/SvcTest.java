@@ -1,13 +1,15 @@
 package edu.hebbible.service;
 
 import edu.hebbible.model.Pasuk;
+import edu.hebbible.persistence.UsageRepository;
 import edu.hebbible.repository.Repo;
 //import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,9 @@ public class SvcTest {
     @Autowired
     private Svc svc;
 
+    @MockBean
+    private UsageRepository usageRepository;
+
 //    @MockBean
 //    DynamoDbTemplate dynamoDbTemplate;
 
@@ -28,6 +33,16 @@ public class SvcTest {
     void psukim() {
         List<Pasuk> actual = svc.psukim("שחר", false, false);
         assertEquals(25, actual.size());
+    }
+
+    @Test
+    void recordPsukimUsage() {
+        Mockito.when(usageRepository.recordInvocation("test@example.com", "psukim")).thenReturn(3);
+
+        int actual = svc.recordPsukimUsage("test@example.com");
+
+        assertEquals(3, actual);
+        Mockito.verify(usageRepository).recordInvocation("test@example.com", "psukim");
     }
 
     @Disabled

@@ -10,6 +10,8 @@ public interface Svc {
 
     int repoSize();
 
+    int recordPsukimUsage(String userId);
+
     int dilugim(String name, int skipMin, int skipMan);
 
 }
