@@ -48,7 +48,7 @@
                 url: "/psukim",
                 success: function (data) {
                     console.debug(data.length);
-                    $('.result').append('Psukim per name: ' + data.length); // TODO replace
+                    $('.result').html('Psukim per name: ' + data.length);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Status: " + textStatus + " Error: " + errorThrown);

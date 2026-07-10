@@ -115,6 +115,11 @@ $ java -jar hebbible-0.0.1-SNAPSHOT.war
 
 OWASP security vuln.: mvn dependency-check:check
 
+PosgreSql, Flyway.
+
+FATAL: role "hebbible" does not exist --> create user hebbible createdb createrole;
+FATAL: database "hebbible" does not exist -> create database hebbible;
+
 ##### https://github.com/spring-projects-experimental/spring-boot-thin-launcher
 
 `java -Dthin.debug=true -jar hebbible-0.0.1-SNAPSHOT.jar`

@@ -1,7 +1,10 @@
 package edu.hebbible.persistence.sqlite;
 
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -20,8 +23,7 @@ class SqliteUsageRepositoryTest {
     @Test
     void recordInvocationReturnsCountPerUserAndEndpoint() {
         SqliteUsageRepository repository =
-                new SqliteUsageRepository(tempDir.resolve("usage.db").toString());
-        repository.init();
+                sqliteUsageRepository(tempDir.resolve("usage.db"));
 
         assertEquals(1, repository.recordInvocation("one@example.com", "psukim"));
         assertEquals(2, repository.recordInvocation("one@example.com", "psukim"));
@@ -32,8 +34,7 @@ class SqliteUsageRepositoryTest {
     @Test
     void recordInvocationStoresOneRowWithCountAndLastUsedDate() throws Exception {
         Path db = tempDir.resolve("usage.db");
-        SqliteUsageRepository repository = new SqliteUsageRepository(db.toString());
-        repository.init();
+        SqliteUsageRepository repository = sqliteUsageRepository(db);
 
         repository.recordInvocation("one@example.com", "psukim");
         repository.recordInvocation("one@example.com", "psukim");
@@ -50,5 +51,15 @@ class SqliteUsageRepositoryTest {
             assertEquals(2, resultSet.getInt(2));
             assertNotNull(resultSet.getString(3));
         }
+    }
+
+    private SqliteUsageRepository sqliteUsageRepository(Path db) {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource("jdbc:sqlite:" + db);
+        Flyway.configure()
+                .dataSource(dataSource)
+                .locations("classpath:db/migration/sqlite")
+                .load()
+                .migrate();
+        return new SqliteUsageRepository(new JdbcTemplate(dataSource));
     }
 }
