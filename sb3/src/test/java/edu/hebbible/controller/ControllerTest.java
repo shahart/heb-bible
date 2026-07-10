@@ -7,11 +7,15 @@ import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.security.autoconfigure.web.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.security.autoconfigure.web.servlet.ServletWebSecurityAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -25,9 +29,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(Controller.class)
 @Import(SecurityConfig.class)
+@ImportAutoConfiguration({
+        SecurityAutoConfiguration.class,
+        SecurityFilterAutoConfiguration.class,
+        ServletWebSecurityAutoConfiguration.class
+})
 public class ControllerTest {
 
-    @MockBean
+    @MockitoBean
     Svc service;
 
     @Autowired
@@ -68,7 +77,7 @@ public class ControllerTest {
     void anonymousRequestsAreRedirectedToLogin() throws Exception {
         mvc.perform(get("/psukim")).
                 andExpect(status().is3xxRedirection()).
-                andExpect(redirectedUrlPattern("**/oauth2/authorization/google"));
+                andExpect(redirectedUrl("/oauth2/authorization/google"));
     }
 
     @Test
@@ -77,7 +86,7 @@ public class ControllerTest {
                         contentType(MediaType.APPLICATION_JSON).
                         content("שחר")).
                 andExpect(status().is3xxRedirection()).
-                andExpect(redirectedUrlPattern("**/oauth2/authorization/google"));
+                andExpect(redirectedUrl("/oauth2/authorization/google"));
     }
 
     @Test
@@ -104,7 +113,7 @@ public class ControllerTest {
 
         mvc.perform(get("/psukim").session(session)).
                 andExpect(status().is3xxRedirection()).
-                andExpect(redirectedUrlPattern("**/oauth2/authorization/google"));
+                andExpect(redirectedUrl("/oauth2/authorization/google"));
     }
 
     @Test

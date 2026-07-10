@@ -24,7 +24,16 @@ public class SecurityConfig {
                                             ClientRegistrationRepository clientRegistrationRepository) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/error", "/favicon.ico", "/logged-out.html").permitAll()
+                        .requestMatchers(
+                                "/error",
+                                "/favicon.ico",
+                                "/logged-out.html",
+                                // SWAGGER
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization -> authorization
