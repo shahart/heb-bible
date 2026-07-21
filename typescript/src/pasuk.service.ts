@@ -7,6 +7,7 @@ export class PasukService {
   private encoder = new TextEncoder();
 
   async onModuleInit() {
+    console.debug('Pasuk Service loaded');
     this.verses = await loadBible();
   }
 
