@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-create-endpoint-usage" author="hebbible">
+        <sql>
+            CREATE TABLE IF NOT EXISTS endpoint_usage (
+                user_id TEXT NOT NULL,
+                endpoint TEXT NOT NULL,
+                invocation_count INTEGER NOT NULL,
+                last_used_date TEXT NOT NULL,
+                PRIMARY KEY (user_id, endpoint)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
