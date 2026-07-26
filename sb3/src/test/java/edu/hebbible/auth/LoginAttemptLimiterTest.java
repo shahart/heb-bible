@@ -19,7 +19,7 @@ class LoginAttemptLimiterTest {
     @Test
     void returnsTheAtomicRedisScriptDecision() {
         StringRedisTemplate redis = mock(StringRedisTemplate.class);
-        LoginAttemptLimiter limiter = new LoginAttemptLimiter(redis);
+        LoginAttemptLimiter limiter = new RedisLoginAttemptLimiter(redis);
         when(redis.execute(any(RedisScript.class), anyList(), anyString(), anyString(), anyString()))
                 .thenReturn(1L, 0L);
 
@@ -30,7 +30,7 @@ class LoginAttemptLimiterTest {
     @Test
     void successfulLoginDeletesTheNormalizedHashedAccountKey() {
         StringRedisTemplate redis = mock(StringRedisTemplate.class);
-        LoginAttemptLimiter limiter = new LoginAttemptLimiter(redis);
+        LoginAttemptLimiter limiter = new RedisLoginAttemptLimiter(redis);
         when(redis.execute(any(RedisScript.class), anyList(), anyString(), anyString(), anyString()))
                 .thenReturn(1L);
 
