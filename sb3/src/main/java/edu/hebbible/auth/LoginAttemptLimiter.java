@@ -1,16 +1,17 @@
 package edu.hebbible.auth;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
-import java.time.Clock;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.HexFormat;
+import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.UUID;
 
 @Component
 class LoginAttemptLimiter {
@@ -18,82 +19,54 @@ class LoginAttemptLimiter {
     static final int MAX_ATTEMPTS = 3;
     static final Duration ATTEMPT_WINDOW = Duration.ofMinutes(5);
 
-    private final ConcurrentMap<String, AttemptWindow> attemptsByEmail = new ConcurrentHashMap<>();
-    private final PriorityBlockingQueue<Expiry> expiries = new PriorityBlockingQueue<>();
-    private final Clock clock;
+    private static final String KEY_PREFIX = "hebbible:auth:login-attempts:";
+    private static final RedisScript<Long> ACQUIRE_ATTEMPT = RedisScript.of("""
+            local redis_time = redis.call('TIME')
+            local now = redis_time[1] * 1000 + math.floor(redis_time[2] / 1000)
+            local cutoff = now - tonumber(ARGV[1])
 
-    LoginAttemptLimiter() {
-        this(Clock.systemUTC());
-    }
+            redis.call('ZREMRANGEBYSCORE', KEYS[1], '-inf', cutoff)
+            if redis.call('ZCARD', KEYS[1]) >= tonumber(ARGV[2]) then
+                return 0
+            end
 
-    LoginAttemptLimiter(Clock clock) {
-        this.clock = clock;
+            redis.call('ZADD', KEYS[1], now, ARGV[3])
+            redis.call('PEXPIRE', KEYS[1], ARGV[1])
+            return 1
+            """, Long.class);
+
+    private final StringRedisTemplate redis;
+
+    LoginAttemptLimiter(StringRedisTemplate redis) {
+        this.redis = redis;
     }
 
     boolean tryAcquire(String email) {
-        Instant now = clock.instant();
-        removeExpiredAttempts(now);
-        String key = normalize(email);
-        boolean[] acquired = new boolean[1];
-        attemptsByEmail.compute(key, (ignored, attempts) -> {
-            AttemptWindow current = attempts == null ? new AttemptWindow() : attempts;
-            acquired[0] = current.tryAcquire(now);
-            return current;
-        });
-        if (!acquired[0]) {
-            return false;
-        }
-
-        expiries.add(new Expiry(key, now.plus(ATTEMPT_WINDOW)));
-        return true;
+        Long result = redis.execute(
+                ACQUIRE_ATTEMPT,
+                List.of(key(email)),
+                Long.toString(ATTEMPT_WINDOW.toMillis()),
+                Integer.toString(MAX_ATTEMPTS),
+                UUID.randomUUID().toString());
+        return Long.valueOf(1).equals(result);
     }
 
     void recordSuccess(String email) {
-        attemptsByEmail.remove(normalize(email));
+        redis.delete(key(email));
     }
 
-    private String normalize(String email) {
-        return email.trim().toLowerCase(Locale.ROOT);
+    private String key(String email) {
+        String normalizedEmail = email.trim().toLowerCase(Locale.ROOT);
+        return KEY_PREFIX + sha256(normalizedEmail);
     }
 
-    private void removeExpiredAttempts(Instant now) {
-        Expiry next;
-        while ((next = expiries.peek()) != null && !next.expiresAt().isAfter(now)) {
-            if (!expiries.remove(next)) {
-                continue;
-            }
-            attemptsByEmail.computeIfPresent(next.email(),
-                    (ignored, attempts) -> attempts.removeExpired(now) ? null : attempts);
-        }
-    }
-
-    private static final class AttemptWindow {
-
-        private final Deque<Instant> attempts = new ArrayDeque<>();
-
-        synchronized boolean tryAcquire(Instant now) {
-            removeExpired(now);
-            if (attempts.size() >= MAX_ATTEMPTS) {
-                return false;
-            }
-            attempts.addLast(now);
-            return true;
-        }
-
-        synchronized boolean removeExpired(Instant now) {
-            Instant cutoff = now.minus(ATTEMPT_WINDOW);
-            while (!attempts.isEmpty() && !attempts.getFirst().isAfter(cutoff)) {
-                attempts.removeFirst();
-            }
-            return attempts.isEmpty();
-        }
-    }
-
-    private record Expiry(String email, Instant expiresAt) implements Comparable<Expiry> {
-
-        @Override
-        public int compareTo(Expiry other) {
-            return expiresAt.compareTo(other.expiresAt);
+    private String sha256(String value) {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256")
+                    .digest(value.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(digest);
+        } catch (NoSuchAlgorithmException exception) {
+            throw new IllegalStateException("SHA-256 is not available", exception);
         }
     }
 }

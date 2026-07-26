@@ -1,15 +1,27 @@
 package edu.hebbible.controller;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.Matchers.matchesPattern;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,6 +33,24 @@ class AuthControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockitoBean
+    private StringRedisTemplate redis;
+
+    @BeforeEach
+    void configureLoginAttemptStorage() {
+        Map<String, AtomicInteger> attempts = new ConcurrentHashMap<>();
+        Mockito.when(redis.execute(any(RedisScript.class), anyList(),
+                        anyString(), anyString(), anyString()))
+                .thenAnswer(invocation -> {
+                    List<String> keys = invocation.getArgument(1);
+                    int count = attempts.computeIfAbsent(keys.getFirst(), ignored -> new AtomicInteger())
+                            .incrementAndGet();
+                    return count <= 3 ? 1L : 0L;
+                });
+        Mockito.when(redis.delete(anyString()))
+                .thenAnswer(invocation -> attempts.remove(invocation.getArgument(0)) != null);
+    }
 
     @Test
     void signupReturnsJwtAndBearerTokenAuthenticatesUserEndpoint() throws Exception {

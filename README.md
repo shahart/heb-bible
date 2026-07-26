@@ -111,7 +111,7 @@ Init'ed with Spring Initializ: https://start.spring.io/
 
 $ java -jar hebbible-0.0.1-SNAPSHOT.war
 
-`mvn --file sb3/pom.xml spring-boot:run`
+`mvn --file sb3/pom.xml spring-boot:run -Dspring-boot.run.profiles=postgres,liquibase`
 
 OWASP security vuln.: mvn dependency-check:check
 

@@ -1,84 +1,43 @@
 package edu.hebbible.auth;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class LoginAttemptLimiterTest {
 
     @Test
-    void allowsAttemptsAgainAfterFiveMinutes() {
-        Instant start = Instant.parse("2026-07-26T10:00:00Z");
-        MutableClock clock = new MutableClock(start);
-        LoginAttemptLimiter limiter = new LoginAttemptLimiter(clock);
+    void returnsTheAtomicRedisScriptDecision() {
+        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        LoginAttemptLimiter limiter = new LoginAttemptLimiter(redis);
+        when(redis.execute(any(RedisScript.class), anyList(), anyString(), anyString(), anyString()))
+                .thenReturn(1L, 0L);
 
         assertTrue(limiter.tryAcquire("User@Example.com"));
-        assertTrue(limiter.tryAcquire("user@example.com"));
-        assertTrue(limiter.tryAcquire(" user@example.com "));
-        assertFalse(limiter.tryAcquire("USER@example.com"));
-
-        clock.set(start.plus(LoginAttemptLimiter.ATTEMPT_WINDOW));
-        assertTrue(limiter.tryAcquire("user@example.com"));
+        assertFalse(limiter.tryAcquire("user@example.com"));
     }
 
     @Test
-    void successfulLoginClearsFailures() {
-        LoginAttemptLimiter limiter = new LoginAttemptLimiter(
-                Clock.fixed(Instant.parse("2026-07-26T10:00:00Z"), ZoneOffset.UTC));
+    void successfulLoginDeletesTheNormalizedHashedAccountKey() {
+        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        LoginAttemptLimiter limiter = new LoginAttemptLimiter(redis);
+        when(redis.execute(any(RedisScript.class), anyList(), anyString(), anyString(), anyString()))
+                .thenReturn(1L);
 
-        limiter.tryAcquire("user@example.com");
-        limiter.tryAcquire("user@example.com");
-        limiter.tryAcquire("user@example.com");
+        limiter.tryAcquire(" User@Example.com ");
         limiter.recordSuccess("user@example.com");
 
-        assertTrue(limiter.tryAcquire("user@example.com"));
-    }
-
-    @Test
-    void permitsOnlyThreeConcurrentAttempts() {
-        LoginAttemptLimiter limiter = new LoginAttemptLimiter(
-                Clock.fixed(Instant.parse("2026-07-26T10:00:00Z"), ZoneOffset.UTC));
-
-        long permitted = IntStream.range(0, 20)
-                .parallel()
-                .filter(ignored -> limiter.tryAcquire("user@example.com"))
-                .count();
-
-        assertEquals(LoginAttemptLimiter.MAX_ATTEMPTS, permitted);
-    }
-
-    private static final class MutableClock extends Clock {
-
-        private Instant instant;
-
-        private MutableClock(Instant instant) {
-            this.instant = instant;
-        }
-
-        void set(Instant instant) {
-            this.instant = instant;
-        }
-
-        @Override
-        public ZoneOffset getZone() {
-            return ZoneOffset.UTC;
-        }
-
-        @Override
-        public Clock withZone(java.time.ZoneId zone) {
-            return this;
-        }
-
-        @Override
-        public Instant instant() {
-            return instant;
-        }
+        verify(redis).delete(eq(
+                "hebbible:auth:login-attempts:b4c9a289323b21a01c3e940f150eb9b8c542587f1abfd8f0e1cc1ffc5e475514"));
     }
 }
