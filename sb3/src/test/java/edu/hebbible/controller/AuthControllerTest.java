@@ -65,7 +65,6 @@ class AuthControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    /*
     @Test
     void loginBlocksAfterThreeFailedAttemptsWithinFiveMinutes() throws Exception {
         String email = "rate-limit-" + UUID.randomUUID() + "@example.com";
@@ -93,7 +92,6 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.message")
                         .value("Too many login attempts. Try again later"));
     }
-    */
 
     @Test
     void signupExplainsPasswordLengthValidationFailure() throws Exception {

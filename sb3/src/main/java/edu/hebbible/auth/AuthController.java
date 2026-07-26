@@ -23,11 +23,14 @@ public class AuthController {
     private final LocalUserRepository users;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final LoginAttemptLimiter loginAttemptLimiter;
 
-    public AuthController(LocalUserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthController(LocalUserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService,
+                          LoginAttemptLimiter loginAttemptLimiter) {
         this.users = users;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.loginAttemptLimiter = loginAttemptLimiter;
     }
 
     @PostMapping("/auth/signup")
@@ -45,12 +48,20 @@ public class AuthController {
     @PostMapping("/auth/login")
     public AuthResponse login(@Valid @RequestBody AuthRequest request) {
         log.info("login: " + request.email());
+        if (!loginAttemptLimiter.tryAcquire(request.email())) {
+            log.warn("Login temporarily blocked: " + request.email());
+            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,
+                    "Too many login attempts. Try again later");
+        }
+
         LocalUser user = users.findByEmail(request.email())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
-        if (!passwordEncoder.matches(request.password(), user.passwordHash())) {
+                .orElse(null);
+        if (user == null || !passwordEncoder.matches(request.password(), user.passwordHash())) {
             log.warn("Invalid email or password: " + request.email());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
+
+        loginAttemptLimiter.recordSuccess(request.email());
         log.info("login successful: " + request.email());
         return response(user);
     }
