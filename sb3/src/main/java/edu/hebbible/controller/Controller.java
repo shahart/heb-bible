@@ -1,5 +1,6 @@
 package edu.hebbible.controller;
 
+import edu.hebbible.auth.PrincipalSupport;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.service.Svc;
 import edu.hebbible.service.impl.ServiceImpl;
@@ -11,11 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 public class Controller {
@@ -27,7 +26,7 @@ public class Controller {
 
     @PostMapping("psukim")
     public ResponseEntity<List<Pasuk>> psukim(@RequestBody String args,
-                                              @AuthenticationPrincipal OAuth2User user) {
+                                              @AuthenticationPrincipal Object user) {
         log.info("/post " + args);
         List<Pasuk> result = svc.psukim(ServiceImpl.engTx(args), false, false);
         logPsukimUsage(user);
@@ -50,12 +49,8 @@ public class Controller {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    private void logPsukimUsage(OAuth2User user) {
-        svc.recordPsukimUsage(userId(user));
-    }
-
-    private String userId(OAuth2User user) {
-        return Objects.requireNonNullElse(user.getAttribute("email"), user.getName());
+    private void logPsukimUsage(Object user) {
+        svc.recordPsukimUsage(PrincipalSupport.userId(user));
     }
 
 }

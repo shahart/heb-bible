@@ -1,13 +1,18 @@
 package edu.hebbible.config;
 
+import edu.hebbible.auth.JwtAuthenticationFilter;
+import edu.hebbible.auth.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+//import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -21,10 +26,14 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                            ClientRegistrationRepository clientRegistrationRepository) throws Exception {
+                                            ClientRegistrationRepository clientRegistrationRepository,
+                                            JwtService jwtService) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/auth/**",
                                 "/error",
                                 "/favicon.ico",
                                 "/logged-out.html",
@@ -45,10 +54,16 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID", "XSRF-TOKEN")
                         .logoutSuccessUrl("/logged-out.html"))
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/psukim", "/dilugim", "/v1/chat/**", "/logout")
+                        .ignoringRequestMatchers("/auth/**", "/psukim", "/dilugim", "/v1/chat/**", "/logout")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(csrfCookieFilter(), BasicAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     private OAuth2AuthorizationRequestResolver authorizationRequestResolver(

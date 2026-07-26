@@ -8,6 +8,18 @@
 <!--integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="-->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" onerror="alert('No internet!')"></script>
 <script>
+    function jwtToken() {
+        return window.localStorage.getItem('jwtToken');
+    }
+
+    function setJwtToken(token) {
+        if (token) {
+            window.localStorage.setItem('jwtToken', token);
+        } else {
+            window.localStorage.removeItem('jwtToken');
+        }
+    }
+
     function csrfToken() {
         var match = document.cookie.match(new RegExp('(^| )XSRF-TOKEN=([^;]+)'));
         return match ? decodeURIComponent(match[2]) : null;
@@ -15,6 +27,10 @@
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
+            var jwt = jwtToken();
+            if (jwt) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + jwt);
+            }
             var token = csrfToken();
             if (token && !/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
                 xhr.setRequestHeader('X-XSRF-TOKEN', token);
@@ -23,21 +39,120 @@
     });
 
     $(function() {
+        showSignedOut();
+
         $.ajax({
             url: "/user",
+            dataType: "json",
             success: function(data) {
-                $('.user').text('Signed in as ' + (data.email || data.name));
+                var identifier = userIdentifier(data);
+                if (identifier) {
+                    showSignedIn(identifier);
+                    loadCount();
+                } else {
+                    setJwtToken(null);
+                    showSignedOut();
+                }
+            },
+            error: function() {
+                setJwtToken(null);
+                showSignedOut();
             }
         });
+    });
 
+    function userIdentifier(data) {
+        if (!data || typeof data !== 'object') {
+            return null;
+        }
+        if (typeof data.email === 'string' && data.email.length > 0) {
+            return data.email;
+        }
+        if (typeof data.name === 'string' && data.name.length > 0) {
+            return data.name;
+        }
+        return null;
+    }
+
+    function showSignedIn(identifier) {
+        $('.auth').hide();
+        $('.app').show();
+        $('.user').text('Signed in as ' + identifier);
+        $('.auth-error').text('');
+    }
+
+    function showSignedOut() {
+        $('.auth').show();
+        $('.app').hide();
+        $('.user').text('');
+    }
+
+    function loadCount() {
         $.ajax({
             url: "/psukim",
             success: function(data) {
                 console.debug(data);
-                $('.count').append(data);
+                $('.count').text('Total Count is ' + data);
             }
         });
-    });
+    }
+
+    function authPayload() {
+        return JSON.stringify({
+            email: document.getElementById('email').value.trim(),
+            password: document.getElementById('password').value
+        });
+    }
+
+    function authenticate(path) {
+        var form = document.getElementById('auth-form');
+        if (!form.reportValidity()) {
+            return;
+        }
+        $('.auth-error').text('');
+        $.ajax({
+            url: path,
+            method: 'POST',
+            data: authPayload(),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                var identifier = userIdentifier(data);
+                if (!data.token || !identifier) {
+                    $('.auth-error').text('The server returned an invalid authentication response.');
+                    return;
+                }
+                setJwtToken(data.token);
+                showSignedIn(identifier);
+                loadCount();
+            },
+            error: function(xhr) {
+                var message = xhr.responseJSON && xhr.responseJSON.message
+                    ? xhr.responseJSON.message
+                    : 'Authentication failed';
+                $('.auth-error').text(message);
+            }
+        });
+    }
+
+    function signup() {
+        authenticate('/auth/signup');
+    }
+
+    function login() {
+        authenticate('/auth/login');
+    }
+
+    function logout() {
+        setJwtToken(null);
+        $.ajax({
+            url: '/logout',
+            method: 'POST',
+            complete: function() {
+                showSignedOut();
+            }
+        });
+    }
 
     function pasuk() {
         if (document.getElementById('text').value.length <= 1) {
@@ -78,26 +193,37 @@
 </script>
 <div>
     <span class="user"></span>
-    <form action="/logout" method="post">
-        <button type="submit">Logout</button>
+</div>
+<div class="auth">
+    <a href="/oauth2/authorization/google">Sign in with Google</a>
+    <form id="auth-form" onsubmit="return false">
+        <input type="email" id="email" placeholder="email" autocomplete="email" required>
+        <input type="password" id="password" placeholder="password" autocomplete="current-password"
+               minlength="8" maxlength="100" required>
+        <button type="button" onclick="login()">Login</button>
+        <button type="button" onclick="signup()">Sign up</button>
+        <p class="auth-error" role="alert"></p>
     </form>
 </div>
-<a href="/swagger-ui/index.html">Swagger</a>
-<div>
-    <p class="count">Total Count is </p>
-</div>
-<input type="text" id="text" value="">
-<button onclick="pasuk()">Find my Pasuk</button>
-<div>
-    <p class="result"></p>
-</div>
-</br>
-<input type="text" id="dilugimTxt" value="">
-<button onclick="dilugim()">Dilugim</button>
-from <input type="number" id="skipMin" value="1" min="1" max="9999"/>
-to <input type="number" id="skipMax" value="100" min="1" max="9999">
-<div>
-    <p class="dilugimResult"></p>
+<div class="app">
+    <button onclick="logout()">Logout</button>
+    <a href="/swagger-ui/index.html">Swagger</a>
+    <div>
+        <p class="count">Total Count is </p>
+    </div>
+    <input type="text" id="text" value="">
+    <button onclick="pasuk()">Find my Pasuk</button>
+    <div>
+        <p class="result"></p>
+    </div>
+    </br>
+    <input type="text" id="dilugimTxt" value="">
+    <button onclick="dilugim()">Dilugim</button>
+    from <input type="number" id="skipMin" value="1" min="1" max="9999"/>
+    to <input type="number" id="skipMax" value="100" min="1" max="9999">
+    <div>
+        <p class="dilugimResult"></p>
+    </div>
 </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package edu.hebbible.controller;
 
+import edu.hebbible.auth.AuthenticatedUser;
+import edu.hebbible.auth.JwtService;
 import edu.hebbible.config.SecurityConfig;
 import edu.hebbible.model.Pasuk;
 import edu.hebbible.service.Svc;
@@ -19,6 +21,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
@@ -38,6 +41,9 @@ public class ControllerTest {
 
     @MockitoBean
     Svc service;
+
+    @MockitoBean
+    JwtService jwtService;
 
     @Autowired
     private MockMvc mvc;
@@ -71,6 +77,25 @@ public class ControllerTest {
                 andDo(print());
 
         Mockito.verify(service).recordPsukimUsage("test@example.com");
+    }
+
+    @Test
+    void postPsukimAcceptsJwtBearerToken() throws Exception {
+        List<Pasuk> res = List.of(new Pasuk("משלי", -1, 12, 19, "שפת אמת תכון לעד ועד ארגיעה לשון שקר", 0));
+        Mockito.when(service.psukim(anyString(), anyBoolean(), anyBoolean())).thenReturn(res);
+        Mockito.when(jwtService.parseToken("test-token"))
+                .thenReturn(Optional.of(new AuthenticatedUser("local:1", "test", "jwt@example.com")));
+
+        mvc.perform(post("/psukim").
+                        header("Authorization", "Bearer test-token").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content("שחר")).
+                andExpect(status().isOk()).
+                andExpect(content().string(StringContains.containsString(
+                        Integer.toString(res.getFirst().pasuk())))).
+                andDo(print());
+
+        Mockito.verify(service).recordPsukimUsage("jwt@example.com");
     }
 
     @Test
