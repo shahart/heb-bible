@@ -15,11 +15,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Compile App
-      run:  |
-        cd c
-        make
+      working-directory: ./c
+      run: make
 
     - name: Run Tests
-      run:  |
-        cd c
-        make test
+      working-directory: ./c
+      run: make test
