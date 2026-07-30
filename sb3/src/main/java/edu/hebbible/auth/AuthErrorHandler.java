@@ -31,4 +31,12 @@ public class AuthErrorHandler {
         log.warn("authenticationError: " + message);
         return ResponseEntity.status(exception.getStatusCode()).body(Map.of("message", message));
     }
+
+    @ExceptionHandler(UserManagementUnavailableException.class)
+    ResponseEntity<Map<String, String>> userManagementUnavailable(
+            UserManagementUnavailableException exception) {
+        log.error("userManagementUnavailable", exception);
+        return ResponseEntity.status(503)
+                .body(Map.of("message", "User management is temporarily unavailable"));
+    }
 }

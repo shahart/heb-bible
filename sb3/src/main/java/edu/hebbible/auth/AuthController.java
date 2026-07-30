@@ -1,12 +1,10 @@
 package edu.hebbible.auth;
 
-import edu.hebbible.controller.UserController;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,15 +18,13 @@ public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
-    private final LocalUserRepository users;
-    private final PasswordEncoder passwordEncoder;
+    private final UserAuthenticationService userAuthentication;
     private final JwtService jwtService;
     private final LoginAttemptLimiter loginAttemptLimiter;
 
-    public AuthController(LocalUserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService,
+    public AuthController(UserAuthenticationService userAuthentication, JwtService jwtService,
                           LoginAttemptLimiter loginAttemptLimiter) {
-        this.users = users;
-        this.passwordEncoder = passwordEncoder;
+        this.userAuthentication = userAuthentication;
         this.jwtService = jwtService;
         this.loginAttemptLimiter = loginAttemptLimiter;
     }
@@ -38,7 +34,7 @@ public class AuthController {
     public AuthResponse signup(@Valid @RequestBody AuthRequest request) {
         try {
             log.info("signup: " + request.email());
-            LocalUser user = users.create(request.email(), passwordEncoder.encode(request.password()));
+            ManagedUser user = userAuthentication.signup(request.email(), request.password());
             return response(user);
         } catch (DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered", e);
@@ -54,9 +50,9 @@ public class AuthController {
                     "Too many login attempts. Try again later");
         }
 
-        LocalUser user = users.findByEmail(request.email())
+        ManagedUser user = userAuthentication.authenticate(request.email(), request.password())
                 .orElse(null);
-        if (user == null || !passwordEncoder.matches(request.password(), user.passwordHash())) {
+        if (user == null) {
             log.warn("Invalid email or password: " + request.email());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
@@ -66,10 +62,10 @@ public class AuthController {
         return response(user);
     }
 
-    private AuthResponse response(LocalUser user) {
+    private AuthResponse response(ManagedUser user) {
         String name = user.email().substring(0, user.email().indexOf('@')).toLowerCase(Locale.ROOT);
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                "local:" + user.id(),
+                user.id(),
                 name,
                 user.email());
         return new AuthResponse(jwtService.createToken(authenticatedUser), "Bearer", user.email(), name);

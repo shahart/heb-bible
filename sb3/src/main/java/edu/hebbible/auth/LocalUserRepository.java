@@ -1,6 +1,7 @@
 package edu.hebbible.auth;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Repository
+@ConditionalOnProperty(
+        name = "hebbible.auth.user-management.provider",
+        havingValue = "jdbc",
+        matchIfMissing = true)
 public class LocalUserRepository {
 
     private final JdbcTemplate jdbcTemplate;
