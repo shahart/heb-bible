@@ -5,29 +5,40 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.junit.jupiter.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.UUID;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-@EnabledIf(expression = "#{systemProperties['os.name'].toLowerCase().startsWith('windows')}", reason = "this os.name is not Linux, which got DevToolsActivePort file doesn't exist")
-class PlayWrightIntegrationFirefoxTest { // todo with Profile so it will work on my local, but not on github server
+@EnabledOnOs({OS.WINDOWS, OS.MAC, OS.LINUX})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class PlayWrightIntegrationFirefoxTest {
 
+    @Value("${local.server.port}")
+    int port;
     static Playwright playwright;
     static Browser browser;
-    static Page page;
+    Page page;
 
     @BeforeAll
-    static void launchBrowser() throws Exception { // setUp
-        HebBible.main(new String[]{}); // TODO consider test-containers
-        Thread.sleep(15_000); // time for spring-boot to be up And running
-
+    static void launchBrowser() {
         playwright = Playwright.create();
-        browser = playwright.firefox().launch((new BrowserType.LaunchOptions().setHeadless(false))); // nightly
+        browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(true));
+    }
+
+    @BeforeEach
+    void openPage() {
         page = browser.newPage();
-        page.navigate("http://localhost:8080");
-        Thread.sleep(5_000);
+        page.navigate("http://localhost:" + port);
+        signUp();
     }
 
     @Test
@@ -36,14 +47,24 @@ class PlayWrightIntegrationFirefoxTest { // todo with Profile so it will work on
     }
 
     @Test
-    void pasukByName() throws Exception {
+    void pasukByName() {
         // todo
     }
 
     @AfterAll
-    static void closeBrowser() { // tearDown
+    static void closeBrowser() {
+        browser.close();
         playwright.close();
     }
 
-}
+    @AfterEach
+    void closePage() {
+        page.close();
+    }
 
+    private void signUp() {
+        page.getByPlaceholder("email").fill("playwright-firefox-" + UUID.randomUUID() + "@example.com");
+        page.getByPlaceholder("password").fill("valid-password");
+        page.getByText("Sign up", new Page.GetByTextOptions().setExact(true)).click();
+    }
+}
