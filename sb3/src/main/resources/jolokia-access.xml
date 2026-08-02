@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<restrict>
+    <commands>
+        <command>version</command>
+    </commands>
+    <allow>
+        <mbean>
+            <name>edu.hebbible:type=Psukim</name>
+            <attribute mode="read">PsukimCount</attribute>
+        </mbean>
+    </allow>
+</restrict>

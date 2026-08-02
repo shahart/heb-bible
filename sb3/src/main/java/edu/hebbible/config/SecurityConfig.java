@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs",
-                                "/v3/api-docs/**")
+                                "/v3/api-docs/**",
+                                "/actuator/health")
                         .permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
@@ -54,7 +55,13 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID", "XSRF-TOKEN")
                         .logoutSuccessUrl("/logged-out.html"))
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/auth/**", "/psukim", "/dilugim", "/v1/chat/**", "/logout")
+                        .ignoringRequestMatchers(
+                                "/auth/**",
+                                "/psukim",
+                                "/dilugim",
+                                "/v1/chat/**",
+                                "/actuator/jolokia/**",
+                                "/logout")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(csrfCookieFilter(), BasicAuthenticationFilter.class)
