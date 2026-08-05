@@ -1,14 +1,16 @@
 // todo for dev efficiency, ignore cache when url is localhost, or contains .ngrok-free.app
 
+const CACHE_NAME = 'v33';
+
 const addResourcesToCache = async (resources) => {
-    const cache = await caches.open('v32');
+    const cache = await caches.open(CACHE_NAME);
     await cache.addAll(resources);
   };
   
   const putInCache = async (request, response) => {
     if (!/^https?:$/i.test(new URL(request.url).protocol)) return;
     if (request.method == 'POST') return; // Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Request method 'POST' is unsupported
-    const cache = await caches.open('v32');
+    const cache = await caches.open(CACHE_NAME);
     await cache.put(request, response);
   };
 
@@ -17,7 +19,7 @@ const addResourcesToCache = async (resources) => {
   };
   
   const deleteOldCaches = async () => {
-    const cacheKeepList = [];
+    const cacheKeepList = [CACHE_NAME];
     const keyList = await caches.keys();
     const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
     await Promise.all(cachesToDelete.map(deleteCache));
@@ -85,7 +87,8 @@ const addResourcesToCache = async (resources) => {
         './index.html',
         './mystyle.css',
         './script.js',
-        './RepoInit.js'
+        './RepoInit.js',
+        './menora.jpg'
       ])
     );
   });
