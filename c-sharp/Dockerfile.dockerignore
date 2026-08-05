@@ -1,0 +1,7 @@
+**
+!bible.txt.gz
+!c-sharp/
+!c-sharp/HebBible.Api.csproj
+!c-sharp/*.cs
+!c-sharp/Properties/
+!c-sharp/Properties/*.cs
