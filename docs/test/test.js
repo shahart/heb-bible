@@ -20,6 +20,24 @@ describe('Mocha tests', function () {
         chai.assert.equal(psk, 'בָּר֖וּךְ אַתָּ֥ה יְהוָ֗ה לַמְּדֵ֥נִי חֻקֶּֽיךָ: ');
     });
 
+    it('read-random-psalm', function() {
+        let read = new Read(Repo);
+        const originalRandom = Math.random;
+        const chapters = [];
+        read.read = chapter => chapters.push(chapter);
+
+        try {
+            Math.random = () => 0;
+            read.readRandomPsalm();
+            Math.random = () => 0.999999;
+            read.readRandomPsalm();
+            chai.assert.deepEqual(chapters, ['27,1', '27,150']);
+        }
+        finally {
+            Math.random = originalRandom;
+        }
+    });
+
     it('count-pasuk-starts-ends', function() {
         let pasuk = new Pasuk(Repo);
         let psk = pasuk.searchPasuk("שחר", true);

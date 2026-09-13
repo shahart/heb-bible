@@ -9,6 +9,11 @@ class Read {
         this.repo = repo;
     }
 
+    readRandomPsalm() {
+        const chapter = Math.floor(Math.random() * 150) + 1;
+        return this.read("27," + chapter);
+    }
+
     read() {
         read(undefined);
     }

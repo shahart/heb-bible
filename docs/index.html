@@ -173,6 +173,7 @@
 </br>
 </br>
 <button disabled id="showBook" type="button">בחר</button>
+<button disabled hidden id="randomPsalm" type="button">אקראי</button>
 </div>
 <p class="result-box" id="bibleResult" ></p>
 <div class="support-links">
@@ -553,7 +554,7 @@
 </div>
 <script>
     document.getElementById("secretPopup").addEventListener('click', function(e) {
-        alert("Last updated 5/Aug/26");
+        alert("Last updated 13/Sep/26");
 
         const deleteCache = async (key) => {
             await caches.delete(key);

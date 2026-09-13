@@ -1,6 +1,6 @@
 // todo for dev efficiency, ignore cache when url is localhost, or contains .ngrok-free.app
 
-const CACHE_NAME = 'v33';
+const CACHE_NAME = 'v34';
 
 const addResourcesToCache = async (resources) => {
     const cache = await caches.open(CACHE_NAME);

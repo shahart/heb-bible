@@ -75,6 +75,21 @@ document.getElementById('showBook').addEventListener('click', () => {
     read.read();
 });
 
+const bookSelect = document.getElementById('BookSelect');
+const randomPsalmButton = document.getElementById('randomPsalm');
+
+function updateRandomPsalmButton() {
+    randomPsalmButton.hidden = bookSelect.value !== '27';
+}
+
+bookSelect.addEventListener('change', updateRandomPsalmButton);
+
+randomPsalmButton.addEventListener('click', () => {
+    read.readRandomPsalm();
+});
+
+updateRandomPsalmButton();
+
 document.getElementById('button1').addEventListener('click', () => {
     pasuk.pasuk();
 });
@@ -246,6 +261,8 @@ if (b && b.trim() !== '') {
 }
 
 repoInit.ready.then(() => {
+    randomPsalmButton.disabled = false;
+
     if (r && r.trim() !== '') {
         try {
           let book = r;
@@ -255,6 +272,7 @@ repoInit.ready.then(() => {
             prk = r;
           }
           document.getElementById("BookSelect").value = book;
+          updateRandomPsalmButton();
           // read.read();
           read.read(prk);
         }
