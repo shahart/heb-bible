@@ -3,6 +3,8 @@ import Repo from "../Repo.js";
 import { Read } from "../Read.js";
 import { No2gim } from "../No2gim.js";
 import { Pasuk } from "../Pasuk.js";
+import { createAppUrl } from "../AppConfig.js";
+import { parseExternalBookReference } from "../BookReferences.js";
 
 describe('Mocha tests', function () {
 
@@ -74,6 +76,19 @@ describe('Mocha tests', function () {
     it('No2gim - large number', function() {
         let n2g = new No2gim();
         chai.assert.equal(n2g.no2gim(5782), 'ה\'תשפב');
+    });
+
+    it('creates encoded share URLs', function() {
+        chai.assert.equal(
+            createAppUrl({ q: 'אמת ושלום', from: 2 }),
+            'https://shahart.github.io/heb-bible/?q=%D7%90%D7%9E%D7%AA+%D7%95%D7%A9%D7%9C%D7%95%D7%9D&from=2'
+        );
+    });
+
+    it('parses external book references', function() {
+        chai.assert.equal(parseExternalBookReference('II Kings 12:4'), '11,12');
+        chai.assert.equal(parseExternalBookReference('Micah 3'), '20,3');
+        chai.assert.isNull(parseExternalBookReference('Unknown 3'));
     });
 
 });

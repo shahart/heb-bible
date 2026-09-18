@@ -1,7 +1,8 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+const apiBase = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:8080' : '');
+const frontendOrigin = import.meta.env.VITE_FRONTEND_ORIGIN || (import.meta.env.DEV ? 'http://localhost:5173' : window.location.origin);
 
 const authLoading = ref(true);
 const authError = ref('');
@@ -38,7 +39,9 @@ async function loadCurrentUser() {
 }
 
 function signInWithGoogle() {
-  window.location.href = `${apiBase}/auth/google`;
+  const url = new URL(`${apiBase}/auth/google`, window.location.origin);
+  url.searchParams.set('returnTo', frontendOrigin);
+  window.location.href = url.toString();
 }
 
 async function logout() {

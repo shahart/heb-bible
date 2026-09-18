@@ -175,9 +175,9 @@
 <button disabled id="showBook" type="button">בחר</button>
 <button disabled hidden id="randomPsalm" type="button">אקראי</button>
 </div>
-<p class="result-box" id="bibleResult" ></p>
+<p class="result-box" id="bibleResult" aria-live="polite"></p>
 <div class="support-links">
-<a class="github-link" href="https://github.com/shahart/heb-bible" target="_blank">
+<a class="github-link" href="https://github.com/shahart/heb-bible" target="_blank" rel="noopener noreferrer">
     <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle">
         <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
     </svg>
@@ -193,10 +193,8 @@
 <!-- <script src="https://raw.githubusercontent.com/avisaradir/lunr-languages-he/refs/heads/master/lunr.stemmer.support.js"></script> -->
 <!-- <script src="https://raw.githubusercontent.com/avisaradir/lunr-languages-he/refs/heads/master/lunr.he.js"></script> -->
 
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script>
-
 <script src="script.js" type='module'></script>
-<a href="https://www.holyclock.com" target="_blank"> <img alt="שומר-שבת" src="https://www.holyclock.com/pics/language/en/ext-icon.png"></a>
+<a href="https://www.holyclock.com" target="_blank" rel="noopener noreferrer"> <img alt="שומר-שבת" src="https://www.holyclock.com/pics/language/en/ext-icon.png"></a>
 <br/><br/>
 
     </div>
@@ -205,7 +203,7 @@
 <p class="panel-subtitle">לפי אות ראשונה ואחרונה, או גם לפי הופעת השם בתוך הפסוק.</p>
 
 <div class="utility-card">
-<a href="https://www.toratemetfreeware.com/online/f_00720_all.html" target="_blank">
+<a href="https://www.toratemetfreeware.com/online/f_00720_all.html" target="_blank" rel="noopener noreferrer">
 סגולה שלא ישכח שמו ליום הדין: יאמר קודם יהיו לרצון השני בתפילת העמידה פסוק מהתנ"ך המתחיל באות הראשונה של שמו ומסתיים באות האחרונה של שמו או פסוק ששמו מופיע בו,
 </a>
 </br>
@@ -220,7 +218,7 @@
 </div>
 <button disabled id="button1">מצא את הפסוק שלי</button>
 </div>
-<p class="result-box" id="result"></p>
+<p class="result-box" id="result" aria-live="polite"></p>
     
     </div>
     <div class="content3" id="content3">
@@ -249,8 +247,8 @@
 <button class="secondary-button" id="sabort">הפסק</button>
 </div>
 </div>
-<p class="result-box" id="resultDilug" ></p>
-<p class="result-box" id="resultDilug2" ></p>
+<p class="result-box" id="resultDilug" aria-live="polite"></p>
+<p class="result-box" id="resultDilug2" aria-live="polite"></p>
 
     
     </div>
@@ -270,7 +268,7 @@
 </div>
 <button id="buttonG" disabled>מצא פסוק עם גימטריה זהה</button>
 </div>
-<p class="result-box" id="resultGim" ></p>
+<p class="result-box" id="resultGim" aria-live="polite"></p>
 
 </div>
 <div class="content5" id="content5">
@@ -291,7 +289,7 @@
 <label for="lucene">ℹ️ חיפוש LunrJS</label><br>
 </div>
 </div>
-<p class="result-box" id="resultFind" ></p>
+<p class="result-box" id="resultFind" aria-live="polite"></p>
 </div>
 
 <div class="content6" id="content6"> <!-- todo style="font-size:20px" with a button for large/mid/small font-size -->
@@ -554,7 +552,7 @@
 </div>
 <script>
     document.getElementById("secretPopup").addEventListener('click', function(e) {
-        alert("Last updated 13/Sep/26");
+        alert("Last updated 18/Sep/26");
 
         const deleteCache = async (key) => {
             await caches.delete(key);

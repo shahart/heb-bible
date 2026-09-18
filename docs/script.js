@@ -5,6 +5,7 @@ import { Dilug } from "./Dilug.js";
 import { Read } from "./Read.js";
 import { Gematria } from "./Gematria.js";
 import { Find } from "./Find.js";
+import { parseExternalBookReference } from "./BookReferences.js";
 
 /*
 window.onerror = function(message) { 
@@ -56,6 +57,10 @@ const g = params.get("g");
 const q = params.get("q"); // (q)uery
 const l = params.get("l");
 const b = params.get("b"); // (b)ook
+const externalBookReference = parseExternalBookReference(b);
+if (externalBookReference) {
+    r = externalBookReference;
+}
 
 const firstName = params.get("firstName");
 if (firstName && firstName !== '') {
@@ -94,10 +99,6 @@ document.getElementById('button1').addEventListener('click', () => {
     pasuk.pasuk();
 });
 
-if (firstName && firstName.trim() !== '') {
-    pasuk.pasuk();
-}
-
 document.getElementById('buttonD').addEventListener('click', () => {
     dilug.dilug();
 });
@@ -125,7 +126,7 @@ if (date.startsWith("1 ") || date.startsWith("29 ") || date.startsWith("30 ")) {
     if (yaaleForgot) yaaleForgot.innerHTML = "ואם שכח ונזכר מייד: ברוך אתה ה' אלקינו מלך העולם שנתן ראשי-חדשים לעמו ישראל לזכרון"
 }
 
-if (b && b.trim() !== '') {
+if (b && b.trim() !== '' && !externalBookReference) {
     if (b.startsWith('Joshua')) {
         r = '6';
     }
@@ -287,6 +288,10 @@ repoInit.ready.then(() => {
         document.getElementById("tab2").checked = true;
         pasuk.pasuk();
     }
+    else if (firstName && firstName.trim() !== '') {
+        document.getElementById("tab2").checked = true;
+        pasuk.pasuk();
+    }
 
     if (s && s.trim() !== '') {
         document.getElementById("dilugTxt").value = s;
@@ -315,100 +320,30 @@ repoInit.ready.then(() => {
     }
 }).catch(err => {
     console.error(err);
+    const result = document.getElementById("bibleResult");
+    result.textContent = "לא ניתן לטעון את נתוני התנ״ך. בדקו את החיבור ונסו לרענן את הדף.";
 });
 
-document.getElementById("text").addEventListener('keyup', function(e) {
-    if (e.key === "Enter") {
-        pasuk.pasuk();
-    }
-})
+function runOnEnter(elementId, action) {
+    document.getElementById(elementId).addEventListener('keydown', event => {
+        if (event.key === "Enter") action();
+    });
+}
 
-document.getElementById("dilugTxt").addEventListener('keyup', function(e) {
-    if (e.key === "Enter") {
-        dilug.dilug();
-    }
-})
-
-document.getElementById("gim").addEventListener('keyup', function(e) {
-    if (e.key === "Enter") {
-        gematria.gematria();
-    }
-})
-
-document.getElementById("find").addEventListener('keyup', function(e) {
-    if (e.key === "Enter") {
-        find.find();
-    }
-})
+runOnEnter("text", () => pasuk.pasuk());
+runOnEnter("dilugTxt", () => dilug.dilug());
+runOnEnter("gim", () => gematria.gematria());
+runOnEnter("find", () => find.find());
 
 function handleChapter(c) {
     document.getElementById('psalms'+c)    .innerHTML = (document.getElementById('psalms'+c)    .innerHTML !== "") ? "" : read.read("27,"+c, true);
     document.getElementById('psalms'+c+'B').innerHTML = (document.getElementById('psalms'+c+'B').innerHTML == "+") ? "-" : "+";
 }
 
-document.getElementById('psalms1B').addEventListener('click', () => {
-    handleChapter(1);
-})
-
-document.getElementById('psalms6B').addEventListener('click', () => {
-    handleChapter(6);
-})
-
-document.getElementById('psalms13B').addEventListener('click', () => {
-    handleChapter(13);
-})
-
-document.getElementById('psalms20B').addEventListener('click', () => {
-    handleChapter(20);
-})
-
-document.getElementById('psalms38B').addEventListener('click', () => {
-    handleChapter(38);
-})
-
-document.getElementById('psalms83B').addEventListener('click', () => {
-    handleChapter(83);
-})
-
-document.getElementById('psalms85B').addEventListener('click', () => {
-    handleChapter(85);
-})
-
-document.getElementById('psalms91B').addEventListener('click', () => {
-    handleChapter(91);
-})
-
-document.getElementById('psalms102B').addEventListener('click', () => {
-    handleChapter(102);
-})
-
-document.getElementById('psalms106B').addEventListener('click', () => {
-    handleChapter(106);
-})
-
-document.getElementById('psalms130B').addEventListener('click', () => {
-    handleChapter(130);
-})
-
-document.getElementById('psalms142B').addEventListener('click', () => {
-    handleChapter(142);
-})
-
-document.getElementById('psalms22B').addEventListener('click', () => {
-    handleChapter(22);
-})
-
-document.getElementById('psalms25B').addEventListener('click', () => {
-    handleChapter(25);
-})
-
-document.getElementById('psalms121B').addEventListener('click', () => {
-    handleChapter(121);
-})
-
-document.getElementById('psalms86B').addEventListener('click', () => {
-    handleChapter(86);
-})
+const psalmChapters = [1, 6, 13, 20, 22, 25, 38, 83, 85, 86, 91, 102, 106, 121, 130, 142];
+for (const chapter of psalmChapters) {
+    document.getElementById(`psalms${chapter}B`).addEventListener('click', () => handleChapter(chapter));
+}
 
 document.getElementById('MiSheb1B').addEventListener('click', () => {
     document.getElementById('MiSheb1').innerHTML = (document.getElementById('MiSheb1').innerHTML !== "") ? "" : "מִי שֶׁבֵּרַךְ אֲבוֹתֵינוּ אַבְרָהָם יִצְחָק וְיַעֲקֹב הוּא יְבָרֵךְ אֶת חַיָּלֵי צְבָא הֲגַנָּה לְיִשְׂרָאֵל, הָעוֹמְדִים עַל מִשְׁמַר אַרְצֵנוּ וְעָרֵי אֱלהֵינוּ מִגְּבוּל הַלְּבָנוֹן וְעַד מִדְבַּר מִצְרַיִם וּמִן הַיָּם הַגָּדוֹל עַד לְבוֹא הָעֲרָבָה בַּיַּבָּשָׁה בָּאֲוִיר וּבַיָּם. יִתֵּן ה' אֶת אוֹיְבֵינוּ הַקָּמִים עָלֵינוּ נִגָּפִים לִפְנֵיהֶם. הַקָּדוֹשׁ בָּרוּךְ הוּא יִשְׁמֹר וְיַצִּיל אֶת חַיָלֵינוּ מִכָּל צָרָה וְצוּקָה וּמִכָּל נֶגַע וּמַחְלָה וְיִשְׁלַח בְּרָכָה וְהַצְלָחָה בְּכָל מַעֲשֵׂה יְדֵיהֶם. יַדְבֵּר שׂוֹנְאֵינוּ תַּחְתֵּיהֶם וִיעַטְרֵם בְּכֶתֶר יְשׁוּעָה וּבְעֲטֶרֶת נִצָּחוֹן. וִיקֻיַּם בָּהֶם הַכָּתוּב: כִּי ה' אֱלֹהֵיכֶם הַהֹלֵךְ עִמָּכֶם לְהִלָּחֵם לָכֶם עִם איבֵיכֶם לְהוֹשִׁיעַ אֶתְכֶם: וְנאמַר אָמֵן";

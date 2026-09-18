@@ -1,4 +1,5 @@
 import { No2gim } from "./No2gim.js";
+import { createReferenceUrl } from "./AppConfig.js";
 
 let instance;
 
@@ -196,7 +197,8 @@ class Repo {
 
     addDoc(bookName, ref,txt) {
         let splits = ref.split(":");
-        documents.push({'text':txt, 'name': txt + " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + splits[0] + "," + splits[1] + "\"" + " target=\"_new\">" + bookName + " " + this.no2gim.no2gim(splits[1]) + "</a>-" + splits[2]});
+        const referenceUrl = createReferenceUrl(splits[0], splits[1]);
+        documents.push({'text':txt, 'name': txt + " -- <a href=\"" + referenceUrl + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + bookName + " " + this.no2gim.no2gim(splits[1]) + "</a>-" + splits[2]});
     }
 
     lucene(t) {

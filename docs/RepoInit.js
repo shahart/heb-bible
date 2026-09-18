@@ -1,5 +1,8 @@
 import Repo from "./Repo.js";
 
+const LOCAL_BIBLE_GZIP_URL = new URL("./bible.txt.gz", import.meta.url).href;
+const LOCAL_BIBLE_NIQQUD_URL = new URL("./bible-niqqud.txt", import.meta.url).href;
+
 class RepoInit {
 
     static DB_NAME = 'heb-bible-cache';
@@ -197,12 +200,12 @@ class RepoInit {
             }
 
             if (ungzipedData == "") {
-                const gzipedDataArray = await this.fetchBinary(["./bible.txt.gz", "https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz"]);
+                const gzipedDataArray = await this.fetchBinary([LOCAL_BIBLE_GZIP_URL, "https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz"]);
                 ungzipedData = new TextDecoder().decode(pako.ungzip(gzipedDataArray));
             }
 
             if (nData == "") {
-                nData = await this.fetchText(["./bible-niqqud.txt", "https://raw.githubusercontent.com/shahart/heb-bible/master/bible-niqqud.txt"]);
+                nData = await this.fetchText([LOCAL_BIBLE_NIQQUD_URL, "https://raw.githubusercontent.com/shahart/heb-bible/master/bible-niqqud.txt"]);
             }
 
             await this.saveCachedData(ungzipedData, nData);

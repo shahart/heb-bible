@@ -1,4 +1,6 @@
 import { No2gim } from "./No2gim.js";
+import { reportUsage } from "./Analytics.js";
+import { createAppUrl, createReferenceUrl } from "./AppConfig.js";
 
 class Pasuk {
 
@@ -58,7 +60,8 @@ class Pasuk {
                 newLine = this.repo.noName(line);
             }
             if (this.output.indexOf(newLine) == -1) {
-                this.output += newLine + " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                const referenceUrl = createReferenceUrl(this.repo.getBookNumArr()[i] + 1, this.repo.getPPrk()[i]);
+                this.output += newLine + " -- <a href=\"" + referenceUrl + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
                 return true;
             }
         }
@@ -114,22 +117,10 @@ class Pasuk {
         } else {
             this.saveInput("input", args);
             this.saveInput('resCount', found);
+            const shareUrl = createAppUrl({ p: args });
             document.getElementById("result").innerHTML = found + " פסוקים <br/><br/>" + this.output +
-                "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?p=" + args + "</p>";
-            //
-            var xhrAws = new XMLHttpRequest();
-            xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
-            xhrAws.setRequestHeader("Content-Type", "application/json");
-            xhrAws.send(JSON.stringify({ "name": args, "extra": "containsName-" + containsName, "type": "Pasuk" }));
-            xhrAws.onreadystatechange = function(e) {
-              if ( xhrAws.readyState === 4) {
-                console.debug(xhrAws.status + this.responseText);
-                // if (this.responseText != "Total Psukim: " + foundInclDups) {
-                    // alert("Total Psukim diff was found, please contact shahar_t AT hotmail. Java " + this.responseText + " -- " + "JS Total Psukim: " + foundInclDups + " -- " + args);
-                // }
-              }
-            }
-            xhrAws.send();
+                "<span class=\"share\">&gt;</span><br><br><p dir=\"ltr\" class=\"share-url\">" + shareUrl + "</p>";
+            reportUsage("Pasuk", args, "containsName-" + containsName);
         }
     }
 

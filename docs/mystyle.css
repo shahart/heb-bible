@@ -67,6 +67,11 @@ a {
   color: var(--brand);
 }
 
+.share-url {
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
 img {
   max-width: 100%;
 }

@@ -1,5 +1,7 @@
 
 import { No2gim } from "./No2gim.js";
+import { reportUsage } from "./Analytics.js";
+import { createAppUrl, createReferenceUrl } from "./AppConfig.js";
 
 class Find {
 
@@ -16,17 +18,7 @@ class Find {
     }
 
     reportFind(findStr, found) {
-      var xhrAws = new XMLHttpRequest();
-      var xhrAws = new XMLHttpRequest();
-      xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
-      xhrAws.setRequestHeader("Content-Type", "application/json");
-      xhrAws.send(JSON.stringify({ "name": findStr, "extra": "found-" + found, "type": "Find" }));
-      xhrAws.onreadystatechange = function(e) {
-        if ( xhrAws.readyState === 4) {
-          console.debug(xhrAws.status + this.responseText);
-        }
-      }
-      xhrAws.send();
+      return reportUsage("Find", findStr, "found-" + found);
     }
 
     find(repo) {
@@ -43,7 +35,8 @@ class Find {
         }
         if (!lucene && !(/^[\u05D0-\u05EA]+$/).test(findStr.replace(/\s+/g, ''))) { 
           alert("הטקסט לחיפוש חייב להכיל רק אותיות בעברית ורווחים");
-      }
+          return;
+        }
         let found = false;
         let findings = 0;
         if (findStr.length >= 2) {
@@ -60,7 +53,8 @@ class Find {
                   this.output += line.substring(idx, idx + findStr.length);
                   this.output += "</span>";
                   this.output += line.substring(idx + findStr.length);
-                  this.output += " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                  const referenceUrl = createReferenceUrl(this.repo.getBookNumArr()[i] + 1, this.repo.getPPrk()[i]);
+                  this.output += " -- <a href=\"" + referenceUrl + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
                 }
                 else {
                   this.output += this.repo.noName(line.substring(0, idx));
@@ -68,17 +62,16 @@ class Find {
                   this.output += this.repo.noName(line.substring(idx, idx + findStr.length));
                   this.output += "</span>";
                   this.output += this.repo.noName(line.substring(idx + findStr.length));
-                  this.output += " -- " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (this.repo.getBookNumArr()[i]+1) + "," + this.repo.getPPrk()[i] + "\"" + " target=\"_new\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
+                  const referenceUrl = createReferenceUrl(this.repo.getBookNumArr()[i] + 1, this.repo.getPPrk()[i]);
+                  this.output += " -- <a href=\"" + referenceUrl + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + this.repo.getCurrBook()[i] + " " + this.no2gim.no2gim(this.repo.getPPrk()[i]) + "</a>-" + this.repo.getPPsk()[i] + "<br/><br/>";
                 }
             }
           }
         }
         if (!found) this.output += "חיפוש רגיל - לא נמצא";
         else { 
-          let findStrToUse = findStr;
-          // if (/iPhone|Android/i.test(navigator.userAgent)) 
-          findStrToUse = findStrToUse.replace(' ', '%20');
-          this.output += " חיפוש רגיל - ממצאים " + findings + "<br/><br/><span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?q=" + findStrToUse + "</p>";
+          const shareUrl = createAppUrl({ q: findStr });
+          this.output += " חיפוש רגיל - ממצאים " + findings + "<br/><br/><span class=\"share\">&gt;</span><br><br><p dir=\"ltr\" class=\"share-url\">" + shareUrl + "</p>";
         }
         document.getElementById("resultFind").innerHTML += "<br/>" + this.output;
         //
@@ -90,7 +83,7 @@ class Find {
         } 
         else {
           setTimeout(() => {
-            reportFind(findStr, found);}, 0);
+            this.reportFind(findStr, found);}, 0);
         }
     } 
 

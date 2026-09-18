@@ -19,7 +19,26 @@ describe('App', () => {
 
     expect(wrapper.text()).toContain('Sign in with Google');
     expect(wrapper.text()).not.toContain('Sign out');
-    expect(fetch).toHaveBeenCalledWith('/auth/me', { credentials: 'include' });
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8080/auth/me', { credentials: 'include' });
+  });
+
+  it('starts Google sign-in on the Node server with a Vue return URL', async () => {
+    fetch.mockResolvedValueOnce(jsonResponse(401, { authenticated: false }));
+
+    const wrapper = mount(App);
+    await flushPromises();
+
+    const originalLocation = window.location;
+    delete window.location;
+    window.location = { ...originalLocation, href: 'http://localhost:5173/' };
+
+    await wrapper.find('button.google-button').trigger('click');
+
+    const location = new URL(window.location.href);
+    expect(location.origin + location.pathname).toBe('http://localhost:8080/auth/google');
+    expect(location.searchParams.get('returnTo')).toBe('http://localhost:5173');
+
+    window.location = originalLocation;
   });
 
   it('shows the authenticated user and signs out', async () => {
@@ -44,7 +63,7 @@ describe('App', () => {
     await wrapper.find('button.secondary-button').trigger('click');
     await flushPromises();
 
-    expect(fetch).toHaveBeenLastCalledWith('/auth/logout', {
+    expect(fetch).toHaveBeenLastCalledWith('http://localhost:8080/auth/logout', {
       method: 'POST',
       credentials: 'include'
     });

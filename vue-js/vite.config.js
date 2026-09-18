@@ -14,7 +14,7 @@ export default defineConfig({
     proxy: {
       '/auth': {
         target: apiTarget,
-        changeOrigin: true
+        changeOrigin: false
       },
       '/psukim': {
         target: apiTarget,

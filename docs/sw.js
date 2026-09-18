@@ -1,6 +1,6 @@
 // todo for dev efficiency, ignore cache when url is localhost, or contains .ngrok-free.app
 
-const CACHE_NAME = 'v34';
+const CACHE_NAME = 'heb-bible-v35';
 
 const addResourcesToCache = async (resources) => {
     const cache = await caches.open(CACHE_NAME);
@@ -9,7 +9,8 @@ const addResourcesToCache = async (resources) => {
   
   const putInCache = async (request, response) => {
     if (!/^https?:$/i.test(new URL(request.url).protocol)) return;
-    if (request.method == 'POST') return; // Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Request method 'POST' is unsupported
+    if (request.method !== 'GET') return;
+    if (!response.ok && response.type !== 'opaque') return;
     const cache = await caches.open(CACHE_NAME);
     await cache.put(request, response);
   };
@@ -76,8 +77,11 @@ const addResourcesToCache = async (resources) => {
   };
   
   self.addEventListener('activate', (event) => {
-    event.waitUntil(deleteOldCaches());
-    event.waitUntil(enableNavigationPreload());
+    event.waitUntil(Promise.all([
+      deleteOldCaches(),
+      enableNavigationPreload(),
+      self.clients.claim()
+    ]));
   });
   
   self.addEventListener('install', (event) => {
@@ -87,13 +91,30 @@ const addResourcesToCache = async (resources) => {
         './index.html',
         './mystyle.css',
         './script.js',
+        './AppConfig.js',
+        './Analytics.js',
+        './BookReferences.js',
         './RepoInit.js',
-        './menora.jpg'
+        './Repo.js',
+        './Read.js',
+        './Pasuk.js',
+        './Find.js',
+        './Gematria.js',
+        './Dilug.js',
+        './No2gim.js',
+        './lunr.stemmer.support.js',
+        './lunr.he.js',
+        './favicon.ico',
+        './menora.jpg',
+        './376-3766518_work-in-progress-clipart-hd-png-download.png'
       ])
+      .then(() => self.skipWaiting())
     );
   });
   
   self.addEventListener('fetch', (event) => {
+    if (event.request.method !== 'GET') return;
+
     event.respondWith(
       cacheFirst({
         request: event.request,

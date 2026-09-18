@@ -1,4 +1,6 @@
 import { No2gim } from "./No2gim.js";
+import { reportUsage } from "./Analytics.js";
+import { createAppUrl, createReferenceUrl } from "./AppConfig.js";
 
 class Dilug {
 
@@ -80,7 +82,8 @@ class Dilug {
                     matchFound = true;
                     foundStr += "דילוג של " + iSkip + " החל ממיקום " + (j+1).toString() + "<br>";
                     var idx = indVrsRange(j+1, 0, repo.getVerses().length); // todo fix?
-                    foundStr += repo.getVerses()[idx+1] + " - " + "<a href=\"https://shahart.github.io/heb-bible/index.html?r=" + (repo.getBookNumArr()[idx]+1) + "," + repo.getPPrk()[idx] + "\"" + " target=\"_new\">" + repo.getCurrBook()[idx] + " " + new No2gim().no2gim(repo.getPPrk()[idx]) + "</a>-" + repo.getPPsk()[idx];
+                    const referenceUrl = createReferenceUrl(repo.getBookNumArr()[idx] + 1, repo.getPPrk()[idx]);
+                    foundStr += repo.getVerses()[idx+1] + " - <a href=\"" + referenceUrl + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + repo.getCurrBook()[idx] + " " + new No2gim().no2gim(repo.getPPrk()[idx]) + "</a>-" + repo.getPPsk()[idx];
 
                     let txt = "";
                     for (let h = j; h <= j+ targetLen * iSkip; ++h) {
@@ -107,19 +110,10 @@ class Dilug {
                 var endTime = new Date();
                 console.log((endTime - startTime) + " mSec");
             }
-            document.getElementById("resultDilug2").innerHTML = foundStr + "<span class=\"share\">&gt;</span></br></br><p dir=\"ltr\" align=\"right\">https://shahart.github.io/heb-bible?s=" + target + "&from=" + foundSkip + "</p>";
+            const shareUrl = createAppUrl({ s: target, from: foundSkip });
+            document.getElementById("resultDilug2").innerHTML = foundStr + "<span class=\"share\">&gt;</span><br><br><p dir=\"ltr\" class=\"share-url\">" + shareUrl + "</p>";
         });
-        //
-        var xhrAws = new XMLHttpRequest();
-        xhrAws.open('POST', 'https://z4r74tvfwdi3wywr4aegh4f3di0zhhuo.lambda-url.eu-north-1.on.aws/');
-        xhrAws.setRequestHeader("Content-Type", "application/json");
-        xhrAws.send(JSON.stringify({ "name": args, "extra": "found-" + "unknown" /*(found >= 1)*/, "type": "Dilug" }));
-        xhrAws.onreadystatechange = function(e) {
-          if ( xhrAws.readyState === 4) {
-            console.debug(xhrAws.status + this.responseText);
-          }
-        }
-        xhrAws.send();
+        reportUsage("Dilug", args, "found-unknown");
     }
 
 }
