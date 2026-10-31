@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <zlib.h>
 #include "utf8.h"
+#include "bible_count.h"
 
 #define PORT 3000
 #define MAX_LINE 8192
@@ -57,26 +58,6 @@ static Bible *load_bible(const char *path) {
     return b;
 }
 
-static size_t count_by_name(const char *name) {
-    if (!name || !*name) return 0;
-    int name_first_len, name_last_len;
-    const char *name_first = utf8_first_char(name, &name_first_len);
-    const char *name_last = utf8_last_char(name, &name_last_len);
-
-    size_t count = 0;
-    for (size_t i = 0; i < bible->count; i++) {
-        int v_first_len, v_last_len;
-        const char *v_first = utf8_first_char(bible->verses[i], &v_first_len);
-        const char *v_last = utf8_last_char(bible->verses[i], &v_last_len);
-        if (utf8_char_eq(v_first, v_first_len, name_first) &&
-            utf8_char_eq(v_last, v_last_len, name_last)) {
-            count++;
-            printf("%s\n", bible->verses[i]);
-        }
-    }
-    return count;
-}
-
 static int hex_val(char c) {
     if (c >= '0' && c <= '9') return c - '0';
     if (c >= 'a' && c <= 'f') return c - 'a' + 10;
@@ -119,6 +100,18 @@ static void handle_client(int client_fd) {
     int status = 200;
     char content_type[64] = "application/json";
 
+    int contains_name = 0;
+    char *query = strchr(path, '?');
+    if (query) {
+        *query++ = '\0';
+        const char *param = strstr(query, "containsName=");
+        if (param && (param == query || param[-1] == '&')) {
+            param += strlen("containsName=");
+            contains_name = strncmp(param, "true", 4) == 0 &&
+                            (param[4] == '\0' || param[4] == '&');
+        }
+    }
+
     if (strcmp(method, "GET") != 0) {
         status = 405;
         resp_body = "{\"error\":\"method not allowed\"}";
@@ -127,7 +120,7 @@ static void handle_client(int client_fd) {
         resp_body = body_buf;
     } else if (strncmp(path, "/psukim/", 8) == 0) {
         char *decoded = url_decode(path + 8);
-        size_t c = count_by_name(decoded);
+        size_t c = count_by_name(bible->verses, bible->count, decoded, contains_name);
         snprintf(body_buf, sizeof(body_buf), "{\"count\":%zu}", c);
         resp_body = body_buf;
         free(decoded);

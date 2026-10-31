@@ -38,11 +38,14 @@ class HebBible:
     def total_psukim(self):
         return len(self.repo)
 
-    def psukim_by_name(self, name):
+    def psukim_by_name(self, name, contains_name=False):
         print('/get', name)
+        if not name:
+            return 0
         result = []
         for psk in self.repo:
-            if (psk[0] == name[0] and psk[-1] == name[-1]):
+            boundary_match = psk[0] == name[0] and psk[-1] == name[-1]
+            if boundary_match or (contains_name and name in psk):
                 result.append(psk)
         print(result)
         return len(result)

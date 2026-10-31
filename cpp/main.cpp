@@ -1,73 +1,15 @@
 #include "httplib.h"
-#include "utf8.hpp"
+#include "bible_repository.hpp"
 
-#include <zlib.h>
-
-#include <array>
 #include <exception>
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <string_view>
-#include <vector>
 
 namespace {
 
 constexpr int PORT = 3000;
-constexpr size_t MAX_LINE = 8192;
 constexpr auto JSON = "application/json";
-
-class BibleRepository {
-public:
-    explicit BibleRepository(const char *path) {
-        gzFile file = gzopen(path, "r");
-        if (!file) {
-            throw std::runtime_error(std::string("Cannot open ") + path);
-        }
-
-        std::array<char, MAX_LINE> line{};
-        while (gzgets(file, line.data(), static_cast<int>(line.size()))) {
-            std::string_view row(line.data());
-            const size_t comma = row.find(',');
-            if (comma == std::string_view::npos) continue;
-
-            row.remove_prefix(comma + 1);
-            while (!row.empty() && (row.back() == '\n' || row.back() == '\r')) {
-                row.remove_suffix(1);
-            }
-
-            verses_.emplace_back(row);
-        }
-
-        gzclose(file);
-        std::cerr << verses_.size() << " psukim\n";
-    }
-
-    size_t count() const {
-        return verses_.size();
-    }
-
-    size_t count_by_name(std::string_view name) const {
-        if (name.empty()) return 0;
-
-        const std::string_view name_first = utf8_first_char(name);
-        const std::string_view name_last = utf8_last_char(name);
-
-        size_t matches = 0;
-        for (const auto &verse : verses_) {
-            const std::string_view verse_view(verse);
-            if (utf8_char_eq(utf8_first_char(verse_view), name_first) &&
-                utf8_char_eq(utf8_last_char(verse_view), name_last)) {
-                ++matches;
-                std::cout << verse << '\n';
-            }
-        }
-        return matches;
-    }
-
-private:
-    std::vector<std::string> verses_;
-};
 
 std::string count_json(size_t count) {
     return "{\"count\":" + std::to_string(count) + "}";
@@ -94,7 +36,11 @@ void configure_routes(httplib::Server &app, const BibleRepository &bible) {
             return;
         }
 
-        json(res, count_json(bible.count_by_name(name->second)));
+        const auto contains = req.get_param_value("containsName");
+        const bool contains_name = contains == "true" || contains == "1" ||
+                                   contains == "t" || contains == "TRUE" ||
+                                   contains == "True" || contains == "T";
+        json(res, count_json(bible.count_by_name(name->second, contains_name)));
     });
 
     app.set_error_handler([](const httplib::Request &, httplib::Response &res) {

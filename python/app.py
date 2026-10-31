@@ -12,8 +12,8 @@ def total_psukim():
     return JSONResponse(content=result)
 
 @app.get('/psukim/{name}')
-def psukim_by_name(name):
-    result = heb_bible.psukim_by_name(name)
+def psukim_by_name(name, contains_name: bool = Query(False, alias='containsName')):
+    result = heb_bible.psukim_by_name(name, contains_name)
     return JSONResponse(content=result)
 
 @app.post('/dilugim')

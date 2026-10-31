@@ -12,11 +12,15 @@ heb-bible: main.cpp utf8.cpp utf8.hpp httplib.h
 test_utf8: test_utf8.cpp utf8.cpp utf8.hpp
 	$(CXX) $(CXXFLAGS) -o $@ test_utf8.cpp utf8.cpp
 
+test_bible_repository: test_bible_repository.cpp bible_repository.hpp utf8.cpp utf8.hpp
+	$(CXX) $(CXXFLAGS) -o $@ test_bible_repository.cpp utf8.cpp $(LDLIBS)
+
 run: heb-bible
 	./heb-bible
 
-test: test_utf8
+test: test_utf8 test_bible_repository
 	./test_utf8
+	./test_bible_repository
 
 clean:
-	rm -f heb-bible test_utf8
+	rm -f heb-bible test_utf8 test_bible_repository

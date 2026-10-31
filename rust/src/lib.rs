@@ -32,7 +32,7 @@ impl HebBible {
         self.repo.len()
     }
 
-    pub fn psukim_by_name(&self, name: &str) -> usize {
+    pub fn psukim_by_name(&self, name: &str, contains_name: bool) -> usize {
         println!("/get {}", name);
         if name.is_empty() {
             return 0;
@@ -44,11 +44,43 @@ impl HebBible {
         for psk in &self.repo {
             let f = psk.chars().next();
             let l = psk.chars().last();
-            if f == first && l == last {
+            if (f == first && l == last) || (contains_name && psk.contains(name)) {
                 count += 1;
             }
         }
         println!("{}", count);
         count
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::HebBible;
+
+    fn bible() -> HebBible {
+        HebBible {
+            repo: vec![
+                "אבג".to_string(),
+                "אxyzג".to_string(),
+                "אבxד".to_string(),
+                "hello world".to_string(),
+                "say hello".to_string(),
+                "xhelloy".to_string(),
+            ],
+        }
+    }
+
+    #[test]
+    fn contains_name_counts_substrings_and_boundary_matches() {
+        let bible = bible();
+        assert_eq!(bible.psukim_by_name("hell", true), 3);
+        assert_eq!(bible.psukim_by_name("אxyzד", true), 1);
+    }
+
+    #[test]
+    fn contains_name_false_keeps_boundary_matching() {
+        let bible = bible();
+        assert_eq!(bible.psukim_by_name("אanythingג", false), 2);
+        assert_eq!(bible.psukim_by_name("hell", false), 0);
     }
 }

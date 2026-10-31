@@ -1,5 +1,6 @@
-use axum::{extract::Path, routing::get, Json, Router};
+use axum::{extract::{Path, Query}, routing::get, Json, Router};
 use serde::Serialize;
+use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::net::TcpListener;
 
@@ -34,10 +35,14 @@ async fn main() {
         }))
         .route("/psukim/:name", get({
             let heb = heb.clone();
-            move |Path(name): Path<String>| {
+            move |Path(name): Path<String>, Query(params): Query<HashMap<String, String>>| {
                 let heb = heb.clone();
                 async move {
-                    let res = heb.psukim_by_name(&name);
+                    let contains_name = params
+                        .get("containsName")
+                        .and_then(|value| value.parse::<bool>().ok())
+                        .unwrap_or(false);
+                    let res = heb.psukim_by_name(&name, contains_name);
                     Json(res)
                 }
             }
