@@ -21,11 +21,15 @@ public sealed class HebBibleRepositoryTests
                 writer.WriteLine("1,שחר");
                 writer.WriteLine("2,שלום");
                 writer.WriteLine("3,אחר");
+                writer.WriteLine("4,שחר באמצע");
             }
 
             var bible = new HebBibleRepository(dataFile);
 
+            Assert.Equal(4, bible.TotalPsukim());
             Assert.Equal(1, bible.PsukimByName("שחר"));
+            Assert.Equal(2, bible.PsukimByName("שחר", containsName: true));
+            Assert.Equal(1, bible.PsukimByName("ר באמצ", containsName: true));
         }
         finally
         {

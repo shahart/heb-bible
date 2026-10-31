@@ -32,7 +32,7 @@ public sealed class HebBibleRepository
         _verses = verses.ToArray();
     }
 
-    public int PsukimByName(string name)
+    public int PsukimByName(string name, bool containsName = false)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
@@ -40,6 +40,9 @@ public sealed class HebBibleRepository
         var last = name[^1];
 
         return _verses.Count(verse =>
-            verse.Length > 0 && verse[0] == first && verse[^1] == last);
+            (verse.Length > 0 && verse[0] == first && verse[^1] == last) ||
+            (containsName && verse.Contains(name, StringComparison.Ordinal)));
     }
+
+    public int TotalPsukim() => _verses.Length;
 }

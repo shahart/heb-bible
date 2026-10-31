@@ -6,8 +6,11 @@ builder.Services.AddSingleton<HebBibleRepository>();
 
 var app = builder.Build();
 
-app.MapGet("/psukim/{name}", (string name, HebBibleRepository bible) =>
-    Results.Json(bible.PsukimByName(name)));
+app.MapGet("/psukim", (HebBibleRepository bible) =>
+    Results.Json(bible.TotalPsukim()));
+
+app.MapGet("/psukim/{name}", (string name, HebBibleRepository bible, bool containsName = false) =>
+    Results.Json(bible.PsukimByName(name, containsName)));
 
 app.Run();
 
