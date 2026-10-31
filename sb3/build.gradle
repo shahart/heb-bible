@@ -59,7 +59,7 @@ dependencies {
     
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
-    implementation 'commons-io:commons-io:2.17.0'
+    implementation 'commons-io:commons-io:2.18.0'
     implementation 'edu.gematria:gematria:1.0'
 
     implementation 'org.liquibase:liquibase-core'
