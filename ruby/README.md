@@ -5,6 +5,8 @@ Ruby web API for counting verses using the matching rules in `pasuk_service.rb`.
 `GET /psukim?name=...` and `GET /psukim/:name` for name searches. Add
 `containsName=true` to enable substring matching. The response is JSON, such as
 `{"count":25}`. A missing `name` query parameter returns HTTP 400.
+`POST /dilugim?skip_min=1&skip_max=100` searches the UTF-8 request body and
+returns the number of skip-pattern matches (up to 50), as a JSON number.
 The dependencies support Ruby 2.6 and newer.
 
 The app reads `../bible.txt.gz` from the repository root. Set `BIBLE_GZIP_PATH`

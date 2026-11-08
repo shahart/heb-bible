@@ -1,6 +1,6 @@
 // todo for dev efficiency, ignore cache when url is localhost, or contains .ngrok-free.app
 
-const CACHE_NAME = 'heb-bible-v35';
+const CACHE_NAME = 'heb-bible-v36';
 
 const addResourcesToCache = async (resources) => {
     const cache = await caches.open(CACHE_NAME);
@@ -28,7 +28,9 @@ const addResourcesToCache = async (resources) => {
   
   const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
     // First try to get the resource from the cache
-    const responseFromCache = await caches.match(request);
+    const responseFromCache = await caches.match(request, {
+      ignoreSearch: request.mode === 'navigate',
+    });
     if (responseFromCache) {
       return responseFromCache;
     }
@@ -104,6 +106,8 @@ const addResourcesToCache = async (resources) => {
         './No2gim.js',
         './lunr.stemmer.support.js',
         './lunr.he.js',
+        './bible.txt.gz',
+        './bible-niqqud.txt',
         './favicon.ico',
         './menora.jpg',
         './376-3766518_work-in-progress-clipart-hd-png-download.png'
@@ -114,6 +118,16 @@ const addResourcesToCache = async (resources) => {
   
   self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
+
+    // A deep link such as /?r=27,1 must still load the cached app shell offline.
+    if (event.request.mode === 'navigate') {
+      event.respondWith(cacheFirst({
+        request: event.request,
+        preloadResponsePromise: event.preloadResponse,
+        fallbackUrl: './index.html',
+      }));
+      return;
+    }
 
     event.respondWith(
       cacheFirst({

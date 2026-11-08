@@ -202,6 +202,16 @@ class Repo {
     }
 
     lucene(t) {
+        if (typeof lunr === "undefined") {
+            const query = String(t || "").trim().toLocaleLowerCase();
+            const matches = documents.filter((doc) => doc.text.toLocaleLowerCase().includes(query));
+            let toS = "";
+            for (const doc of matches) {
+                toS += "<br/></br>" + this.noName(doc.name) + ", Score: 1";
+            }
+            document.getElementById("resultFind").innerHTML = toS + "</br></br>" + matches.length + ' ממצאים ' + "</br>";
+            return;
+        }
         if (typeof lunr != "undefined") {
             if (idx.length == 0) {
                 idx = lunr(function () {
@@ -216,7 +226,7 @@ class Repo {
                 })
                 }
         }
-        if (!!idx) console.warn('Offline?! >> Lunr might not work');
+        if (!idx) return;
         let message = idx.search(t);
         let toS = "";
         for (let i=0; i<message.length; ++i) {

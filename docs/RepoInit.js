@@ -102,6 +102,14 @@ class RepoInit {
         throw lastError || new Error("Failed to fetch binary data");
     }
 
+    async ungzip(bytes) {
+        if (typeof DecompressionStream === "undefined") {
+            throw new Error("This browser does not support offline gzip decompression");
+        }
+        const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+        return new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+
     async loadCachedValue(key) {
         let cachedValue = "";
         try {
@@ -194,14 +202,9 @@ class RepoInit {
         }
 
         if (ungzipedData == "" || nData == "") {
-            if (typeof pako === "undefined") {
-                alert("No internet!");
-                return;
-            }
-
             if (ungzipedData == "") {
                 const gzipedDataArray = await this.fetchBinary([LOCAL_BIBLE_GZIP_URL, "https://raw.githubusercontent.com/shahart/heb-bible/master/bible.txt.gz"]);
-                ungzipedData = new TextDecoder().decode(pako.ungzip(gzipedDataArray));
+                ungzipedData = new TextDecoder().decode(await this.ungzip(gzipedDataArray));
             }
 
             if (nData == "") {

@@ -7,9 +7,6 @@
     <meta name="theme-color" content="#4e2d15">
     <link rel="shortcut icon" href="#">
     <title>Pasuk or Dilug</title>
-    <!-- HolyClock.com <HEAD> code for shahart.github.io -->
-    <script crossorigin="anonymous">/*<![CDATA[*/_holyclock_id="a587140a291af38d7336f360192e7f83";_holyclock_tag='<s'+'cript src\x3d"//www.holyclock.com/holyclock.js?'+Math.floor(+new Date/864E5)+'">\x3c/script>';null!==document.cookie.match(/(?:^|;)\s*_holyclock_qr=\s*\w/)&&null===window.location.hash.match(/#holyclock=qr(?=#|$)/)&&document.write(_holyclock_tag);//]]></script>
-    <!-- HolyClock.com <HEAD> code for shahart.github.io -->
     <link rel="stylesheet" href="mystyle.css" media="print" onload="this.media='all'">
     <link rel="icon" href="favicon.ico">
     <meta name="description" content="התנך הממוחשב">
@@ -61,15 +58,6 @@
 
 </head>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-59K6M4EH08"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-59K6M4EH08');
-</script>
 
 <body>
 <noscript>
@@ -114,9 +102,7 @@
 <a id="book"/>
 <!-- (new Date).toLocaleString('he',{dateStyle:'full',calendar:"hebrew"}) -->
 <!-- (new Intl.DateTimeFormat('he-u-ca-hebrew',{weekday: 'long', year:'numeric', month:'numeric', day:'numeric'}).format(new Date())); -->
-<script src="https://www.hebcal.com/etc/hdate-he-v2.js" crossorigin="anonymous"></script>
 <div class="utility-card">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" onerror="alert('No internet!')"></script>
 <label class="field-label" for="BookSelect">ספר</label>
 <select id="BookSelect">
     <optgroup label="תורה"> <!-- Instruction -->
@@ -186,15 +172,7 @@
 <h5><a href="test/test.html">Tests</a></h5>
 </div>
 
-<script src="https://unpkg.com/lunr/lunr.js"></script>
-<script src="lunr.stemmer.support.js"></script>
-<script src="lunr.he.js"></script>
-
-<!-- <script src="https://raw.githubusercontent.com/avisaradir/lunr-languages-he/refs/heads/master/lunr.stemmer.support.js"></script> -->
-<!-- <script src="https://raw.githubusercontent.com/avisaradir/lunr-languages-he/refs/heads/master/lunr.he.js"></script> -->
-
 <script src="script.js" type='module'></script>
-<a href="https://www.holyclock.com" target="_blank" rel="noopener noreferrer"> <img alt="שומר-שבת" src="https://www.holyclock.com/pics/language/en/ext-icon.png"></a>
 <br/><br/>
 
     </div>
@@ -542,7 +520,7 @@
     
     <br/>
     <br/>
-    <img id="secretPopup" style="width: 25%; height: auto" loading="lazy" src="https://www.kindpng.com/picc/m/376-3766518_work-in-progress-clipart-hd-png-download.png" alt="Work In Progress Clipart, HD Png Download@kindpng.com">
+    <img id="secretPopup" style="width: 25%; height: auto" loading="lazy" src="376-3766518_work-in-progress-clipart-hd-png-download.png" alt="Work In Progress">
   </div>
 </div>
 </div>
@@ -552,7 +530,7 @@
 </div>
 <script>
     document.getElementById("secretPopup").addEventListener('click', function(e) {
-        alert("Last updated 18/Sep/26");
+        alert("Last updated 8/Nov/26");
 
         const deleteCache = async (key) => {
             await caches.delete(key);

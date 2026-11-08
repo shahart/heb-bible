@@ -1,15 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Noto+Serif+Hebrew:wght@400;600;700&display=swap');
-
-@font-face {
-  font-family: 'FreeMono';
-  font-style: normal;
-  src:
-     local('FreeMono'), 
-     url('https://fonts.cdnfonts.com/s/16387/FreeMono.woff') format('woff');
-}
-
 pre {
-  font-family: 'FreeMono', sans-serif;
+  font-family: 'FreeMono', monospace;
 }
 
 :root {
