@@ -81,6 +81,25 @@ textarea {
   z-index: 1;
 }
 
+.offline-indicator {
+  position: fixed;
+  z-index: 10;
+  right: 16px;
+  bottom: 16px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  color: #fff8ef;
+  background: #7a2525;
+  box-shadow: 0 4px 16px rgba(36, 24, 11, 0.24);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.offline-indicator[hidden] {
+  display: none;
+}
+
 .hero {
   margin-bottom: 18px;
   padding: 24px;
@@ -93,6 +112,13 @@ textarea {
   box-shadow: var(--shadow);
   overflow: hidden;
   position: relative;
+}
+
+.hero-hebrew-date {
+  margin: 10px 0 0;
+  color: #f4dfbd;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .hero > * {

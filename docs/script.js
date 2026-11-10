@@ -24,6 +24,47 @@ let gematria = new Gematria(Repo);
 let find = new Find(Repo);
 
 const fontSizeKey = "fontSizeMode";
+const toHebrewNumeral = value => {
+    let number = value;
+    let letters = "";
+    for (const [amount, letter] of [[400, "ת"], [300, "ש"], [200, "ר"], [100, "ק"]]) {
+        while (number >= amount) {
+            letters += letter;
+            number -= amount;
+        }
+    }
+    if (number === 15) return `${letters}טו`;
+    if (number === 16) return `${letters}טז`;
+    for (const [amount, letter] of [[90, "צ"], [80, "פ"], [70, "ע"], [60, "ס"], [50, "נ"], [40, "מ"], [30, "ל"], [20, "כ"], [10, "י"]]) {
+        if (number >= amount) {
+            letters += letter;
+            number -= amount;
+        }
+    }
+    return `${letters}${"אבגדהוזחט"[number - 1] || ""}`;
+};
+const formatHebrewYear = year => {
+    const letters = toHebrewNumeral(year % 1000);
+    return `ה׳${letters.length > 1 ? `${letters.slice(0, -1)}״${letters.slice(-1)}` : `${letters}׳`}`;
+};
+
+const hebrewDate = document.getElementById("hebrew-date");
+if (hebrewDate && Intl.DateTimeFormat) {
+    try {
+        const parts = new Intl.DateTimeFormat("he-IL-u-ca-hebrew", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }).formatToParts(new Date());
+        const day = Number(parts.find(part => part.type === "day")?.value);
+        const year = Number(parts.find(part => part.type === "year")?.value);
+        const month = parts.find(part => part.type === "month")?.value;
+        hebrewDate.textContent = `${toHebrewNumeral(day)} ${month} ${formatHebrewYear(year)}`;
+    } catch (error) {
+        hebrewDate.hidden = true;
+    }
+}
+
 const normalFontButton = document.getElementById("normalFont");
 const largeFontButton = document.getElementById("largeFont");
 
@@ -361,9 +402,14 @@ document.getElementById('lucene').addEventListener('click', () => {
     document.getElementById('lunrJsTip').innerHTML = (document.getElementById('lunrJsTip').innerHTML !== "") ? "" : "for Joker; See also: `+Foo Bar -Baz` FOR *<br/>contains Foo Must, Bar Maybe, Baz Not";
 })
 
-if (!navigator.onLine) {
-    console.log('offline'); 
-}
+const offlineIndicator = document.getElementById('offline-indicator');
+const updateOfflineIndicator = () => {
+    offlineIndicator.hidden = navigator.onLine;
+};
+
+window.addEventListener('online', updateOfflineIndicator);
+window.addEventListener('offline', updateOfflineIndicator);
+updateOfflineIndicator();
 
 const registerServiceWorker = async () => {
     if ('serviceWorker' in navigator) {
