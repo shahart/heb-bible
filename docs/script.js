@@ -1,0 +1,394 @@
+import { RepoInit } from "./RepoInit.js";
+import Repo from "./Repo.js";
+import { Pasuk } from "./Pasuk.js";
+import { Dilug } from "./Dilug.js";
+import { Read } from "./Read.js";
+import { Gematria } from "./Gematria.js";
+import { Find } from "./Find.js";
+import { parseExternalBookReference } from "./BookReferences.js";
+/*
+window.onerror = function(message) {
+    alert(message);
+    console(message);
+    return true;
+};
+*/
+const repoInit = new RepoInit();
+let pasuk = new Pasuk(Repo);
+let dilug = new Dilug(Repo);
+let read = new Read(Repo);
+let gematria = new Gematria(Repo);
+let find = new Find(Repo);
+const fontSizeKey = "fontSizeMode";
+const toHebrewNumeral = value => {
+    let number = value;
+    let letters = "";
+    for (const [amount, letter] of [[400, "ת"], [300, "ש"], [200, "ר"], [100, "ק"]]) {
+        while (number >= amount) {
+            letters += letter;
+            number -= amount;
+        }
+    }
+    if (number === 15)
+        return `${letters}טו`;
+    if (number === 16)
+        return `${letters}טז`;
+    for (const [amount, letter] of [[90, "צ"], [80, "פ"], [70, "ע"], [60, "ס"], [50, "נ"], [40, "מ"], [30, "ל"], [20, "כ"], [10, "י"]]) {
+        if (number >= amount) {
+            letters += letter;
+            number -= amount;
+        }
+    }
+    return `${letters}${"אבגדהוזחט"[number - 1] || ""}`;
+};
+const formatHebrewYear = year => {
+    const letters = toHebrewNumeral(year % 1000);
+    return `ה׳${letters.length > 1 ? `${letters.slice(0, -1)}״${letters.slice(-1)}` : `${letters}׳`}`;
+};
+const hebrewDate = document.getElementById("hebrew-date");
+if (hebrewDate && Intl.DateTimeFormat) {
+    try {
+        const parts = new Intl.DateTimeFormat("he-IL-u-ca-hebrew", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }).formatToParts(new Date());
+        const day = Number(parts.find(part => part.type === "day")?.value);
+        const year = Number(parts.find(part => part.type === "year")?.value);
+        const month = parts.find(part => part.type === "month")?.value;
+        hebrewDate.textContent = `${toHebrewNumeral(day)} ${month} ${formatHebrewYear(year)}`;
+    }
+    catch (error) {
+        hebrewDate.hidden = true;
+    }
+}
+const normalFontButton = document.getElementById("normalFont");
+const largeFontButton = document.getElementById("largeFont");
+function setFontSizeMode(mode) {
+    const useLargeFont = mode === "large";
+    document.body.classList.toggle("large-font", useLargeFont);
+    normalFontButton.classList.toggle("is-active", !useLargeFont);
+    largeFontButton.classList.toggle("is-active", useLargeFont);
+    normalFontButton.setAttribute("aria-pressed", String(!useLargeFont));
+    largeFontButton.setAttribute("aria-pressed", String(useLargeFont));
+    localStorage.setItem(fontSizeKey, useLargeFont ? "large" : "normal");
+}
+setFontSizeMode(localStorage.getItem(fontSizeKey));
+normalFontButton.addEventListener("click", () => {
+    setFontSizeMode("normal");
+});
+largeFontButton.addEventListener("click", () => {
+    setFontSizeMode("large");
+});
+const params = new URLSearchParams(document.location.search);
+let r = params.get("r");
+const p = params.get("p");
+const s = params.get("s"); // (s)kip
+const g = params.get("g");
+const q = params.get("q"); // (q)uery
+const l = params.get("l");
+const b = params.get("b"); // (b)ook
+const externalBookReference = parseExternalBookReference(b);
+if (externalBookReference) {
+    r = externalBookReference;
+}
+const firstName = params.get("firstName");
+if (firstName && firstName !== '') {
+    console.info(firstName);
+}
+let cookieInput = firstName && firstName !== '' ? firstName : pasuk.loadInput("input");
+if (cookieInput !== "") {
+    document.getElementById('text').value = cookieInput;
+}
+let totalPsukim = firstName && firstName !== '' ? 0 : pasuk.loadInput("resCount");
+if (totalPsukim !== "") {
+    document.getElementById("result").innerHTML = totalPsukim + " פסוקים";
+}
+document.getElementById('showBook').addEventListener('click', () => {
+    read.read();
+});
+const bookSelect = document.getElementById('BookSelect');
+const randomPsalmButton = document.getElementById('randomPsalm');
+function updateRandomPsalmButton() {
+    randomPsalmButton.hidden = bookSelect.value !== '27';
+}
+bookSelect.addEventListener('change', updateRandomPsalmButton);
+randomPsalmButton.addEventListener('click', () => {
+    read.readRandomPsalm();
+});
+updateRandomPsalmButton();
+document.getElementById('button1').addEventListener('click', () => {
+    pasuk.pasuk();
+});
+document.getElementById('buttonD').addEventListener('click', () => {
+    dilug.dilug();
+});
+document.getElementById('buttonG').addEventListener('click', () => {
+    gematria.gematria();
+});
+document.getElementById('buttonF').addEventListener('click', () => {
+    find.find();
+});
+document.getElementById('sabort').addEventListener('click', () => {
+    dilug.doAbort();
+});
+const date = (new Date).toLocaleString('he', { calendar: "hebrew" });
+if (date.startsWith("1 ") || date.startsWith("29 ") || date.startsWith("30 ")) {
+    const yaale = document.getElementById('yaale');
+    const yaale2 = document.getElementById('yaale2');
+    const yaaleForgot = document.getElementById('yaaleForgot');
+    if (yaale)
+        yaale.innerHTML = "בראש חודש(?): אֱלהֵינוּ וֵאלהֵי אֲבוֹתֵינוּ. יַעֲלֶה וְיָבא, יַגִּיעַ, יֵרָאֶה, יֵרָצֶה, יִשָּׁמַע, יִפָּקֵד, יִזָּכֵר לְפָנֶיךָ זִכְרוֹנֵנוּ, זִכְרוֹן אֲבוֹתֵינוּ, זִכְרוֹן יְרוּשָׁלַיִם עִירָךְ, זִכְרוֹן מָשִׁיחַ בֶּן דָּוִד עַבְדָּךְ, זִכְרוֹן כָּל עַמְּךָ בֵית יִשְׂרָאֵל לְפָנֶיךָ. לִפְלֵיטָה, לְטוֹבָה, לִבְרָכָה, לְחֵן, לְחֶסֶד וּלְרַחֲמִים. בְּיוֹם ראשׁ הַחֹדֶשׁ הַזֶּה. לְרַחֵם בּוֹ עָלֵינוּ וּלְהוֹשִׁיעֵנוּ. זָכְרֵנוּ יי אֱלֹהֵינוּ בּוֹ לְטוֹבָה, פָּקְדֵנוּ בוֹ לִבְרָכָה, הוֹשִׁיעֵנוּ בוֹ לְחַיִּים, בִּדְבַר יְשׁוּעָה וְרַחֲמִים. חוּס וְחָנֵּנוּ וְרַחֵם עָלֵינוּ, וּמַלְּטֵנוּ בוֹ מִכּל צָרָה וְיָגוֹן, וְשַׂמְּחֵנוּ בוֹ שִׂמְחָה שְׁלֵמָה, כִּי אֵל מֶלֶךְ רַחוּם וְחַנּוּן אָתָּה:";
+    if (yaale2)
+        yaale2.innerHTML = "בראש חודש(?): וזכרנו לטובה ביום ראש חודש הזה:";
+    if (yaaleForgot)
+        yaaleForgot.innerHTML = "ואם שכח ונזכר מייד: ברוך אתה ה' אלקינו מלך העולם שנתן ראשי-חדשים לעמו ישראל לזכרון";
+}
+if (b && b.trim() !== '' && !externalBookReference) {
+    if (b.startsWith('Joshua')) {
+        r = '6';
+    }
+    else if (b.startsWith('Judges')) {
+        r = '7';
+    }
+    else if (b.startsWith('I Samuel')) {
+        r = '8';
+    }
+    else if (b.startsWith('II Samuel')) {
+        r = '9';
+    }
+    else if (b.startsWith('I Kings')) {
+        r = '10';
+    }
+    else if (b.startsWith('II Kings')) {
+        r = '11';
+    }
+    else if (b.startsWith('Isaiah')) {
+        r = '12';
+    }
+    else if (b.startsWith('Jeremiah')) {
+        r = '13';
+    }
+    else if (b.startsWith('Ezekiel')) {
+        r = '14';
+    }
+    else if (b.startsWith('Hosea')) {
+        r = '15';
+    }
+    else if (b.startsWith('Joel')) {
+        r = '16';
+    }
+    else if (b.startsWith('Amos')) {
+        r = '17';
+    }
+    else if (b.startsWith('Obadiah')) {
+        r = '18';
+    }
+    else if (b.startsWith('Jonah')) {
+        r = '19';
+    }
+    else if (b.startsWith('Micha')) {
+        r = '20';
+    }
+    else if (b.startsWith('Micah')) {
+        r = '20';
+    }
+    else if (b.startsWith('Nachum')) {
+        r = '21';
+    }
+    else if (b.startsWith('Habakkuk')) {
+        r = '22';
+    }
+    else if (b.startsWith('Zephaniah')) {
+        r = '23';
+    }
+    else if (b.startsWith('Haggai')) {
+        r = '24';
+    }
+    else if (b.startsWith('Zechariah')) {
+        r = '25';
+    }
+    else if (b.startsWith('Malachi')) {
+        r = '26';
+    }
+    /* eng - no need
+        else if (b.startsWith('יהושע')) {
+            r = '6';
+        }
+        else if (b.startsWith('שופטים')) {
+            r = '7';
+        }
+        else if (b.startsWith('שמואל א')) {
+            r = '8';
+        }
+        else if (b.startsWith('שמואל ב')) {
+            r = '9';
+        }
+        else if (b.startsWith('מלכים א')) {
+            r = '10';
+        }
+        else if (b.startsWith('מלכים ב')) {
+            r = '11';
+        }
+        else if (b.startsWith('ישעיהו')) {
+            r = '12';
+        }
+        else if (b.startsWith('ירמיהו')) {
+            r = '13';
+        }
+        else if (b.startsWith('יחזקאל')) {
+            r = '14';
+        }
+        else if (b.startsWith('הושע')) {
+            r = '15';
+        }
+        else if (b.startsWith('יואל')) {
+            r = '16';
+        }
+        else if (b.startsWith('עמוס')) {
+            r = '17';
+        }
+        else if (b.startsWith('עובדיה')) {
+            r = '18';
+        }
+        else if (b.startsWith('יונה')) {
+            r = '19';
+        }
+        else if (b.startsWith('מיכה')) {
+            r = '20';
+        }
+        else if (b.startsWith('נחום')) {
+            r = '21';
+        }
+        else if (b.startsWith('חבקוק')) {
+            r = '22';
+        }
+        else if (b.startsWith('צפניה')) {
+            r = '23';
+        }
+        else if (b.startsWith('חגי')) {
+            r = '24';
+        }
+        else if (b.startsWith('זכריה')) {
+            r = '25';
+        }
+        else if (b.startsWith('מלאכי')) {
+            r = '26';
+        }
+    */
+    r += "," + b.split(" ")[b.split(" ").length - 1]; // .split(":")[0];
+}
+repoInit.ready.then(() => {
+    randomPsalmButton.disabled = false;
+    if (r && r.trim() !== '') {
+        try {
+            let book = r;
+            let prk = undefined;
+            if (r.indexOf(",") > 0) {
+                book = r.split(",")[0];
+                prk = r;
+            }
+            document.getElementById("BookSelect").value = book;
+            updateRandomPsalmButton();
+            // read.read();
+            read.read(prk);
+        }
+        catch (e) {
+            console.error(e);
+            alert("מספר הספר אינו חוקי, 39..1");
+        }
+    }
+    if (p && p.trim() !== '') {
+        document.getElementById("text").value = p;
+        document.getElementById("tab2").checked = true;
+        pasuk.pasuk();
+    }
+    else if (firstName && firstName.trim() !== '') {
+        document.getElementById("tab2").checked = true;
+        pasuk.pasuk();
+    }
+    if (s && s.trim() !== '') {
+        document.getElementById("dilugTxt").value = s;
+        document.getElementById("tab3").checked = true;
+        const from = params.get("from");
+        if (from && from.trim() !== '')
+            document.getElementById("skipMin").value = from;
+        document.getElementById("chars").textContent = s.length + ' ';
+        dilug.dilug();
+    }
+    if (g && g.trim() !== '') {
+        document.getElementById("gim").value = g;
+        document.getElementById("tab4").checked = true;
+        gematria.gematria();
+    }
+    if (q && q.trim() !== '') {
+        document.getElementById("find").value = q.replace(/%20/g, ' ');
+        document.getElementById("tab5").checked = true;
+        find.find();
+    }
+    if (l) {
+        document.getElementById("tab6").checked = true;
+    }
+}).catch(err => {
+    console.error(err);
+    const result = document.getElementById("bibleResult");
+    result.textContent = "לא ניתן לטעון את נתוני התנ״ך. בדקו את החיבור ונסו לרענן את הדף.";
+});
+function runOnEnter(elementId, action) {
+    document.getElementById(elementId).addEventListener('keydown', event => {
+        if (event.key === "Enter")
+            action();
+    });
+}
+runOnEnter("text", () => pasuk.pasuk());
+runOnEnter("dilugTxt", () => dilug.dilug());
+runOnEnter("gim", () => gematria.gematria());
+runOnEnter("find", () => find.find());
+function handleChapter(c) {
+    document.getElementById('psalms' + c).innerHTML = (document.getElementById('psalms' + c).innerHTML !== "") ? "" : read.read("27," + c, true);
+    document.getElementById('psalms' + c + 'B').innerHTML = (document.getElementById('psalms' + c + 'B').innerHTML == "+") ? "-" : "+";
+}
+const psalmChapters = [1, 6, 13, 20, 22, 25, 38, 83, 85, 86, 91, 102, 106, 121, 130, 142];
+for (const chapter of psalmChapters) {
+    document.getElementById(`psalms${chapter}B`).addEventListener('click', () => handleChapter(chapter));
+}
+document.getElementById('MiSheb1B').addEventListener('click', () => {
+    document.getElementById('MiSheb1').innerHTML = (document.getElementById('MiSheb1').innerHTML !== "") ? "" : "מִי שֶׁבֵּרַךְ אֲבוֹתֵינוּ אַבְרָהָם יִצְחָק וְיַעֲקֹב הוּא יְבָרֵךְ אֶת חַיָּלֵי צְבָא הֲגַנָּה לְיִשְׂרָאֵל, הָעוֹמְדִים עַל מִשְׁמַר אַרְצֵנוּ וְעָרֵי אֱלהֵינוּ מִגְּבוּל הַלְּבָנוֹן וְעַד מִדְבַּר מִצְרַיִם וּמִן הַיָּם הַגָּדוֹל עַד לְבוֹא הָעֲרָבָה בַּיַּבָּשָׁה בָּאֲוִיר וּבַיָּם. יִתֵּן ה' אֶת אוֹיְבֵינוּ הַקָּמִים עָלֵינוּ נִגָּפִים לִפְנֵיהֶם. הַקָּדוֹשׁ בָּרוּךְ הוּא יִשְׁמֹר וְיַצִּיל אֶת חַיָלֵינוּ מִכָּל צָרָה וְצוּקָה וּמִכָּל נֶגַע וּמַחְלָה וְיִשְׁלַח בְּרָכָה וְהַצְלָחָה בְּכָל מַעֲשֵׂה יְדֵיהֶם. יַדְבֵּר שׂוֹנְאֵינוּ תַּחְתֵּיהֶם וִיעַטְרֵם בְּכֶתֶר יְשׁוּעָה וּבְעֲטֶרֶת נִצָּחוֹן. וִיקֻיַּם בָּהֶם הַכָּתוּב: כִּי ה' אֱלֹהֵיכֶם הַהֹלֵךְ עִמָּכֶם לְהִלָּחֵם לָכֶם עִם איבֵיכֶם לְהוֹשִׁיעַ אֶתְכֶם: וְנאמַר אָמֵן";
+});
+document.getElementById('MiSheb2B').addEventListener('click', () => {
+    document.getElementById('MiSheb2').innerHTML = (document.getElementById('MiSheb2').innerHTML !== "") ? "" : "אָבִינוּ שֶׁבַּשָּׁמַיִם, צוּר יִשְׂרָאֵל וְגוֹאֲלוֹ, בָּרֵךְ אֶת מְדִינַת יִשְׂרָאֵל, רֵאשִׁית צְמִיחַת גְּאֻלָּתֵנוּ. הָגֵן עָלֶיהָ בְּאֶבְרַת חַסְדֶּךָ, וּפְרֹשׁ עָלֶיהָ סֻכַּת שְׁלוֹמֶךָ, וּשְׁלַח אוֹרְךָ וַאֲמִתְּךָ לְרָאשֶׁיהָ, שָׂרֶיהָ וְיוֹעֲצֶיהָ, וְתַקְּנֵם בְּעֵצָה טוֹבָה מִלְּפָנֶיךָ. חַזֵּק אֶת יְדֵי מְגִנֵּי אֶרֶץ קָדְשֵׁנוּ, וְהַנְחִילֵם אֱלֹהֵינוּ יְשׁוּעָה וַעֲטֶרֶת נִצָּחוֹן תְּעַטְּרֵם, וְנָתַתָּ שָׁלוֹם בָּאָרֶץ וְשִׂמְחַת עוֹלָם לְיוֹשְׁבֶיהָ. וְאֶת אַחֵינוּ כָּל בֵּית יִשְׂרָאֵל פְּקָד-נָא בְּכָל אַרְצוֹת פְּזוּרֵיהֶם, וְתוֹלִיכֵם מְהֵרָה קוֹמְמִיּוּת לְצִיּוֹן עִירֶךָ וְלִירוּשָׁלַיִם מִשְׁכַּן שְׁמֶךָ, כַּכָּתוּב בְּתוֹרַת משֶׁה עַבְדֶּךָ: אִם יִהְיֶה נִדַּחֲךָ בִּקְצֵה הַשָּׁמַיִם, מִשָּׁם יְקַבֶּצְךָ ה' אֱלֹהֶיךָ וּמִשָּׁם יִקָּחֶךָ. וֶהֱבִיאֲךָ ה' אֱלֹהֶיךָ אֶל הָאָרֶץ אֲשֶׁר יָרְשׁוּ אֲבֹתֶיךָ וִירִשְׁתָּהּ, וְהֵיטִבְךָ וְהִרְבְּךָ מֵאֲבֹתֶיךָ. (וּמָל יְיָ אֱלֹהֶיךָ אֶת לְבָבְךָ וְאֶת לְבַב זַרְעֶךָ, לְאַהֲבָה אֶת יְיָ אֱלֹהֶיךָ בְּכׇל לְבָבְךָ וּבְכׇל נַפְשְׁךָ, לְמַעַן חַיֶּיךָ.) (דברים ל, ד-ו). וְיַחֵד לְבָבֵנוּ לְאַהֲבָה וּלְיִרְאָה אֶת שְׁמֶךָ, וְלִשְׁמֹר אֶת כָּל דִּבְרֵי תּוֹרָתֶךָ. וּשְׁלַח לָנוּ מְהֵרָה בֶּן דָּוִד מְשִׁיחַ צִדְקֶךָ, לִפְדּות מְחַכֵּי קֵץ יְשׁוּעָתֶךָ. הוֹפַע בַּהֲדַר גְּאוֹן עֻזֶּךָ עַל כָּל יוֹשְׁבֵי תֵּבֵל אַרְצֶךָ, וְיֹאמַר כֹּל אֲשֶׁר נְשָׁמָה בְּאַפּוֹ: ה' אֱלֹהֵי יִשְׂרָאֵל מֶלֶךְ, וּמַלְכוּתו בַּכּל מָשָׁלָה. אָמֵן סֶלָה";
+});
+document.getElementById('MiSheb3B').addEventListener('click', () => {
+    document.getElementById('MiSheb3').innerHTML = (document.getElementById('MiSheb3').innerHTML !== "") ? "" : "אַחֵינוּ כָּל בֵּית יִשְׂרָאֵל הַנְּתוּנִים בַּצָּרָה וּבַשִּׁבְיָה הָעוֹמְדִים בֵּין בַּיָּם וּבֵין בַּיַּבָּשָׁה הַמָּקוֹם יְרַחֵם עֲלֵיהֶם וְיוֹצִיאֵם מִצָּרָה לִרְוָחָה וּמֵאֲפֵלָה לְאוֹרָה וּמִשִּׁעְבּוּד לִגְאֻלָּה הָשָׁתָא בַּעֲגָלָא וּבִזְמַן קָרִיב וְנֹאמַר אָמֵן ";
+});
+document.getElementById('lucene').addEventListener('click', () => {
+    document.getElementById('lunrJsTip').innerHTML = (document.getElementById('lunrJsTip').innerHTML !== "") ? "" : "for Joker; See also: `+Foo Bar -Baz` FOR *<br/>contains Foo Must, Bar Maybe, Baz Not";
+});
+const offlineIndicator = document.getElementById('offline-indicator');
+const updateOfflineIndicator = () => {
+    offlineIndicator.hidden = navigator.onLine;
+};
+window.addEventListener('online', updateOfflineIndicator);
+window.addEventListener('offline', updateOfflineIndicator);
+updateOfflineIndicator();
+const registerServiceWorker = async () => {
+    if ('serviceWorker' in navigator) {
+        try {
+            let serviceWorker = await navigator.serviceWorker.register('sw.js');
+            if (serviceWorker.installing) {
+                console.log("Service worker installing");
+            }
+            else if (serviceWorker.waiting) {
+                console.log("Service worker installed");
+            }
+            else if (serviceWorker.active) {
+                console.log("Service worker active");
+            }
+            console.log(`Service worker registered ${serviceWorker}`);
+        }
+        catch (err) {
+            console.error(`Failed to register service worker: ${err}`);
+        }
+    }
+};
+registerServiceWorker();

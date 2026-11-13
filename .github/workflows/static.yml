@@ -39,6 +39,8 @@ jobs:
         run: npm install --global typescript
       - name: Compile docs TypeScript
         run: tsc --project docs/tsconfig.json
+      - name: Verify compiled site entry points
+        run: test -f docs/script.js && test -f docs/sw.js && test -f docs/test/test.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
