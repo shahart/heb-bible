@@ -48,7 +48,7 @@ describe('Mocha tests', function () {
         const registration = await navigator.serviceWorker.register('../sw.js');
         await navigator.serviceWorker.ready;
         chai.assert.isNotNull(registration.active, 'service worker should activate');
-        const cache = await caches.open('heb-bible-v38');
+        const cache = await caches.open('heb-bible-v39');
         const appRootWithQuery = new URL('../?r=27,1', location.href);
         const [home, compressed, niqqud] = await Promise.all([
             cache.match(appRootWithQuery, { ignoreSearch: true }),

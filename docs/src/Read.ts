@@ -1,6 +1,37 @@
 import { No2gim } from "./No2gim.js";
 import { createAppUrl } from "./AppConfig.js";
 
+const TORAH_PARASHOT = [
+    { book: 1, name: "בראשית", chapter: 1, verse: 1 }, { book: 1, name: "נח", chapter: 6, verse: 9 },
+    { book: 1, name: "לך לך", chapter: 12, verse: 1 }, { book: 1, name: "וירא", chapter: 18, verse: 1 },
+    { book: 1, name: "חיי שרה", chapter: 23, verse: 1 }, { book: 1, name: "תולדות", chapter: 25, verse: 19 },
+    { book: 1, name: "ויצא", chapter: 28, verse: 10 }, { book: 1, name: "וישלח", chapter: 32, verse: 4 },
+    { book: 1, name: "וישב", chapter: 37, verse: 1 }, { book: 1, name: "מקץ", chapter: 41, verse: 1 },
+    { book: 1, name: "ויגש", chapter: 44, verse: 18 }, { book: 1, name: "ויחי", chapter: 47, verse: 28 },
+    { book: 2, name: "שמות", chapter: 1, verse: 1 }, { book: 2, name: "וארא", chapter: 6, verse: 2 },
+    { book: 2, name: "בא", chapter: 10, verse: 1 }, { book: 2, name: "בשלח", chapter: 13, verse: 17 },
+    { book: 2, name: "יתרו", chapter: 18, verse: 1 }, { book: 2, name: "משפטים", chapter: 21, verse: 1 },
+    { book: 2, name: "תרומה", chapter: 25, verse: 1 }, { book: 2, name: "תצוה", chapter: 27, verse: 20 },
+    { book: 2, name: "כי תשא", chapter: 30, verse: 11 }, { book: 2, name: "ויקהל", chapter: 35, verse: 1 },
+    { book: 2, name: "פקודי", chapter: 38, verse: 21 },
+    { book: 3, name: "ויקרא", chapter: 1, verse: 1 }, { book: 3, name: "צו", chapter: 6, verse: 1 },
+    { book: 3, name: "שמיני", chapter: 9, verse: 1 }, { book: 3, name: "תזריע", chapter: 12, verse: 1 },
+    { book: 3, name: "מצורע", chapter: 14, verse: 1 }, { book: 3, name: "אחרי מות", chapter: 16, verse: 1 },
+    { book: 3, name: "קדשים", chapter: 19, verse: 1 }, { book: 3, name: "אמר", chapter: 21, verse: 1 },
+    { book: 3, name: "בהר", chapter: 25, verse: 1 }, { book: 3, name: "בחקתי", chapter: 26, verse: 3 },
+    { book: 4, name: "במדבר", chapter: 1, verse: 1 }, { book: 4, name: "נשא", chapter: 4, verse: 21 },
+    { book: 4, name: "בהעלתך", chapter: 8, verse: 1 }, { book: 4, name: "שלח", chapter: 13, verse: 1 },
+    { book: 4, name: "קרח", chapter: 16, verse: 1 }, { book: 4, name: "חקת", chapter: 19, verse: 1 },
+    { book: 4, name: "בלק", chapter: 22, verse: 2 }, { book: 4, name: "פינחס", chapter: 25, verse: 10 },
+    { book: 4, name: "מטות", chapter: 30, verse: 2 }, { book: 4, name: "מסעי", chapter: 33, verse: 1 },
+    { book: 5, name: "דברים", chapter: 1, verse: 1 }, { book: 5, name: "ואתחנן", chapter: 3, verse: 23 },
+    { book: 5, name: "עקב", chapter: 7, verse: 12 }, { book: 5, name: "ראה", chapter: 11, verse: 26 },
+    { book: 5, name: "שופטים", chapter: 16, verse: 18 }, { book: 5, name: "כי תצא", chapter: 21, verse: 10 },
+    { book: 5, name: "כי תבוא", chapter: 26, verse: 1 }, { book: 5, name: "נצבים", chapter: 29, verse: 9 },
+    { book: 5, name: "וילך", chapter: 31, verse: 1 }, { book: 5, name: "האזינו", chapter: 31, verse: 30 },
+    { book: 5, name: "וזאת הברכה", chapter: 33, verse: 1 }
+];
+
 class Read {
 
     repo;
@@ -66,6 +97,9 @@ class Read {
         if (bookNum == 27 && !!!bookPrk) {
             this.output += "</br>ליום ראשון - א, ליום שני - <a id=\"book\"/><a href=\"#prk30\">ל</a> , ליום שלישי - <a id=\"book\"/><a href=\"#prk51\">נא</a> , ליום רביעי - <a id=\"book\"/><a href=\"#prk73\">עג</a> , ליום חמישי - <a id=\"book\"/><a href=\"#prk90\">צ</a> , ליום שישי - <a id=\"book\"/><a href=\"#prk107\">קז</a> , ליום השבת - <a id=\"book\"/><a href=\"#prk120\">קכ</a>  " + "</br>";
         }
+        if (bookNum >= 1 && bookNum <= 5 && !!!bookPrk) {
+            this.output += "</br>" + TORAH_PARASHOT.map((parasha, index) => ({ parasha, index })).filter(({ parasha }) => parasha.book == bookNum).map(({ parasha, index }) => "<a href=\"#parasha" + index + "\">" + parasha.name + "</a>").join(" , ") + "</br>";
+        }
         // console.info("Book "+ bookNum);
         // todo output += בראשית נח לך-לך וירא and maybe with pointer
         var lastI = 0;
@@ -79,6 +113,11 @@ class Read {
                         ++ psukim;
                         if (this.repo.getPPsk()[i] == 1 || (this.repo.getBookNumArr()[i] == 27-1 && this.repo.getPPrk()[i] == 119 && this.repo.getPPsk()[i] % 8 == 1)) 
                             this.output += "</br>";
+                        if (bookNum >= 1 && bookNum <= 5) {
+                            const parashaIndex = TORAH_PARASHOT.findIndex(parasha => parasha.book == bookNum && parasha.chapter == Number(this.repo.getPPrk()[i]) && parasha.verse == Number(this.repo.getPPsk()[i]));
+                            if (parashaIndex >= 0)
+                                this.output += "<a id=\"parasha" + parashaIndex + "\"></a>";
+                        }
                         // todo if psk,prk,book in Parashot, + br
                         if (this.repo.getPPsk()[i] == 1) {
                             if (this.repo.getPPrk()[i] >= 2) {
