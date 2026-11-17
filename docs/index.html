@@ -566,5 +566,37 @@
     })
 
 </script>
+<script>
+    (() => {
+        const measurementId = "G-59K6M4EH08";
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function() { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', measurementId);
+
+        let scriptRequested = false;
+        const loadGoogleAnalytics = () => {
+            if (scriptRequested) return;
+            if (!navigator.onLine) {
+                console.log("Google Analytics is unavailable while offline; it will retry when online.");
+                return;
+            }
+
+            scriptRequested = true;
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+            script.onerror = () => {
+                scriptRequested = false;
+                console.log("Google Analytics could not load; it will retry when online.");
+            };
+            document.head.appendChild(script);
+        };
+
+        if (navigator.onLine) loadGoogleAnalytics();
+        else console.log("Google Analytics is unavailable while offline; it will retry when online.");
+        window.addEventListener('online', loadGoogleAnalytics);
+    })();
+</script>
 </body>
 </html>
