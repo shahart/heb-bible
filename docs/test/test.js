@@ -21,8 +21,9 @@ describe('Mocha tests', function () {
         const decompressed = await repoInit.ungzip(new Uint8Array(compressed));
         chai.assert.equal(new TextDecoder().decode(decompressed), original);
     });
-    it('uses local substring search when Lunr is unavailable', function () {
-        chai.assert.isUndefined(window.lunr, 'the offline test should not load Lunr');
+    it('uses the locally bundled Lunr Hebrew analyzer and fuzzy search', function () {
+        chai.assert.equal(lunr.version, '2.3.9');
+        chai.assert.isFunction(lunr.he);
         let result = document.getElementById('resultFind');
         if (!result) {
             result = document.createElement('div');
@@ -32,6 +33,20 @@ describe('Mocha tests', function () {
         Repo.lucene('בראשית ברא');
         chai.assert.include(result.textContent, 'ממצאים');
         chai.assert.match(result.textContent, /בראשית ברא/);
+    });
+    it('finds Psalm 110:3 with Lunr wildcard terms that literal matching misses', function () {
+        const query = '+*שחר +*טל';
+        const literalMatches = Repo.getVerses().filter(verse => verse.includes(query));
+        chai.assert.lengthOf(literalMatches, 0, 'the previous literal substring search finds no verse');
+
+        let result = document.getElementById('resultFind');
+        if (!result) {
+            result = document.createElement('div');
+            result.id = 'resultFind';
+            document.body.appendChild(result);
+        }
+        Repo.lucene(query);
+        chai.assert.include(result.textContent, 'קי-3', 'Lunr should find Psalm 110:3');
     });
     it('serves local Bible files from the Pages folder', async function () {
         const [plain, niqqud] = await Promise.all([
@@ -48,16 +63,18 @@ describe('Mocha tests', function () {
         const registration = await navigator.serviceWorker.register('../sw.js');
         await navigator.serviceWorker.ready;
         chai.assert.isNotNull(registration.active, 'service worker should activate');
-        const cache = await caches.open('heb-bible-v39');
+        const cache = await caches.open('heb-bible-v40');
         const appRootWithQuery = new URL('../?r=27,1', location.href);
-        const [home, compressed, niqqud] = await Promise.all([
+        const [home, compressed, niqqud, lunrCore] = await Promise.all([
             cache.match(appRootWithQuery, { ignoreSearch: true }),
             cache.match(new URL('../bible.txt.gz', location.href)),
-            cache.match(new URL('../bible-niqqud.txt', location.href))
+            cache.match(new URL('../bible-niqqud.txt', location.href)),
+            cache.match(new URL('../lunr.min.js', location.href))
         ]);
         chai.assert.isNotNull(home, 'cached app shell should match a query-string deep link');
         chai.assert.isNotNull(compressed, 'gzip dataset should be precached');
         chai.assert.isNotNull(niqqud, 'niqqud dataset should be precached');
+        chai.assert.isNotNull(lunrCore, 'Lunr core should be precached');
     });
     it('read-pasuk', function () {
         let read = new Read(Repo);

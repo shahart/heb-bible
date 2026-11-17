@@ -1,6 +1,6 @@
 "use strict";
 // todo for dev efficiency, ignore cache when url is localhost, or contains .ngrok-free.app
-const CACHE_NAME = 'heb-bible-v39';
+const CACHE_NAME = 'heb-bible-v40';
 const addResourcesToCache = async (resources) => {
     const cache = await caches.open(CACHE_NAME);
     await cache.addAll(resources);
@@ -97,6 +97,7 @@ self.addEventListener('install', (event) => {
         './Gematria.js',
         './Dilug.js',
         './No2gim.js',
+        './lunr.min.js',
         './lunr.stemmer.support.js',
         './lunr.he.js',
         './bible.txt.gz',
