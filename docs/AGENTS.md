@@ -20,7 +20,9 @@ These instructions apply only to `docs/` and its subdirectories. Treat this fold
 ## Editing Conventions
 - Prefer small, direct edits that preserve the current plain-JS structure.
 - Keep filenames and exported class names stable; the test harness imports modules by relative path.
+- When changing a runtime JavaScript file that has a corresponding file under `src/` (for example, `Find.js` and `src/Find.ts`), make the equivalent change in the TypeScript source in the same task so both stay in sync. If a change intentionally applies to only one version, document why.
 - Avoid introducing a bundler, framework, or npm dependency unless explicitly requested.
+- For each docs app upgrade, update the `CACHE_NAME` version in `sw.js` and the `Last updated` date shown in `index.html`.
 - Be careful with network-dependent code paths in `index.html` and `RepoInit.js`; the current app relies on CDN scripts and may fetch Bible data from GitHub when local cache is empty.
 
 ## Validation

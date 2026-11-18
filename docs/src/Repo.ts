@@ -230,7 +230,7 @@ class Repo {
         let message = idx.search(t);
         let toS = "";
         for (let i=0; i<message.length; ++i) {
-            toS += "<br/></br>" + this.noName(message[i].ref) + ", " + "Score: " + message[i].score;
+            toS += "<br/></br>" + this.noName(message[i].ref) + ", " + "Score: " + message[i].score.toFixed(2);
         }
         document.getElementById("resultFind").innerHTML = toS + "</br></br>" + message.length + ' ממצאים ' + "</br>";
     }

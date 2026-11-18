@@ -86,6 +86,7 @@ const p = params.get("p");
 const s = params.get("s"); // (s)kip
 const g = params.get("g");
 const q = params.get("q"); // (q)uery
+const lunrSearch = params.get("lunr") === "1";
 const l = params.get("l");
 const b = params.get("b"); // (b)ook
 const externalBookReference = parseExternalBookReference(b);
@@ -323,6 +324,7 @@ repoInit.ready.then(() => {
     }
     if (q && q.trim() !== '') {
         document.getElementById("find").value = q.replace(/%20/g, ' ');
+        document.getElementById("lucene").checked = lunrSearch;
         document.getElementById("tab5").checked = true;
         find.find();
     }

@@ -28,7 +28,10 @@ class Find {
         let lucene = document.getElementById("lucene").checked;
         if (lucene && findStr.length >= 2) {
           this.lucene(findStr);
-          // alert("LunrJs -> check console.log");
+          const shareUrl = createAppUrl({ q: findStr, lunr: "1" });
+          document.getElementById("resultFind").innerHTML += "<br/><br/><span class=\"share\">&gt;</span><br><br><p dir=\"ltr\" class=\"share-url\">" + shareUrl + "</p>";
+          this.reportFind(findStr, true);
+          return;
         }
         else {
           document.getElementById("resultFind").innerHTML = "";

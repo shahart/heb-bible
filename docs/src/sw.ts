@@ -1,6 +1,6 @@
 // todo for dev efficiency, ignore cache when url is localhost, or contains .ngrok-free.app
 
-const CACHE_NAME = 'heb-bible-v39';
+const CACHE_NAME = 'heb-bible-v42';
 
 const addResourcesToCache = async (resources) => {
     const cache = await caches.open(CACHE_NAME);

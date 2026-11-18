@@ -48,6 +48,11 @@ describe('Mocha tests', function () {
         Repo.lucene(query);
         chai.assert.include(result.textContent, 'קי-3', 'Lunr should find Psalm 110:3');
     });
+    it('creates shareable URLs for Lunr searches', function () {
+        const url = new URL(createAppUrl({ q: '+משחר +טל', lunr: '1' }));
+        chai.assert.equal(url.searchParams.get('q'), '+משחר +טל');
+        chai.assert.equal(url.searchParams.get('lunr'), '1');
+    });
     it('serves local Bible files from the Pages folder', async function () {
         const [plain, niqqud] = await Promise.all([
             fetch('../bible.txt.gz'),
@@ -63,7 +68,7 @@ describe('Mocha tests', function () {
         const registration = await navigator.serviceWorker.register('../sw.js');
         await navigator.serviceWorker.ready;
         chai.assert.isNotNull(registration.active, 'service worker should activate');
-        const cache = await caches.open('heb-bible-v41');
+        const cache = await caches.open('heb-bible-v42');
         const appRootWithQuery = new URL('../?r=27,1', location.href);
         const [home, compressed, niqqud, lunrCore] = await Promise.all([
             cache.match(appRootWithQuery, { ignoreSearch: true }),

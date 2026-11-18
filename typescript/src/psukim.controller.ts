@@ -10,8 +10,8 @@ export class PsukimController {
     @Query('name') name: string,
     @Query('containsName') containsName?: string,
   ) {
-    if (!name) {
-      throw new BadRequestException({ error: "missing 'name' query parameter" });
+    if (typeof name !== 'string' || name.trim() === '') {
+      throw new BadRequestException({ error: "missing or invalid 'name' query parameter" });
     }
     const count = this.pasukService.count(name, containsName === 'true');
     return { count };
